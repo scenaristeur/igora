@@ -1,7 +1,7 @@
 import minimist from "minimist";
 import "dotenv/config";
 import { Broker } from "./src/broker/index.js";
-import { YjsMarketConnector } from "./src/yjsMarketConnector/index.js";
+
 import { Worker } from "./src/worker/index.js";
 
 import chalk from "chalk";
@@ -46,25 +46,14 @@ let yjs_url =
   yjs_env == "local" ? process.env.YJS_LOCAL_URL : process.env.YJS_REMOTE_URL;
 let yjs_market_room = process.env.YJS_MARKET_ROOM || "market";
 
-let marketCommunicator = new YjsMarketConnector({
-  name: argv.name || "Connor",
-  job: argv.job || "communicator",
-  //debug: argv.debug || false,
-  // color: argv.color || null,
-  // yjs_url: argv.yjs_url || process.env.YJS_URL || "ws://localhost:1234",
-  // yjs_room: argv.yjs_room || process.env.YJS_MARKET_ROOM || "market",
-  yjs_url: yjs_url,
-  yjs_market_room: yjs_market_room,
-});
-
-//communicator.check();
-
 let broker = new Broker({
-  name: argv.name || "Bob",
-  job: argv.job || "unemployed",
+  name: "Connor",
+  job:  "communicator",
   debug: argv.debug || false,
-  communicator: marketCommunicator,
-  // color: argv.color || null,
+  yjs_url: yjs_url,
+  yjs_room: "market",
+  type: "broker",
+  style: "normal"
 });
 
 // start 3 workers
@@ -76,7 +65,7 @@ workers_config.forEach((w) => {
     systemPrompt: w.systemPrompt,
     modelName: w.modelName,
     yjs_url: yjs_url,
-    yjs_room: argv.yjs_room || "my-roomname",
+    yjs_room: argv.yjs_room || "market",
     multi_channel: true,
   });
 });

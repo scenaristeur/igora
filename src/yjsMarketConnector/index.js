@@ -28,35 +28,35 @@ export class YjsMarketConnector extends Base {
       this.log(this.state); // logs "connected" or "disconnected"
      // this.updateWorker();
     });
-    this.awareness.on("change", (changes) => {
-      // Whenever somebody updates their awareness information,
-      // we log all awareness information from all users.
-      let agents = Array.from(this.awareness.getStates().values());
-      console.log("######AWARENESS", agents.length);
-      agents.forEach((a) => {
-        console.log(a)
-        // try {
-        //   this.log(
-        //    // a.agent.type,
-        //     a.agent.state,
-        //     a.agent.name,
-        //     a.agent.id,
-        //     a.agent.style
-        //     // a
-        //   );
-        // } catch (e) {
-        //   console.log(e, a);
-        // }
-      });
-      console.log("#####", agents.length);
-    });
+    // this.awareness.on("change", (changes) => {
+    //   // Whenever somebody updates their awareness information,
+    //   // we log all awareness information from all users.
+    //   let agents = Array.from(this.awareness.getStates().values());
+    //   console.log("######AWARENESS", agents.length);
+    //   agents.forEach((a) => {
+    //     console.log(a)
+    //     // try {
+    //     //   this.log(
+    //     //    // a.agent.type,
+    //     //     a.agent.state,
+    //     //     a.agent.name,
+    //     //     a.agent.id,
+    //     //     a.agent.style
+    //     //     // a
+    //     //   );
+    //     // } catch (e) {
+    //     //   console.log(e, a);
+    //     // }
+    //   });
+    //   console.log("#####", agents.length);
+    // });
   }
 
-  check() {
+  // check() {
 
-      this.log("check")
+  //     this.log("check")
 
-  }
+  // }
 //   updateWorker() {
 //     // workspace.set(worker.id, worker);
 //     this.awareness.setLocalStateField("agent", {

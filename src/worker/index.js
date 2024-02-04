@@ -4,7 +4,7 @@ import { Base } from "../base/index.js";
 import { YjsConnector } from "../yjsConnector/index.js";
 import { McConnector } from "../mcConnector/index.js";
 import { TodoList } from "../todolist/index.js";
-import {Broker} from '../broker/index.js'
+// import {Broker} from '../broker/index.js'
 
 export class Worker extends Base {
   constructor(options = {}) {
@@ -16,6 +16,9 @@ export class Worker extends Base {
     this.chalk = this.options.color || this.chalk.blue;
     //this.name = options.name || "inconnu";
     this.numberOfKOMax = 12;
+    this.options.type= "text"
+    this.options.style ="igora"
+    this.options.bind= "node-llama-cpp-v2"
     // this.catai_url = options.catai_url || "ws://localhost:3000";
     // this.yjs_url = options.yjs_url || "ws://localhost:1234";
     // this.yjs_room = options.yjs_room || "my-roomname";
@@ -54,10 +57,10 @@ export class Worker extends Base {
     );
   }
 
-  createBroker() {
-    this.broker =new Broker(this.options)
-    this.broker.check()
-  }
+  // createBroker() {
+  //   this.broker =new Broker(this.options)
+  //   this.broker.check()
+  // }
 
   healthCheck() {
  
@@ -73,9 +76,9 @@ export class Worker extends Base {
       // if (this.yjs && this.yjs.state == "connected") {
       this.state = "ok";
       //this.options.healthCheckInterval = 60000
-if(!this.broker){
-  this.createBroker();
-}
+// if(!this.broker){
+//   this.createBroker();
+// }
 
 
       this.log("state", this.state);
@@ -119,10 +122,16 @@ if(!this.broker){
       this.prepare();
     
     })
+
+    // this.doing.observeDeep((events, transaction) => {
+    //    this.log("events in doing", events, transaction)
+    //     //this.prepare();
+      
+    //   })
   }
 
   prepare() {
-this.broker.check()
+//this.broker.check()
     this.checkObsoletes();
     if (this.state == "ok") {
       let delay = Math.random() * 1000; // wait less tha 1 second to avoid that many workers get the job at the same time

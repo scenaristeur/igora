@@ -3,7 +3,7 @@ import { Base } from "../base/index.js";
 export class Market extends Base {
   constructor(options = {}) {
     super(options);
-    this.flag = "[LIST]";
+    this.flag = "[MARKET]";
     this.chalk = this.chalk.hex("#DEAD");
     this.doc = options.communicator.doc;
 
@@ -30,58 +30,20 @@ export class Market extends Base {
       let brokers = []
 
       agents.forEach((a) => {
-        console.log(a)
+        console.log(a.broker.id)
         brokers.push({id:a.broker.id,date:a.broker.date,state:a.broker.state})
-        // if (this.broker.size == 0 && a.broker.type =="broker"){
-        //   b.promote()
-        //   this.broker.set("main", b.id)
-// mainBroker = a
-// awareness.setLocalStateField("state", "main")
-// console.log("mainBroker1", mainBroker)
-        //}
-        // try {
-        //   this.log(
-        //    // a.agent.type,
-        //     a.agent.state,
-        //     a.agent.name,
-        //     a.agent.id,
-        //     a.agent.style
-        //     // a
-        //   );
-        // } catch (e) {
-        //   console.log(e, a);
-        // }
+
       });
       console.log("#####", agents.length);
-      console.log(brokers)
+      //console.log(brokers)
       brokers = brokers.sort((a,b) => a.date - b.date)
-      console.log("brokers", brokers)
+      //console.log("brokers", brokers)
       let main = brokers[0].id
-      console.log("main", main)
+     // console.log("main", main)
       if (this.broker.get("main") != main){
         this.broker.set("main", main)
       }
       this.log("mainBroker", JSON.stringify(this.broker.toJSON()))
     });
-  }
-  async checkActiveBroker(b) {
-//     let awareness = this.awareness = this.options.communicator.awareness
-//     let mainBroker = null
-
-// console.log("SIZE", this.broker.size)
-
-
-//     if (this.broker.size == 0){
-//       b.promote()
-//       this.broker.set('main', ytextNested)
-//     }
-
-//console.log(b)
-
-
-
-    
-
-
   }
 }
