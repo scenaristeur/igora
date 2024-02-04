@@ -6,25 +6,23 @@ export class Broker extends Base {
     super(options);
     this.options = options;
     this.id = uuidv4();
-    this.doc = options.worker.yjs.doc;
     this.flag = "[BROKER][" + this.options.name + "]";
     this.chalk = this.options.color || this.chalk.green;
     this._init();
   }
 
-_init() {
-        this.log("Salut, je suis", this.options.name);
-        // this.log("init")
-        // this.workers = this.doc.getMap("workers");
-        // this.models = this.doc.getMap("models");
-}
+  _init() {
+    this.log("Salut, je suis", this.options.name);
+    //this.market =
+    // this.doc = options.worker.yjs.doc;
+    // this.log("init")
+    // this.workers = this.doc.getMap("workers");
+    // this.models = this.doc.getMap("models");
+  }
 
-check() {
-//   this.log("check")
-//   this.log(this.workers)
-//   this.log(this.models)
-}
-
-
-
+  check() {
+       this.log("check")
+    //   this.log(this.workers)
+    //   this.log(this.models)
+  }
 }
