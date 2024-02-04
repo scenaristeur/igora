@@ -22,7 +22,7 @@ let yjs_room = process.env.YJS_MARKET_ROOM || "market";
 
 
 
-let communicator = new YjsConnector({
+let marketCommunicator = new YjsConnector({
     name: argv.name || "Connor",
     job: argv.job || "communicator",
     //debug: argv.debug || false,
@@ -33,14 +33,22 @@ let communicator = new YjsConnector({
     yjs_room: yjs_room,
   });
   
-  communicator.check();
-  
+  //communicator.check();
 
 let broker = new Broker({
   name: argv.name || "Bob",
   job: argv.job || "unemployed",
   debug: argv.debug || false,
-  communicator: communicator,
+  communicator: marketCommunicator,
   // color: argv.color || null,
 });
+
+
+
+// start 2 workers
+
+
+
+
+// start 1 client
 
