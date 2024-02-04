@@ -2,7 +2,7 @@ import { Broker } from "./src/broker/index.js";
 import { Worker } from "./src/worker/index.js";
 
 
-let yjs_url = "ws://localhost:1234"
+let yjs_url = 'wss://ylm-websocket.glitch.me'// "ws://localhost:1234"
 let yjs_room = "market"
 
 let broker = new Broker({
