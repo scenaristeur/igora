@@ -1,10 +1,9 @@
+
 import chalk from "chalk";
-import { v4 as uuidv4 } from "uuid";
 
 export class Base {
   constructor(options = {}) {
     this.options = options;
-    this.id = uuidv4();
     this.flag = "[BASE]";
     this.chalk = chalk;
   }
