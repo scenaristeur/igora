@@ -15,7 +15,9 @@ npm install
 ```
 
 # KNOWN BUG
-- https://github.com/yjs/y-websocket/issues/170
+the two following bugs can be fixed with `npm run fix`
+
+- 1 https://github.com/yjs/y-websocket/issues/170
 
 ```
 (node:21742) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
@@ -30,6 +32,14 @@ SyntaxError: Cannot use import statement outside a module
  --> go to node_modules/
 
  ![Alt text](/doc/images/y-websocket_bug.png)
+
+
+- 2 https://github.com/yjs/y-websocket/pull/173/commits/69ddb2c49ac73e76b1ab8b2876d24fe94a153819
+
+replace node_modules/y-websocket/src/y-websocket.js by 
+
+https://raw.githubusercontent.com/yjs/y-websocket/69ddb2c49ac73e76b1ab8b2876d24fe94a153819/src/y-websocket.js
+
 
 # local market
 

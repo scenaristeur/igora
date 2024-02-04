@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js --name Bob --job 'The best broker'"
+    "start": "node index.js --name Bob --job 'The best broker'",
+    "fix": "copy fix_bugs/package.json node_modules/y-websocket/package.json && copy fix_bugs/y-websocket.js node_modules/y-websocket/src/y-websocket.js"
   },
   "keywords": [],
   "author": "",
