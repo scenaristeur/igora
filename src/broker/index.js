@@ -27,6 +27,8 @@ export class Broker extends Base {
 
 
 prepare() {
+  if(this.activeBroker.get("active")==this.id){ //if this broker is the active broker
+
    let todos =  Array.from(this.todos.values())
    console.log("TODOS tasks", todos.length, todos)
 
@@ -58,46 +60,46 @@ prepare() {
     
 })
 
-
-
-}
-
-
-  prepare1() {
-    console.log("prepare TODOS")
-    console.log((this.activeBroker.get("active")==this.id))
-    if(this.activeBroker.get("active")==this.id){ //if this broker is the active broker
-console.log(Array.from(this.todos.keys()))
-    let task_id = Array.from(this.todos.keys())[0];
-    let task = this.todos.get(task_id);
-    console.log("currenttask", task);
-if (task != undefined){
-
-
-    let workers = Array.from(this.yjs.awareness.getStates().values()).filter(
-      (a) => {
-        return a.agent.type == task.type && a.agent.state=='ready';
-      }
-    )
-    console.log("workers", workers.length, workers)
-    if(workers.length>0){
-      task.state = "doing";
-      task.worker = workers[0].agent.id;
-      task.attemps = 1;
-      task.start = Date.now();
-      this.doing.set(task_id, task);
-      this.todos.delete(task_id);
-      console.log(task)
-      this.log("prepare task", task_id, "for worker ", workers[0].agent.id)
-    }else{
-        this.log("no workers available for task", task)
-    }
-}
-    }
-
-
-
   }
+
+}
+
+
+//   prepare1() {
+//     console.log("prepare TODOS")
+//     console.log((this.activeBroker.get("active")==this.id))
+//     if(this.activeBroker.get("active")==this.id){ //if this broker is the active broker
+// console.log(Array.from(this.todos.keys()))
+//     let task_id = Array.from(this.todos.keys())[0];
+//     let task = this.todos.get(task_id);
+//     console.log("currenttask", task);
+// if (task != undefined){
+
+
+//     let workers = Array.from(this.yjs.awareness.getStates().values()).filter(
+//       (a) => {
+//         return a.agent.type == task.type && a.agent.state=='ready';
+//       }
+//     )
+//     console.log("workers", workers.length, workers)
+//     if(workers.length>0){
+//       task.state = "doing";
+//       task.worker = workers[0].agent.id;
+//       task.attemps = 1;
+//       task.start = Date.now();
+//       this.doing.set(task_id, task);
+//       this.todos.delete(task_id);
+//       console.log(task)
+//       this.log("prepare task", task_id, "for worker ", workers[0].agent.id)
+//     }else{
+//         this.log("no workers available for task", task)
+//     }
+// }
+//     }
+
+
+
+//   }
 
   listenAwareness() {
       this.activeBroker = this.yjs.doc.getMap("activeBroker");
