@@ -46,6 +46,7 @@ export class Broker extends Base {
   }
 
   promote(){
+    this.log("promote", this.id)
     this.options.communicator.awareness.setLocalStateField("broker", {
       // Define a print name that should be displayed
       id: this.id,
