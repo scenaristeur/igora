@@ -1,5 +1,5 @@
 import { Base } from "../base/index.js";
-
+import { McConnector } from "../mcConnector/index.js";
 import { YjsConnector } from "../yjsConnector/index.js";
 
 export class Worker extends Base {
@@ -11,27 +11,82 @@ export class Worker extends Base {
     this.flag = "[WORKER][" + this.options.name + "]";
     this.chalk = this.chalk.yellow;
     this.yjs = new YjsConnector(this.options);
+    this.mcConnector = new McConnector(this.options);
     this.updateAwareness();
+    this.prepared = this.yjs.doc.getMap("prepared");
     this.doing = this.yjs.doc.getMap("doing");
+    this.done = this.yjs.doc.getMap("done");
     this.listenDoing()
   }
 
 listenDoing(){
-  this.doing.observeDeep((events, transaction) => {
-    //this.log("events", events, transaction)
+  this.prepared.observeDeep((events, transaction) => {
+    this.log("events", events, transaction)
     this.prepare();
   })
 }
 
   prepare() {
-     let  tasks = Array.from(this.doing.values())
-     .filter(
-        (a) => {
-            a.worker == this.id
-        }
-      )
-      console.log("tasks", tasks.length, tasks)
+     let  tasks = Array.from(this.prepared.values())
+
+     tasks.forEach((task)=>{
+        // console.log("task", task)
+         if (task.worker == this.id){
+            this.processTask(task)
+         }
+     })
+  
+
+
+    //   if(tasks.length>0){
+    //     this.options.state = "working";
+    //     this.updateAwareness();
+    //   }
   }
+
+processTask(task) {
+
+
+
+if (this.mcConnector && this.mcConnector.state == "ready") {
+    this.options.state = "working";
+    this.updateAwareness();
+    this.log("process task", task.id)
+    this.doing.set(task.id, task)
+this.prepared.delete(task.id)
+    this.process_doing_mc(task.id);
+  }
+
+
+
+}
+
+async process_doing_mc(id) {
+    let current = this.doing.get(id);
+    this.log("process_doing_mc", id, current, this.mcConnector.state);
+    current.response = "";
+    const response = await this.mcConnector.chat(current, (token) => {
+      process.stdout.write(token);
+      current.response += token;
+      this.doing.set(current.id, current);
+    });
+
+    this.log(`\nTotal text length: ${current.response.length}`);
+
+    current.end = Date.now();
+
+    current.state = "done";
+    current.duration = current.end - current.start;
+    console.log("done", current);
+    this.done.set(current.id, current);
+    this.doing.delete(current.id);
+    this.options.state = "ready";
+    this.log("DONE", current.id);
+   // this.prepare();
+   this.updateAwareness()
+  }
+
+
 
   updateAwareness() {
     this.yjs.awareness.setLocalStateField("agent", {
@@ -43,4 +98,21 @@ listenDoing(){
       date: Date.now(),
     });
   }
+
+//   logList(step) {
+//     let { todos, doing, done } = {
+//       todos: this.todolist.todos,
+//       prepared: this.todolist.todos,
+//       doing: this.todolist.doing,
+//       done: this.todolist.done,
+//     };
+//     this.log(
+//       "### ",
+//       step,
+//       " ###",
+//       Array.from(todos.keys()).length,
+//       Array.from(doing.keys()).length,
+//       Array.from(done.keys()).length
+//     );
+//   }
 }

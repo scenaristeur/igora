@@ -13,7 +13,7 @@ export class Broker extends Base {
     this.listenAwareness();
     this.updateAwareness();
     this.todos = this.yjs.doc.getMap("todos");
-    this.doing = this.yjs.doc.getMap("doing");
+    this.prepared = this.yjs.doc.getMap("prepared");
     this.listenTodos()
   }
   listenTodos() {
@@ -25,10 +25,49 @@ export class Broker extends Base {
     })
   }
 
-  prepare() {
+
+prepare() {
+   let todos =  Array.from(this.todos.values())
+   console.log("TODOS tasks", todos.length, todos)
+
+
+  todos.forEach((todo)=>{
+    let job = this.todos.get(todo.id);
+    console.log("job", job)
+    let workers = Array.from(this.yjs.awareness.getStates().values()).filter(
+        (a) => {
+          return a.agent.type == job.type && a.agent.state=='ready';
+        }
+      )
+      console.log("workers", workers.length, workers)
+    if (workers.length > 0) {
+        
+    
+      job.worker = workers[0].agent.id;
+      job.state = "prepared";
+      job.worker = workers[0].agent.id;
+      job.attemps = 1;
+      job.start = Date.now();
+      this.prepared.set(job.id, job);
+      this.todos.delete(job.id);
+      console.log(job)
+      this.log("prepare job", job.id, "for worker ", workers[0].agent.id)
+    }else{
+        this.log("no workers for job", job.id)
+    }
+    
+})
+
+
+
+}
+
+
+  prepare1() {
+    console.log("prepare TODOS")
     console.log((this.activeBroker.get("active")==this.id))
     if(this.activeBroker.get("active")==this.id){ //if this broker is the active broker
-
+console.log(Array.from(this.todos.keys()))
     let task_id = Array.from(this.todos.keys())[0];
     let task = this.todos.get(task_id);
     console.log("currenttask", task);
@@ -71,9 +110,9 @@ if (task != undefined){
         try {
           this.log(
             a.agent.name,
-            a.agent.type
+            a.agent.type,
             // a.agent.type,
-            // a.agent.state,
+            a.agent.state,
             // a.agent.name,
             // a.agent.id,
             // a.agent.style
@@ -94,7 +133,7 @@ if (task != undefined){
       brokers = brokers.sort((a, b) => a.date - b.date);
     //   console.log("brokers", brokers);
       let active = brokers[0].id;
-    //   console.log("active", active);
+     console.log("active", brokers[0]);
       if (this.activeBroker.get("active") != active) {
         this.activeBroker.set("active", active);
       }
