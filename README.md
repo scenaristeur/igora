@@ -1,5 +1,8 @@
 # Igora
 
+broker for https://github.com/scenaristeur/catay
+
+
 
 # prerequist
 - Linux
@@ -69,3 +72,12 @@ YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
 YJS_MARKET_ROOM="market"
 
 
+# storage
+? https://docs.storj.io/
+
+
+# node-red
+- https://nodered.org/docs/getting-started/local
+```
+npm install -g node-red
+```
