@@ -63,6 +63,9 @@ this.prepared.delete(task.id)
 
 async process_doing_mc(id) {
     let current = this.doing.get(id);
+    current.systemPrompt = this.options.systemPrompt || "Tu es une petite souris et tu dois agir comme telle, en finissant toutes te phrases par 'Hi!Hi!Hi'"
+    current.temperature = this.options.temperature || 0.7
+    current.seed = this.options.seed 
     this.log("process_doing_mc", id, current, this.mcConnector.state);
     current.response = "";
     const response = await this.mcConnector.chat(current, (token) => {

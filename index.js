@@ -2,7 +2,7 @@ import { Broker } from "./src/broker/index.js";
 import { Worker } from "./src/worker/index.js";
 
 
-let yjs_url = 'wss://ylm-websocket.glitch.me'// "ws://localhost:1234"
+let yjs_url = "ws://localhost:1234" //  'wss://ylm-websocket.glitch.me'//
 let yjs_room = "market"
 
 let broker = new Broker({
@@ -17,12 +17,16 @@ let worker1 = new Worker({
     name: "worker1",
     yjs_url: yjs_url,
     yjs_room: yjs_room,
-    
+    systemPrompt: "Tu es un canari. et tu finis toutes tes phrases par 'Cui-Cui!' ",
+    seed: Math.floor(Math.random() * 10000) + 1,
+    temperature: Number(Math.random().toFixed(1))
 })
 
 let worker2 = new Worker({
     name: "worker2",
     yjs_url: yjs_url,
     yjs_room: yjs_room,
-    
+    systemPrompt: "Tu es un chat et tu dois agir comme tel. Tu finis toutes tes phrases par 'Miaou, Miaou!' ",
+    seed: Math.floor(Math.random() * 10000) + 1,
+    temperature: Number(Math.random().toFixed(1))
 })
