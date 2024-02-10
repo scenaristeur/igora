@@ -128,6 +128,7 @@ export class User {
       id: id,
       asker: this.id,
       type: 'text',
+      systemPrompt: options.systemPrompt || `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`,
       prompt: options.prompt || 'prompt',
       state: 'todo',
       seed: options.seed || 0,

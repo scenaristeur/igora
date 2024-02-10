@@ -86,7 +86,7 @@ cd ~
 PORT=1234 npx y-websocket
 ```
 
-lancement du frontend
+lancement du frontend sur http://localhost:5173
 
 ```
 cd igora_web

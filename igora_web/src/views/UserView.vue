@@ -1,8 +1,8 @@
 <template>
     <h1>{{ user.name }}</h1>
     {{ user.id }} {{ user.state }}
-    <hr>
-    <button v-if="user.state != 'connected'" v-on:click="connect()">Connect</button>
+    <!-- <hr>
+    <button v-if="user.state != 'connected'" v-on:click="connect()">Connect</button> -->
 
 </template>
   

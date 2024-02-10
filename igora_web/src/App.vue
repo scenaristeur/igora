@@ -1,9 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
 import UserView from './views/UserView.vue';
 import SendView from './views/SendView.vue'
-import AwarenessView from './views/AwarenessView.vue'
+// import AwarenessView from './views/AwarenessView.vue'
 import AdminView from './views/AdminView.vue'
 </script>
 
@@ -14,9 +14,9 @@ import AdminView from './views/AdminView.vue'
     <div class="wrapper">
       <UserView/>
       <SendView />  
-      <HelloWorld msg="You did it!" />
+      <!-- <HelloWorld msg="You did it!" /> -->
       <AdminView />
-      <AwarenessView/>
+      <!-- <AwarenessView/> -->
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
