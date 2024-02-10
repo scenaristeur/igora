@@ -13,16 +13,16 @@ let broker = new Broker({
 })
 
 
-let worker1 = new Worker({
-    name: "worker1",
-    yjs_url: yjs_url,
-    yjs_room: yjs_room,
+ let worker1 = new Worker({
+     name: "worker1",
+     yjs_url: yjs_url,
+     yjs_room: yjs_room,
     
-})
+ })
 
-let worker2 = new Worker({
-    name: "worker2",
-    yjs_url: yjs_url,
-    yjs_room: yjs_room,
+// let worker2 = new Worker({
+//     name: "worker2",
+//     yjs_url: yjs_url,
+//     yjs_room: yjs_room,
     
-})
+// })

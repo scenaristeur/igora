@@ -45,7 +45,7 @@ https://raw.githubusercontent.com/yjs/y-websocket/69ddb2c49ac73e76b1ab8b2876d24f
 
 
 # local market
-
+if you want to use a local y-websocket server use 
 run outside a project with type:module as y-websocket server is commonjs
 ```
 PORT=1234 YPERSISTENCE=./dbDir npx y-websocket
@@ -72,6 +72,34 @@ YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
 YJS_MARKET_ROOM="market"
 
 
+# start
+dans 3 terminaux
+
+Lancement du worker llm
+```
+npm run start
+```
+lancement du serveur y-websocket d'échange de donnée
+
+```
+cd ~
+PORT=1234 npx y-websocket
+```
+
+lancement du frontend
+
+```
+cd igora_web
+npm install
+npm run dev
+```
+
+
+
+
+
+
+
 # storage
 ? https://docs.storj.io/
 
@@ -81,3 +109,6 @@ YJS_MARKET_ROOM="market"
 ```
 npm install -g node-red
 ```
+
+# see llama http docker
+- https://github.com/edfletcher/llama.http/tree/master/examples/simple-http
