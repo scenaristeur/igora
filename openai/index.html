@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Tuto WebSocket avec Socket.io et NodeJS par WeLoveDevs.com</title>
+    <title>Igora compatible server to OpenAI api</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <h1>Hello</h1>
@@ -11,8 +12,9 @@
       <li>Premier élément</li>
     </ul>
 
-    <textarea id="prompt"></textarea>
-    <button onclick="send()">Send</button>
+    <textarea id="prompt" value="Julie est une artiste qui dessine, elle est assise à la terrasse d'un café et griffone son calepin."></textarea>
+    <button onclick="send()">Send websocket</button>
+    <button onclick="sendChatCompletion()">Send openai compatible chat completion</button>
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -29,6 +31,41 @@ socket.on("message", (data) => {
 function send() {
   const message = document.getElementById("prompt").value;
   socket.emit("message", message);
+  document.getElementById("prompt").value = "";
+}
+
+
+function sendChatCompletion() {
+  const message = document.getElementById("prompt").value;
+  const body = {
+    messages: [
+      {
+        role: "system",
+        content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
+         Donne uniquement le texte et rien d'autre, 
+         ne discute pas, pas de préambule, va à l'essentiel.`,
+      },
+      { role: "user", content: message},
+    ],
+    max_tokens: 800,
+     stop: [
+      //"\n", 
+      "###",
+  
+  ],
+  };
+
+axios
+  .post(
+    `http://127.0.0.1:5678/v1/chat/completions`,
+    body
+  )
+  .then(function (response) {
+    console.log(response.data.choices[0].message);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
   document.getElementById("prompt").value = "";
 }
 

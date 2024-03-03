@@ -5,7 +5,8 @@
   "main": "openai.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":     "nodemon --env-file=../.env openai.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,8 @@
   "dependencies": {
     "express": "^4.18.3",
     "socket.io": "^4.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

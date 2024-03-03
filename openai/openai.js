@@ -26,7 +26,7 @@ import { createServer } from "node:http";
 import { Server } from "socket.io";
 // import session from "express-session";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5678;
 
 const app = express();
 const httpServer = createServer(app);
@@ -43,10 +43,11 @@ app.get("/", (req, res) => {
   res.sendFile(new URL("./index.html", import.meta.url).pathname);
 });
 
-app.post("/incr", (req, res) => {
-  const session = req.session;
-  session.count = (session.count || 0) + 1;
-  res.status(200).end("" + session.count);
+app.post("/v1/chat/completions", express.json(), (req, res) => {
+    console.log("received", req.body) 
+//   const session = req.session;
+//   session.count = (session.count || 0) + 1;
+  res.status(200).end("received" + req.body);
 });
 
 const io = new Server(httpServer);
