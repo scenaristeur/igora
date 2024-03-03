@@ -18,19 +18,28 @@
       cols="50"
       rows="10"
     ></textarea>
-<br>
+    <br />
     <button onclick="sendChatCompletion()">
       Send openai compatible chat completion
     </button>
-    <br><br>
-    <hr> 
+    <br /><br />
+    <hr />
     not implemented yet
-    <hr>
+    <hr />
     <button onclick="send()">Send websocket</button>
-        <input type="checkbox"  id="stream" /> Stream (not implemented yet)
+    <input type="checkbox" id="stream" /> Stream (not implemented yet)
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      let messages = [
+        {
+          role: "system",
+          content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
+         Donne uniquement le texte et rien d'autre, 
+         ne discute pas, pas de préambule, va à l'essentiel.`,
+        },
+      ];
+
       const socket = io();
 
       socket.on("connect", () => {
@@ -50,20 +59,13 @@
       function sendChatCompletion() {
         const message = document.getElementById("prompt").value;
         const stream = document.getElementById("stream").checked;
-        console.log(stream)
+        console.log(stream);
+        messages.push({ role: "user", content: message });
         const body = {
-          messages: [
-            {
-              role: "system",
-              content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
-         Donne uniquement le texte et rien d'autre, 
-         ne discute pas, pas de préambule, va à l'essentiel.`,
-            },
-            { role: "user", content: message },
-          ],
+          messages: messages,
           model: "gpt-3.5-turbo",
           temperature: 0.7,
-        stream: stream,
+          stream: stream,
           max_tokens: 800,
           stop: [
             //"\n",
@@ -71,23 +73,13 @@
           ],
         };
 
+        //         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
+        //   //withCredentials: true,
+        // });
 
-
-
-//         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
-//   //withCredentials: true,
-// });
-
-
-
-
-// evtSource.onmessage = function (event) {
-// console.log("event", event);
-// };
-
-
-
-
+        // evtSource.onmessage = function (event) {
+        // console.log("event", event);
+        // };
 
         axios
           .post(
@@ -104,6 +96,13 @@
           .then(function (response) {
             console.log(response.data);
             console.log(response.data.choices[0].message);
+            let m = response.data.choices[0].message
+            let message = {
+              role: m.role,
+              content: m.content,
+            }
+            messages.push(message);
+            console.log("messages", messages);
           })
           .catch(function (error) {
             console.log(error);
