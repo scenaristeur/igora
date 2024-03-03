@@ -21,7 +21,7 @@
         </div>
         <label for="systemPromptTextarea" class="form-label">System Prompt</label>
 
-       <textarea id="systemPromptTextarea" class="form-control" rows="6" v-model="systemPrompt"></textarea>
+        <textarea id="systemPromptTextarea" class="form-control" rows="6" v-model="systemPrompt"></textarea>
     </div>
 </template>
 
@@ -54,7 +54,8 @@ tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et
             console.log(this.prompt)
 
             let randomSeed = Math.floor(Math.random() * 100) + 1
-            this.user.addTodo({ prompt: this.prompt.trim(), systemPrompt: this.systemPrompt, temperature: this.temperature, seed: this.seed || randomSeed })
+
+            this.user.addTodo({ prompt: this.prompt.trim(), systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
             this.prompt = ""
         }
     },

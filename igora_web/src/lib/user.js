@@ -55,7 +55,7 @@ export class User {
     console.log('connect')
     this.awareness = wsProvider.awareness
     this.awareness.clientId = this.id
-    this.awareness.on('change', (changes) => {
+    this.awareness.on('change', (/*changes*/) => {
       // Whenever somebody updates their awareness information,
       // we log all awareness information from all users.
       let agents = Array.from(user.awareness.getStates().values())
@@ -79,7 +79,7 @@ export class User {
       this.updateWorker()
     })
 
-    doc.on('update', (update) => {
+    doc.on('update', (/*update*/) => {
       //console.log(update)
       // let date = workspace.get("date");
       // console.log("date", date);
