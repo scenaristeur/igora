@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
-    <h1>Hello</h1>
+    <h1>Igora compatible with OpenAI endpoint</h1>
     <ul id="list">
       <li>Premier élément</li>
     </ul>
@@ -15,12 +15,18 @@
     <textarea
       id="prompt"
       value="Julie est une artiste qui dessine, elle est assise à la terrasse d'un café et griffone son calepin."
+      cols="50"
+      rows="10"
     ></textarea>
-    <button onclick="send()">Send websocket</button>
+<br>
     <button onclick="sendChatCompletion()">
       Send openai compatible chat completion
     </button>
     <br><br>
+    <hr> 
+    not implemented yet
+    <hr>
+    <button onclick="send()">Send websocket</button>
         <input type="checkbox"  id="stream" /> Stream (not implemented yet)
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>

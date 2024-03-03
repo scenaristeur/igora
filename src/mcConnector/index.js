@@ -125,8 +125,26 @@ model = new LlamaModel({
   chat = async (options, cb) => {
     const that = this
 
+if(options.prompt == undefined){
+  console.log(options.messages)
+  let messages = options.messages
+  let system_message = messages[0].role == "system" ? messages.shift() : undefined
+let user_last_message = messages.pop()
+console.log("USER MESSAGE", user_last_message)
+console.log("SYSTEM MESSAGE", system_message)
+console.log("messages", messages)
+options.prompt = user_last_message.content
+options.conversationHistory = messages
+options.systemPrompt = system_message.content
+ 
+}
+
+
+
+
+
     let seed = options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1
-    this.log("### " + options.user + " say " + options.prompt, "seed:", seed)
+    this.log("### " + options.user + " say " +  options.prompt, "seed:", seed)
     this.log("### starting session n°" + options.id)
     const context = new LlamaContext({ model, seed });
 

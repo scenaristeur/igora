@@ -6,6 +6,14 @@ let yjs_url = process.env.YJS_ENV== "remote" ? process.env.YJS_REMOTE_URL : proc
 //'wss://ylm-websocket.glitch.me'// "ws://localhost:1234"
 let yjs_room = process.env.YJS_MARKET_ROOM
 
+let options = {
+
+    yjs_url: yjs_url,
+    yjs_room: yjs_room
+}
+
+console.log("OPTIONS", options)
+
 let broker = new Broker({
     name: "Broker",
     yjs_url: yjs_url,

@@ -154,7 +154,8 @@ if (req.body.stream==true) {
         type: 'text',
         // systemPrompt should comme from client
         systemPrompt: `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`,
-        prompt: req.body.messages,
+        //prompt: 
+        messages: req.body.messages,
         state: 'todo',
        // seed: options.seed || 0,
         temperature: req.body.temperature || 0,
