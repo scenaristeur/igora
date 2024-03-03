@@ -23,6 +23,7 @@
       Send openai compatible chat completion
     </button>
     <br /><br />
+    <button onclick="removeHistory()">Remove history</button>
     <hr />
     not implemented yet
     <hr />
@@ -38,6 +39,8 @@
          Donne uniquement le texte et rien d'autre, 
          ne discute pas, pas de préambule, va à l'essentiel.`,
         },
+        {role: "user", content: "Je m'appelle David."},
+        {role: "assistant", content: "Nice to meet you, David! How can I assist you today?"}
       ];
 
       const socket = io();
@@ -50,8 +53,19 @@
         console.log("message", data);
       });
 
+      function removeHistory(){
+        messages = [];
+        messages.push({
+          role: "system",
+          content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
+         Donne uniquement le texte et rien d'autre, 
+         ne discute pas, pas de préambule, va à l'essentiel.`,
+        })
+        console.log("history removed", messages)
+      }
+
       function send() {
-        const message = document.getElementById("prompt").value;
+        const message = document.getElementById("prompt").value.trim();
         socket.emit("message", message);
         document.getElementById("prompt").value = "";
       }
@@ -103,6 +117,11 @@
             }
             messages.push(message);
             console.log("messages", messages);
+            list = document.getElementById("list");
+            list.innerHTML = "";
+            messages.forEach((message) => {
+              list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+            });
           })
           .catch(function (error) {
             console.log(error);
