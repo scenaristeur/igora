@@ -10,7 +10,7 @@ const openai = new OpenAI({
 });
 
 const chatCompletion = await openai.chat.completions.create({
-  messages: [{ role: "user", content: "Say this is a test" }],
+  messages: [{ role: "user", content: "Raconte-moi une blague" }],
   model: "gpt-3.5-turbo",
 });
 
