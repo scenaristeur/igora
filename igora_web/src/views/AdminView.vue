@@ -6,18 +6,18 @@
         <WorkersView />
         <TasksView />
         // BE CAREFULL //
-        <button v-on:click="clean()">Clean</button>
+        <button v-on:click="clean()" type="button" class="btn btn-warning">Clean</button>
     </div>
 </template>
 
 <script>
-import BrokersView from '@/views/BrokersView.vue'
+// import BrokersView from '@/views/BrokersView.vue'
 import WorkersView from '@/views/WorkersView.vue'
 import TasksView from '@/views/TasksView.vue'
 export default {
     name: "AdminView",
     components: {
-        BrokersView,
+        // BrokersView,
         WorkersView,
         TasksView
     },
