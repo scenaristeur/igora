@@ -38,7 +38,7 @@ export default {
 tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et tu dois imaginer une intrigue`}],
             systemPrompt: "",
             agent: "romancier",
-            temperature: 0,
+            temperature: 0.5,
             seed: Math.floor(Math.random() * 100) + 1
         }
     },

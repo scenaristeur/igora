@@ -61,6 +61,13 @@
 <script>
 export default {
     name: "WorkersView",
+    data() {
+        return {
+            workers: [],
+            clients: [],
+            brokers: []
+        }
+    },
     watch: {
         agents() {
             console.log("AGENTS", this.agents)
