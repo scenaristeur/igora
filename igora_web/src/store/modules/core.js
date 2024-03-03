@@ -1,13 +1,33 @@
 import { User } from '@/lib/user.js';
 
+
 const state = () => ({
-user: new User({ name: "Youri l'UI" }),
-awareness:null
+user: new User({ name: "Youri l'UI" 
+// , callbacks:{
+//   awarenessChanged: mutations.test
+// }
+
+}),
+awareness:null,
+agents: null
 })
 
 const mutations = {
+//   setAgents(state, agents) {
+//     console.log("agents", agents.length)
+// state.agents = agents
+//   },
     setAwareness(state, awareness) {
         state.awareness = awareness
+        state.agents = Array.from(awareness.getStates().values())
+        console.log('AAAAAAAAAAAAAA in store', state.agents.length)
+
+        // // state.agents = [...agents]
+        // // console.log(state.agents)
+        // this.commit('core/setAgents', agents)
+    },
+    test(state,data) {
+      console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",data, state)
     }
 //   initChat(state, options) {
 //     state.target = options
@@ -26,6 +46,9 @@ const mutations = {
 }
 
 const actions = {
+  vuexAction(context, data) {
+    console.log(data)
+  }
 //   async embedGraph(context, input) {
 //     //let documents = [input]
 //     let uid = context.state.uid
