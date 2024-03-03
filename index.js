@@ -26,6 +26,7 @@ let broker = new Broker({
      name: "worker1",
      yjs_url: yjs_url,
      yjs_room: yjs_room,
+     modelName: "dolphin-2.2.1-mistral-7b.Q2_K.gguf"
     
  })
 

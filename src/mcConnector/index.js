@@ -192,11 +192,13 @@ export class McConnector extends Base {
     sessions[options.id] = s;
 
     this.log("### sessions actives ", sessions);
+    let maxTokens = context.getContextSize()
+    console.log('MAXTOKENS', maxTokens)
 
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
-      maxTokens: context.getContextSize(),
+      maxTokens: maxTokens,
       onToken(chunk) {
         const tok = context.decode(chunk);
         that.log(

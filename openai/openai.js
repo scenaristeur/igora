@@ -24,6 +24,7 @@ console.log("yjs_url:", yjs_url, "\tyjs_room:", yjs_room);
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 // import session from "express-session";
 
@@ -34,6 +35,14 @@ const port = process.env.PORT || 5678;
 
 const app = express();
 const httpServer = createServer(app);
+
+const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+
+const cors_options = {
+  origin: allowedOrigins
+};
+
+app.use(cors(cors_options));
 
 let options = {
   name: "openai",

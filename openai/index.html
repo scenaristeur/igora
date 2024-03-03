@@ -59,7 +59,7 @@ System Prompt:<br>
         messages = [];
         messages.push({
           role: "system",
-          content: systemPrompt
+          content: document.getElementById("systemPrompt").value 
         })
         console.log("history removed", messages)
       }
