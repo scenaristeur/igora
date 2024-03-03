@@ -44,6 +44,23 @@ app.get("/", (req, res) => {
   res.sendFile(new URL("./index.html", import.meta.url).pathname);
 });
 
+
+var sendAndSleep = function (response, counter) {
+    if (counter > 10) {
+        console.log("end")
+      response.end();
+    } else {
+        console.log("sendAndSleep", counter)
+      response.write(" ;i=" + counter);
+      //response.json({"text": " ;i=" + counter});
+      counter++;
+      setTimeout(function () {
+        sendAndSleep(response, counter);
+      }, 1000)
+    };
+  };
+  
+
 app.post("/v1/chat/completions", express.json(), (req, res) => {
   console.log("received", req.body);
   //   const session = req.session;
@@ -71,7 +88,29 @@ app.post("/v1/chat/completions", express.json(), (req, res) => {
       },
     ],
   };
-  res.status(200).json(response);
+
+
+// stream 
+if (req.body.stream==true) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Transfer-Encoding', 'chunked');
+  
+    res.write("Thinking...");
+    sendAndSleep(res, 1);
+//   res.writeHead(200, {
+//     "Content-Type": "text/event-stream",
+//     "Cache-Control": "no-cache",
+//     Connection: "keep-alive",
+//   });
+//   res.write("data: " + JSON.stringify(response) + "\n\n");
+//   res.flush();
+}else{
+    res.status(200).json(response);
+}
+
+
+
+
 });
 
 const io = new Server(httpServer);

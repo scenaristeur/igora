@@ -20,6 +20,8 @@
     <button onclick="sendChatCompletion()">
       Send openai compatible chat completion
     </button>
+    <br><br>
+        <input type="checkbox"  id="stream" /> Stream (not implemented yet)
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -41,6 +43,8 @@
 
       function sendChatCompletion() {
         const message = document.getElementById("prompt").value;
+        const stream = document.getElementById("stream").checked;
+        console.log(stream)
         const body = {
           messages: [
             {
@@ -53,13 +57,31 @@
           ],
           model: "gpt-3.5-turbo",
           temperature: 0.7,
-        // stream: true
+        stream: stream,
           max_tokens: 800,
           stop: [
             //"\n",
             "###",
           ],
         };
+
+
+
+
+//         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
+//   //withCredentials: true,
+// });
+
+
+
+
+// evtSource.onmessage = function (event) {
+// console.log("event", event);
+// };
+
+
+
+
 
         axios
           .post(
