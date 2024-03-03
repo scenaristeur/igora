@@ -2,7 +2,9 @@
 
 broker for https://github.com/scenaristeur/catay
 
-
+# todo 
+- [ ] should be compatible with OpenAi API for stream https://cookbook.openai.com/examples/how_to_stream_completions, tiktoken to count
+- [ ] possibilité de prioriser les demandes locales, ou liste de prioritaires, workers debrayables, ou 2 workers, un pour les demandes locales, un pour les remote
 
 # prerequist
 - Linux
@@ -108,7 +110,12 @@ npm run dev
 ```
 
 
-
+# based on
+- node-llama-cpp [https://github.com/edfletcher/node-llama-cpp](https://withcatai.github.io/node-llama-cpp/) / https://github.com/withcatai/node-llama-cpp
+- y-websocket https://github.com/yjs/y-websocket
+- y-leveldb https://github.com/yjs/y-leveldb todo
+- y-protocols https://github.com/yjs/y-protocols
+- sould do with llama-cpp python server
 
 
 

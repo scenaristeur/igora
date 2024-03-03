@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>ADMIN</h1>
+        <h1>Admin</h1>
 
         <!-- <BrokersView /> -->
         <WorkersView />

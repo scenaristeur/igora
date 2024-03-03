@@ -4,18 +4,18 @@ import { RouterLink, RouterView } from 'vue-router'
 import UserView from './views/UserView.vue';
 import SendView from './views/SendView.vue'
 // import AwarenessView from './views/AwarenessView.vue'
-import AdminView from './views/AdminView.vue'
+// import AdminView from './views/AdminView.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
       <UserView/>
       <SendView />  
       <!-- <HelloWorld msg="You did it!" /> -->
-      <AdminView />
+      <!-- <AdminView /> -->
       <!-- <AwarenessView/> -->
       <nav>
         <RouterLink to="/">Home</RouterLink>
