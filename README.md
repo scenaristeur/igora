@@ -72,6 +72,19 @@ YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
 YJS_MARKET_ROOM="market"
 
 
+
+# adapt client 
+in igoraweb/src/lib/user.js, set wsProvider according to y-websocket server t=you defined
+```
+const wsProvider = new WebsocketProvider(
+  //'ws://localhost:9999',
+  //'ws://localhost:1234',
+  'wss://ylm-websocket.glitch.me',
+  'market',
+  doc
+)
+```
+
 # start
 dans 3 terminaux
 
