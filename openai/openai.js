@@ -1,11 +1,11 @@
-// define your environment variables in the .env file 
-let yjs_url = process.env.YJS_ENV== "remote" ? process.env.YJS_REMOTE_URL : process.env.YJS_LOCAL_URL
-let yjs_room = process.env.YJS_MARKET_ROOM
+// define your environment variables in the .env file
+let yjs_url =
+  process.env.YJS_ENV == "remote"
+    ? process.env.YJS_REMOTE_URL
+    : process.env.YJS_LOCAL_URL;
+let yjs_room = process.env.YJS_MARKET_ROOM;
 
-
-console.log("yjs_url:",yjs_url, "\tyjs_room:", yjs_room)
-
-
+console.log("yjs_url:", yjs_url, "\tyjs_room:", yjs_room);
 
 // https://blog.postman.com/set-up-a-websockets-server-in-node-js-postman/
 // import { WebSocketServer } from 'ws';
@@ -24,6 +24,7 @@ console.log("yjs_url:",yjs_url, "\tyjs_room:", yjs_room)
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import { v4 as uuidv4 } from 'uuid';
 // import session from "express-session";
 
 const port = process.env.PORT || 5678;
@@ -44,32 +45,51 @@ app.get("/", (req, res) => {
 });
 
 app.post("/v1/chat/completions", express.json(), (req, res) => {
-    console.log("received", req.body) 
-//   const session = req.session;
-//   session.count = (session.count || 0) + 1;
-  res.status(200).end("received" + req.body);
+  console.log("received", req.body);
+  //   const session = req.session;
+  //   session.count = (session.count || 0) + 1;
+
+  // reponse inspirée de https://cookbook.openai.com/examples/how_to_stream_completions
+  let response = {
+    id: "chatcmpl-" + uuidv4(),
+    choices: [
+      {
+        message: {
+          content: "Hello, World!",
+          role: "assistant",
+          function_call: null, // "None" ? python style ?
+          tool_calls: null,
+        },
+        finish_reason: "stop",
+        index: 0,
+        logprobs: null,
+        model: "gpt-3.5-turbo", //"vicuna-7b-v1.5-16k.Q2_K.gguf"
+        created: Date.now(), //  1703395008
+        object: "chat.completion",
+        system_fingerprint: "None",
+        usage: { completion_tokens: 299, prompt_tokens: 36, total_tokens: 335 },
+      },
+    ],
+  };
+  res.status(200).json(response);
 });
 
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
-console.log("connexion", socket.id)
+  console.log("connexion", socket.id);
   socket.on("message", (data) => {
-    console.log("message",data)
-    socket.emit("message", data)
+    console.log("message", data);
+    socket.emit("message", data);
   });
   socket.on("*", (data) => {
-    console.log("*",data)
+    console.log("*", data);
   });
 
   socket.on("disconnect", (reason) => {
-    console.log("deconnexion ", reason,socket.id)
-  })
-
-})
-
-
-
+    console.log("deconnexion ", reason, socket.id);
+  });
+});
 
 httpServer.listen(port, () => {
   console.log(`application is running at: http://localhost:${port}`);

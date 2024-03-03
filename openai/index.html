@@ -12,65 +12,76 @@
       <li>Premier élément</li>
     </ul>
 
-    <textarea id="prompt" value="Julie est une artiste qui dessine, elle est assise à la terrasse d'un café et griffone son calepin."></textarea>
+    <textarea
+      id="prompt"
+      value="Julie est une artiste qui dessine, elle est assise à la terrasse d'un café et griffone son calepin."
+    ></textarea>
     <button onclick="send()">Send websocket</button>
-    <button onclick="sendChatCompletion()">Send openai compatible chat completion</button>
+    <button onclick="sendChatCompletion()">
+      Send openai compatible chat completion
+    </button>
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
 
       socket.on("connect", () => {
-  console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
-});
+        console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
+      });
 
-socket.on("message", (data) => {
-  console.log("message",data)
-})
+      socket.on("message", (data) => {
+        console.log("message", data);
+      });
 
-function send() {
-  const message = document.getElementById("prompt").value;
-  socket.emit("message", message);
-  document.getElementById("prompt").value = "";
-}
+      function send() {
+        const message = document.getElementById("prompt").value;
+        socket.emit("message", message);
+        document.getElementById("prompt").value = "";
+      }
 
-
-function sendChatCompletion() {
-  const message = document.getElementById("prompt").value;
-  const body = {
-    messages: [
-      {
-        role: "system",
-        content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
+      function sendChatCompletion() {
+        const message = document.getElementById("prompt").value;
+        const body = {
+          messages: [
+            {
+              role: "system",
+              content: `Agis comme un écrivain. Développez le texte de l'utilisateur en ajoutant plus de détails tout en gardant le même sens.
          Donne uniquement le texte et rien d'autre, 
          ne discute pas, pas de préambule, va à l'essentiel.`,
-      },
-      { role: "user", content: message},
-    ],
-    max_tokens: 800,
-     stop: [
-      //"\n", 
-      "###",
-  
-  ],
-  };
+            },
+            { role: "user", content: message },
+          ],
+          model: "gpt-3.5-turbo",
+          temperature: 0.7,
+        // stream: true
+          max_tokens: 800,
+          stop: [
+            //"\n",
+            "###",
+          ],
+        };
 
-axios
-  .post(
-    `http://127.0.0.1:5678/v1/chat/completions`,
-    body
-  )
-  .then(function (response) {
-    console.log(response.data.choices[0].message);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-  document.getElementById("prompt").value = "";
-}
+        axios
+          .post(
+            `http://127.0.0.1:5678/v1/chat/completions`,
 
-
-
+            body,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          )
+          .then(function (response) {
+            console.log(response.data);
+            console.log(response.data.choices[0].message);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        document.getElementById("prompt").value = "";
+      }
     </script>
     <!-- FIN CODE SOCKET -->
   </body>

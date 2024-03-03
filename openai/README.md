@@ -2,6 +2,11 @@
 - with voice ? https://medium.com/@sujanxchhetri/creating-a-chatbot-using-socket-io-api-ai-and-web-speech-api-844c3177596b
 
 
+# openai making requests
+- https://platform.openai.com/docs/api-reference/making-requests
+
+
+response from chatgpt : https://cookbook.openai.com/examples/how_to_stream_completions
 run on localhost:5678
 
 see test/node_test.js for more details
