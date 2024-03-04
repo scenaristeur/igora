@@ -19,23 +19,23 @@ export class Worker extends Base {
     this.listenDoing()
   }
 
-listenDoing(){
-  this.prepared.observeDeep((events, transaction) => {
-    this.log("events", events, transaction)
-    this.prepare();
-  })
-}
+  listenDoing() {
+    this.prepared.observeDeep((events, transaction) => {
+      this.log("events", events, transaction)
+      this.prepare();
+    })
+  }
 
   prepare() {
-     let  tasks = Array.from(this.prepared.values())
+    let tasks = Array.from(this.prepared.values())
 
-     tasks.forEach((task)=>{
-        // console.log("task", task)
-         if (task.worker == this.id){
-            this.processTask(task)
-         }
-     })
-  
+    tasks.forEach((task) => {
+      // console.log("task", task)
+      if (task.worker == this.id) {
+        this.processTask(task)
+      }
+    })
+
 
 
     //   if(tasks.length>0){
@@ -44,25 +44,29 @@ listenDoing(){
     //   }
   }
 
-processTask(task) {
+  processTask(task) {
 
 
 
-if (this.mcConnector && this.mcConnector.state == "ready") {
-    this.options.state = "working";
-    this.updateAwareness();
-    this.log("process task", task.id)
-    this.doing.set(task.id, task)
-this.prepared.delete(task.id)
-    this.process_doing_mc(task.id);
+    if (this.mcConnector && this.mcConnector.state == "ready") {
+      this.options.state = "working";
+      this.updateAwareness();
+      this.log("process task", task.id)
+      this.doing.set(task.id, task)
+      this.prepared.delete(task.id)
+      this.process_doing_mc(task.id);
+    }
   }
 
-
-
-}
-
-async process_doing_mc(id) {
+  async process_doing_mc(id) {
     let current = this.doing.get(id);
+    console.log("!!!!!! PROCESSING ", current)
+    if (current.systemPrompt == undefined || current.systemPrompt.length == 0) {
+      current.systemPrompt = this.options.systemPrompt || "Tu es une petite souris et tu dois agir comme telle, en finissant toutes te phrases par 'Hi!Hi!Hi'"
+
+    }
+    current.temperature = this.options.temperature || 0.7
+    current.seed = this.options.seed
     this.log("process_doing_mc", id, current, this.mcConnector.state);
     current.response = "";
     const response = await this.mcConnector.chat(current, (token) => {
@@ -82,8 +86,8 @@ async process_doing_mc(id) {
     this.doing.delete(current.id);
     this.options.state = "ready";
     this.log("DONE", current.id);
-   // this.prepare();
-   this.updateAwareness()
+    // this.prepare();
+    this.updateAwareness()
   }
 
 
@@ -99,20 +103,20 @@ async process_doing_mc(id) {
     });
   }
 
-//   logList(step) {
-//     let { todos, doing, done } = {
-//       todos: this.todolist.todos,
-//       prepared: this.todolist.todos,
-//       doing: this.todolist.doing,
-//       done: this.todolist.done,
-//     };
-//     this.log(
-//       "### ",
-//       step,
-//       " ###",
-//       Array.from(todos.keys()).length,
-//       Array.from(doing.keys()).length,
-//       Array.from(done.keys()).length
-//     );
-//   }
+  //   logList(step) {
+  //     let { todos, doing, done } = {
+  //       todos: this.todolist.todos,
+  //       prepared: this.todolist.todos,
+  //       doing: this.todolist.doing,
+  //       done: this.todolist.done,
+  //     };
+  //     this.log(
+  //       "### ",
+  //       step,
+  //       " ###",
+  //       Array.from(todos.keys()).length,
+  //       Array.from(doing.keys()).length,
+  //       Array.from(done.keys()).length
+  //     );
+  //   }
 }

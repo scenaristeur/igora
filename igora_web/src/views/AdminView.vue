@@ -3,6 +3,7 @@
         <h1>Admin</h1>
 
         <!-- <BrokersView /> -->
+        <ConfigView />
         <WorkersView />
         <TasksView />
         // BE CAREFULL //
@@ -14,12 +15,16 @@
 // import BrokersView from '@/views/BrokersView.vue'
 import WorkersView from '@/views/WorkersView.vue'
 import TasksView from '@/views/TasksView.vue'
+import ConfigView from './ConfigView.vue'
+
+
 export default {
     name: "AdminView",
     components: {
         // BrokersView,
         WorkersView,
-        TasksView
+        TasksView,
+        ConfigView
     },
     methods: {
         clean() {

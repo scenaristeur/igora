@@ -2,7 +2,7 @@ import * as Y from 'yjs'
 import { WebsocketProvider } from 'y-websocket'
 import { v4 as uuidv4 } from 'uuid'
 
- import store from '@/store';
+import store from '@/store';
 
 
 
@@ -11,8 +11,8 @@ import { v4 as uuidv4 } from 'uuid'
 const doc = new Y.Doc()
 const wsProvider = new WebsocketProvider(
   //'ws://localhost:9999',
-  //'ws://localhost:1234',
-  'wss://ylm-websocket.glitch.me',
+  'ws://localhost:1234',
+  //'wss://ylm-websocket.glitch.me',
   'market',
   doc
 )
@@ -28,11 +28,11 @@ const doing = doc.getMap('doing')
 const done = doc.getMap('done')
 
 export class User {
-  constructor({ name = 'inconnu'}) {
+  constructor({ name = 'inconnu' }) {
     this.name = name
-// this.callbacks = callbacks
+    // this.callbacks = callbacks
     // console.log("store", store)
-//handleAction("one")
+    //handleAction("one")
     this.id = uuidv4()
     this.listening = []
     this.awareness = null
@@ -60,7 +60,7 @@ export class User {
       // we log all awareness information from all users.
       let agents = Array.from(user.awareness.getStates().values())
       console.log('######AWARENESS', agents.length)
-      store.commit("core/setAwareness", this.awareness )
+      store.commit("core/setAwareness", this.awareness)
       //this.callbacks.awarenessChanged(null, user.awareness)
 
       agents.forEach((a) => {
@@ -91,11 +91,42 @@ export class User {
       console.log('prepared', prepared.toJSON())
       console.log('doing', doing.toJSON())
       console.log('done', done.toJSON())
+      console.log('listening', this.listening)
+
+      for (let l of this.listening) {
+        let isReady = done.get(l)
+        if (isReady) {
+          console.log("RESPONSE", isReady)
+          this.listening = this.listening.filter(function (item) {
+            return item !== l
+          })
+          let message = {
+            id: isReady.id,
+            role: "assistant",
+            content: isReady.response
+          }
+          done.delete(l)
+          store.commit('core/pushMessage', message)
+        } else {
+          let isDoing = doing.get(l)
+          if (isDoing) {
+            let message = {
+              id: isDoing.id,
+              role: "assistant",
+              content: isDoing.response,
+              partial: true
+            }
+            store.commit('core/pushMessage', message)
+          }
+        }
+
+      }
+
 
       if (doing.size > 0) {
         console.log('doing', doing.entries())
         for (const value of doing.values()) {
-          console.log('doing', value)
+          console.log('doing', value, value.response)
         }
       }
 
@@ -150,6 +181,7 @@ export class User {
     console.log(todo)
     todos.set(id, todo)
     this.listening.push(id)
+    return id
   }
   clean() {
     this.cleanTodos()

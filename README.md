@@ -162,3 +162,11 @@ npm install -g node-red
 - lightnode $52.7 / month : https://go.lightnode.com/france-vps?ref=1179805e&id=45 for 8cpu
 - 120 days free https://vpssos.com/free-vps-hosting/#_6-linuxone
 - https://www.hostingadvice.com/how-to/free-vps-hosting/
+
+# expériences
+- SP : 
+ user : Une baguette de pain est-elle plus chère ou moins chère qu'une coupe de cheveux ? Réponds étape par étape et explique ton raisonnement 
+ 
+- SP : Etablit une liste de dix fruits, et classe les du plus cher au moins cher
+P : user : Etablit une liste de dix fruits, et classe les du plus cher au moins cher 
+
