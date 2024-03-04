@@ -69,7 +69,7 @@ export default {
 }
 
 #messages {
-    height: 50px;
+    height: 200px;
     overflow-y: auto;
 }
 </style>
