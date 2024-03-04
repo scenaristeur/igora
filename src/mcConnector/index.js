@@ -2,12 +2,12 @@ import { Base } from "../base/index.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
-import { getLlama, LlamaModel, LlamaContext, LlamaChatSession } from "node-llama-cpp";
+import { LlamaModel, LlamaContext, LlamaChatSession } from "node-llama-cpp";
 // import { get_encoding, encoding_for_model } from "tiktoken";
 // const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const llama = await getLlama()
+
 let model = undefined;
 
 let prompts = [];
@@ -22,7 +22,6 @@ export class McConnector extends Base {
     console.log("Loading LLM model from", modelPath);
 
     model = new LlamaModel({
-      llama,
       modelPath: modelPath,
     });
     this.flag = "[MULTI-CHANNEL]";
@@ -169,7 +168,7 @@ export class McConnector extends Base {
       options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1;
     this.log("### " + options.user + " say " + options.prompt, "seed:", seed);
     this.log("### starting session n°" + options.id);
-    const context = new LlamaContext({ model, seed ,  contextSize: Math.min(4096, model.trainContextSize)});
+    const context = new LlamaContext({ model, seed });
 
     // let tokens = enc.encode(JSON.stringify(options.conversationHistory))
     let tokens = context.encode(JSON.stringify(options.conversationHistory));
@@ -190,7 +189,6 @@ export class McConnector extends Base {
 
     let sessionOptions = {
       context: context,
-      contextSequence: context.getSequence(),
       conversationHistory: options.conversationHistory || [],
     };
 
@@ -219,7 +217,7 @@ export class McConnector extends Base {
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
-     // maxTokens: maxTokens,
+      maxTokens: maxTokens,
       onToken(chunk) {
         const tok = context.decode(chunk);
         that.log(

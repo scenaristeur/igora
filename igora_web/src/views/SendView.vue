@@ -2,7 +2,7 @@
     <div>
         <MessagesView />
         <label for="promptTextarea" class="form-label">Prompt</label>
-        <textarea id="promptTextarea" class="form-control" rows="3" v-model="prompt" @keyup.enter="send()"></textarea>
+        <textarea id="promptTextarea" class="form-control" rows="2" v-model="prompt" @keyup.enter="send()"></textarea>
         <button v-on:click="send()" type="button" class="btn btn-success">Send</button><br>
 
         <div class="row">
@@ -22,7 +22,7 @@
         </div>
         <label for="systemPromptTextarea" class="form-label">System Prompt</label>
 
-        <textarea id="systemPromptTextarea" class="form-control" rows="6" v-model="systemPrompt"></textarea>
+        <textarea id="systemPromptTextarea" class="form-control" rows="4" v-model="systemPrompt"></textarea>
     </div>
 </template>
 
