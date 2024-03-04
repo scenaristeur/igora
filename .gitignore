@@ -1,3 +1,4 @@
 node_modules
 .env
 models/*.gguf
+.ipynb_checkpoints

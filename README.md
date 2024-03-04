@@ -24,6 +24,7 @@ cd igora
 npm install
 npm run fix
 # download a gguf llm model like https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF
+# or use `sh download_model.sh`
 wget -O /content/igora/models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
 
 
@@ -151,3 +152,8 @@ npm install -g node-red
 
 - https://medium.com/@yufengg/how-to-upgrade-colab-with-more-compute-64d53a9b05dc
 - https://console.cloud.google.com/marketplace/browse?filter=solution-type:vm
+
+# free vps server
+- https://www.youtube.com/watch?v=07as5Sf8Sz0
+- github codespace https://www.youtube.com/watch?v=edHyPPfc9QY
+- -> https://sturdy-carnival-vqx6vvr79g2649.github.dev/
