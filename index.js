@@ -28,7 +28,7 @@ let broker = new Broker({
      name: "worker1",
      yjs_url: yjs_url,
      yjs_room: yjs_room,
-     modelName: "vicuna-7b-v1.5-16k.Q2_K.gguf"
+     modelName: process.env.LLM_MODEL_NAME
     
  })
 

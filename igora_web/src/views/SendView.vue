@@ -1,5 +1,6 @@
 <template>
     <div>
+        <MessagesView />
         <label for="promptTextarea" class="form-label">Prompt</label>
         <textarea id="promptTextarea" class="form-control" rows="3" v-model="prompt" @keyup.enter="send()"></textarea>
         <button v-on:click="send()" type="button" class="btn btn-success">Send</button><br>
@@ -26,8 +27,13 @@
 </template>
 
 <script>
+import MessagesView from './MessagesView.vue'
+
 export default {
     name: "SendView",
+    components  :{
+        MessagesView
+    },
     data() {
         return {
             prompt: "un bar la nuit dans une ruelle sombre",
@@ -54,9 +60,10 @@ tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et
             console.log(this.prompt)
 
             let randomSeed = Math.floor(Math.random() * 100) + 1
-
-            this.user.addTodo({ prompt: this.prompt.trim(), systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
+let prompt = this.prompt.trim()
+           let id= this.user.addTodo({ prompt: prompt, systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
             this.prompt = ""
+            this.$store.commit("core/pushMessage",{id: id,role:"user", content: prompt})
         }
     },
     computed: {
