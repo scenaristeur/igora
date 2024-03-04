@@ -170,3 +170,23 @@ npm install -g node-red
 - SP : Etablit une liste de dix fruits, et classe les du plus cher au moins cher
 P : user : Etablit une liste de dix fruits, et classe les du plus cher au moins cher 
 
+- SP : Tu es un écrivain romancier et tu dois décrire la scénario demandée par l'utilisateur avec un maximum de détails.
+tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et tu dois imaginer une intrigue
+- prompt : un bar la nuit dans une ruelle sombre
+- temperature 07
+- model vicuna-7b-v1.5-16k.Q2_K.gguf
+- assistant : Le scénario se déroule dans un bar de nuit situé dans une ruelle sombre d'une petite ville. Le personnage principal, qui est un écrivain romancier, arrive au bar en fin de semaine pour essayer de trouver l'inspiration pour son prochain livre. Il a entendu parler du bar de nuit et il souhaitait explorer le lieu pour y trouver des idées pour son prochain livre. ### Scénario: Le personnage principal s'installe à sa table, prêt à commencer son quête d'inspiration. Il remarque alors un groupe de personnes qui discutent en écoutant musique sur des écouteurs. Il se rapproche d'eux pour écouter et il découvre qu'ils parlent d'une affaire de meurtre. Les témoins entendent la conversation, mais ils ne veulent pas s'impliquer. Le personnage principal commence à interagir avec les autres clients du bar. Il rencontre un homme qui travaille dans une entreprise de sécurité privée et il lui propose de l'aider à trouver le meurtrier en échange de 500 $ récompense. Le personnage accepte la proposition et il commence sa mission pour trouver le meurtrier. Le personnage découvre bientôt que la victime était un ancien ennemi du propriétaire du bar, qui avait des affaires illégales avec les autorités locales. Le propriétaire du bar est lui-même suspect dans l'affaire de meurtre et il cherche à dissimuler ses activités criminelles. Le personnage principal commence à enquêter sur le propriétaire du bar, il découvre que celui-ci a un passé criminel et qu'il est impliqué dans des activités de contrebande illégales avec une autre ville voisine. Il découvre également que le propriétaire a un compte secret dans un banque locale et qu'il utilise cette banque pour dissimuler sa richesse. Le personnage principal continue son enquête en interagissant avec les autres clients du bar, il découvre que l'un d'entre eux est un ancien associé de la victime, qui a été victime de l'affaire elle-même. Il découvre également qu'il existe un traître dans le groupe des témoins, car ils ont tous refusé de témoigner en cour de justice. Le personnage principal finit par trouver le meurtrier grâce à son enquête et il décide de faire arrêter le propriétaire du bar pour ses activités criminelles. Il apporte également la preuve qu'il y a un traître parmi les témoins en tuant l'un d'entre eux. Il utilise ensuite cette preuve pour faire condamner le propriétaire du bar en justice et il récupère la somme de 500 $ promettue par l'homme travaillant dans une entreprise de sécurité privée. Le personnage retourne ensuite au bar pour trouver de l'inspiration pour son prochain livre, mais il est interrompu par les crimes commis par le propriétaire du bar et la police qui arrive pour prendre le suspect en custodia. Il décide d'attendre que tout soit terminé avant de continuer son quête d'inspiration dans le bar de nuit sombre. 
+--> peu satisfaisant
+
+
+# message history
+- model vicuna-7b-v1.5-16k.Q2_K.gguf
+```
+system : Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur
+user : Bonjour, je m'appelle David et j'ai 45 ans
+assistant : Bonjour David, ça va ? Comment puis-je vous aider aujourd'hui ?
+user : Quel est mon prénom et quel est mon âge ?
+assistant : Votre prénom est David et vous avez 45 ans.
+user : quel âge aurais-je dans deux ans ?
+assistant : D'après mes calculs, en deux ans, vous aurez 47 ans. 
+```

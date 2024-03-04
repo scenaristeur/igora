@@ -3,6 +3,8 @@ import { Base } from "../base/index.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import { LlamaModel, LlamaContext, LlamaChatSession } from "node-llama-cpp";
+// import { get_encoding, encoding_for_model } from "tiktoken";
+// const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -168,6 +170,11 @@ export class McConnector extends Base {
     this.log("### starting session n°" + options.id);
     const context = new LlamaContext({ model, seed });
 
+    // let tokens = enc.encode(JSON.stringify(options.conversationHistory))
+    const tokens = context.encode(JSON.stringify(options.conversationHistory));
+    console.log('TIKTOKEN length', tokens, tokens.length)
+
+
     let sessionOptions = {
       context: context,
       conversationHistory: options.conversationHistory || [],
@@ -194,6 +201,7 @@ export class McConnector extends Base {
     this.log("### sessions actives ", sessions);
     let maxTokens = context.getContextSize()
     console.log('MAXTOKENS', maxTokens)
+  
 
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature

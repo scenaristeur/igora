@@ -166,22 +166,37 @@ export class User {
   }
 
   addTodo(options) {
-    let id = uuidv4()
+   let systemPrompt = options.systemPrompt.length > 0 && options.systemPrompt || `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`
+  let messages = store.state.core.messages
+
+  messages[0].role == "system" ? messages[0].content = systemPrompt : messages.unshift({ role: "system", content: systemPrompt })
+
+
+
+  // encoding = tiktoken.get_encoding("cl100k_base")
+  // num_tokens = len(encoding.encode(messages))
+  // print(num_tokens)
+
+
     let todo = {
-      id: id,
+      id: options.id,
       asker: this.id,
       type: 'text',
-      systemPrompt: options.systemPrompt || `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`,
-      prompt: options.prompt || 'prompt',
+      systemPrompt: systemPrompt,
+      //prompt: options.prompt || 'prompt',
+      messages: messages,
       state: 'todo',
       seed: options.seed || 0,
       temperature: options.temperature || 0,
       date: Date.now()
     }
+    //console.log("messages", messages)
+
+
     console.log(todo)
-    todos.set(id, todo)
-    this.listening.push(id)
-    return id
+    todos.set(todo.id, todo)
+    this.listening.push(todo.id)
+    //return id
   }
   clean() {
     this.cleanTodos()
