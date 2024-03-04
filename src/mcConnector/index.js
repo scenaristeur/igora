@@ -171,9 +171,21 @@ export class McConnector extends Base {
     const context = new LlamaContext({ model, seed });
 
     // let tokens = enc.encode(JSON.stringify(options.conversationHistory))
-    const tokens = context.encode(JSON.stringify(options.conversationHistory));
-    console.log('TIKTOKEN length', tokens, tokens.length)
+    let tokens = context.encode(JSON.stringify(options.conversationHistory));
+    console.log("TIKTOKEN length", tokens, tokens.length);
 
+    while (tokens.length > 300) {
+      console.log("token too long", tokens);
+      // keep system_prompt
+      // let system_message = options.conversationHistory.pop()
+      // remove the older message
+      let removed = options.conversationHistory.shift();
+      console.log("removed", removed);
+      // add the system message
+      // options.conversationHistory.unshift(system_message)
+      tokens = context.encode(JSON.stringify(options.conversationHistory));
+      console.log("TIKTOKEN length", tokens, tokens.length);
+    }
 
     let sessionOptions = {
       context: context,
@@ -199,9 +211,8 @@ export class McConnector extends Base {
     sessions[options.id] = s;
 
     this.log("### sessions actives ", sessions);
-    let maxTokens = context.getContextSize()
-    console.log('MAXTOKENS', maxTokens)
-  
+    let maxTokens = context.getContextSize();
+    console.log("MAXTOKENS", maxTokens);
 
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature

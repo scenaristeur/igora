@@ -32,7 +32,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default {
     name: "SendView",
-    components  :{
+    components: {
         MessagesView
     },
     data() {
@@ -58,15 +58,15 @@ tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et
             console.log("systemPrompt", this.systemPrompt)
         },
         send() {
-            console.log(this.prompt)
+            console.log(this.prompt, this.seed)
 
             let randomSeed = Math.floor(Math.random() * 100) + 1
-let prompt = this.prompt.trim()
-let id = uuidv4()
-this.$store.commit("core/pushMessage",{id: id,role:"user", content: prompt})
-           this.user.addTodo({id: id, prompt: prompt, systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
+            let prompt = this.prompt.trim()
+            let id = uuidv4()
+            this.$store.commit("core/pushMessage", { id: id, role: "user", content: prompt })
+            this.user.addTodo({ id: id, prompt: prompt, systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
             this.prompt = ""
-   
+
         }
     },
     computed: {
