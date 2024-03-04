@@ -1,5 +1,11 @@
 # Igora
 
+- No GPU needed
+- runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing)
+- see notebook https://github.com/scenaristeur/igora/blob/main/igora.ipynb
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scenaristeur/igora/blob/main/igora.ipynb)
+
 broker for https://github.com/scenaristeur/catay
 
 # todo 
@@ -16,6 +22,10 @@ broker for https://github.com/scenaristeur/catay
 git clone https://github.com/scenaristeur/igora.git
 cd igora
 npm install
+npm run fix
+# download a gguf llm model like https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF
+wget -O /content/igora/models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
+
 
 ```
 
@@ -132,3 +142,12 @@ npm install -g node-red
 
 # see llama http docker
 - https://github.com/edfletcher/llama.http/tree/master/examples/simple-http
+
+
+# run on colab ?
+- run Igora on Google colab : https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing
+
+- only two cpu but my laptop is more efficient with 16 CPU and 16 GB Ram
+
+- https://medium.com/@yufengg/how-to-upgrade-colab-with-more-compute-64d53a9b05dc
+- https://console.cloud.google.com/marketplace/browse?filter=solution-type:vm
