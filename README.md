@@ -1,8 +1,16 @@
 # Igora
 
+- No GPU needed
+- runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing)
+- see notebook https://github.com/scenaristeur/igora/blob/main/igora.ipynb
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scenaristeur/igora/blob/main/igora.ipynb)
+
 broker for https://github.com/scenaristeur/catay
 
-
+# todo 
+- [ ] should be compatible with OpenAi API for stream https://cookbook.openai.com/examples/how_to_stream_completions, tiktoken to count
+- [ ] possibilité de prioriser les demandes locales, ou liste de prioritaires, workers debrayables, ou 2 workers, un pour les demandes locales, un pour les remote
 
 # prerequist
 - Linux
@@ -14,6 +22,11 @@ broker for https://github.com/scenaristeur/catay
 git clone https://github.com/scenaristeur/igora.git
 cd igora
 npm install
+npm run fix
+# download a gguf llm model like https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF
+# or use `sh download_model.sh`
+wget -O /content/igora/models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
+
 
 ```
 
@@ -45,7 +58,7 @@ https://raw.githubusercontent.com/yjs/y-websocket/69ddb2c49ac73e76b1ab8b2876d24f
 
 
 # local market
-
+if you want to use a local y-websocket server use 
 run outside a project with type:module as y-websocket server is commonjs
 ```
 PORT=1234 YPERSISTENCE=./dbDir npx y-websocket
@@ -72,6 +85,52 @@ YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
 YJS_MARKET_ROOM="market"
 
 
+
+# adapt client 
+in igoraweb/src/lib/user.js, set wsProvider according to y-websocket server t=you defined
+```
+const wsProvider = new WebsocketProvider(
+  //'ws://localhost:9999',
+  //'ws://localhost:1234',
+  'wss://ylm-websocket.glitch.me',
+  'market',
+  doc
+)
+```
+
+# start
+dans 3 terminaux
+
+Lancement du worker llm
+```
+npm run start
+```
+lancement du serveur y-websocket d'échange de donnée
+
+```
+cd ~
+PORT=1234 npx y-websocket
+```
+
+lancement du frontend sur http://localhost:5173
+
+```
+cd igora_web
+npm install
+npm run dev
+```
+
+
+# based on
+- node-llama-cpp [https://github.com/edfletcher/node-llama-cpp](https://withcatai.github.io/node-llama-cpp/) / https://github.com/withcatai/node-llama-cpp
+- y-websocket https://github.com/yjs/y-websocket
+- y-leveldb https://github.com/yjs/y-leveldb todo
+- y-protocols https://github.com/yjs/y-protocols
+- sould do with llama-cpp python server
+
+
+
+
 # storage
 ? https://docs.storj.io/
 
@@ -81,3 +140,20 @@ YJS_MARKET_ROOM="market"
 ```
 npm install -g node-red
 ```
+
+# see llama http docker
+- https://github.com/edfletcher/llama.http/tree/master/examples/simple-http
+
+
+# run on colab ?
+- run Igora on Google colab : https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing
+
+- only two cpu but my laptop is more efficient with 16 CPU and 16 GB Ram
+
+- https://medium.com/@yufengg/how-to-upgrade-colab-with-more-compute-64d53a9b05dc
+- https://console.cloud.google.com/marketplace/browse?filter=solution-type:vm
+
+# free vps server
+- https://www.youtube.com/watch?v=07as5Sf8Sz0
+- github codespace https://www.youtube.com/watch?v=edHyPPfc9QY
+- -> https://sturdy-carnival-vqx6vvr79g2649.github.dev/
