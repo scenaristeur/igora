@@ -155,5 +155,10 @@ npm install -g node-red
 
 # free vps server
 - https://www.youtube.com/watch?v=07as5Sf8Sz0
+- https://vpssos.com/blog/buy-16-core-vps-in-2023.html#_1-vultr
 - github codespace https://www.youtube.com/watch?v=edHyPPfc9QY
 - -> https://sturdy-carnival-vqx6vvr79g2649.github.dev/
+
+- lightnode $52.7 / month : https://go.lightnode.com/france-vps?ref=1179805e&id=45 for 8cpu
+- 120 days free https://vpssos.com/free-vps-hosting/#_6-linuxone
+- https://www.hostingadvice.com/how-to/free-vps-hosting/
