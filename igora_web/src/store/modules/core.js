@@ -12,8 +12,8 @@ const state = () => ({
   awareness: null,
   agents: null,
   messages: [
-    { id:1,role: "user", content: "Bonjour" },
-    { id:2,role: "assistant", content: "Bonjour, comment puis-je vous aider aujourd'hui ?" }
+    // { id: 1, role: "user", content: "Bonjour" },
+    // { id: 2, role: "assistant", content: "Bonjour, comment puis-je vous aider aujourd'hui ?" }
   ]
 })
 
@@ -34,8 +34,16 @@ const mutations = {
   test(state, data) {
     console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", data, state)
   },
-  pushMessage(state, message){
-    state.messages.push(message)
+  pushMessage(state, message) {
+    // if (message.partial == true && message.role == "assistant") {
+      state.messages = state.messages.filter(function (item) {
+        return !(item.id == message.id && item.role == message.role)
+      })
+      console.log("filtered messages", state.messages)
+
+    // } 
+      state.messages.push(message)
+  
   }
   //   initChat(state, options) {
   //     state.target = options

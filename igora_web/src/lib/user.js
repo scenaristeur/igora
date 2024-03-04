@@ -96,21 +96,37 @@ export class User {
       for (let l of this.listening) {
         let isReady = done.get(l)
         if (isReady) {
-          console.log("RESPONSE", l)
+          console.log("RESPONSE", isReady)
+          this.listening = this.listening.filter(function (item) {
+            return item !== l
+          })
           let message = {
-            id: l.id,
+            id: isReady.id,
             role: "assistant",
-            content: l.response
+            content: isReady.response
           }
+          done.delete(l)
           store.commit('core/pushMessage', message)
+        } else {
+          let isDoing = doing.get(l)
+          if (isDoing) {
+            let message = {
+              id: isDoing.id,
+              role: "assistant",
+              content: isDoing.response,
+              partial: true
+            }
+            store.commit('core/pushMessage', message)
+          }
         }
+
       }
 
 
       if (doing.size > 0) {
         console.log('doing', doing.entries())
         for (const value of doing.values()) {
-          console.log('doing', value)
+          console.log('doing', value, value.response)
         }
       }
 

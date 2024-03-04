@@ -157,3 +157,11 @@ npm install -g node-red
 - https://www.youtube.com/watch?v=07as5Sf8Sz0
 - github codespace https://www.youtube.com/watch?v=edHyPPfc9QY
 - -> https://sturdy-carnival-vqx6vvr79g2649.github.dev/
+
+# expériences
+- SP : 
+ user : Une baguette de pain est-elle plus chère ou moins chère qu'une coupe de cheveux ? Réponds étape par étape et explique ton raisonnement 
+ 
+- SP : Etablit une liste de dix fruits, et classe les du plus cher au moins cher
+P : user : Etablit une liste de dix fruits, et classe les du plus cher au moins cher 
+
