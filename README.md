@@ -25,7 +25,7 @@ npm install
 npm run fix
 # download a gguf llm model like https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF
 # or use `sh download_model.sh`
-wget -O /content/igora/models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
+wget -O ./models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
 
 
 ```
@@ -190,3 +190,12 @@ assistant : Votre prénom est David et vous avez 45 ans.
 user : quel âge aurais-je dans deux ans ?
 assistant : D'après mes calculs, en deux ans, vous aurez 47 ans. 
 ```
+
+# Docker
+- https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211567-utilisez-des-images-grace-au-partage-sur-le-docker-hub
+
+docker build -t igora .
+
+docker run --rm --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora
+
+

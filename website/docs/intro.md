@@ -33,6 +33,6 @@ The goal of Igora is to provide everyone, everywhere with llms (large language m
 ## Getting Started
 
 There are two ways to get started:
-- You can [create a Igora stack in local market](/docs/installation) (a worker and a client on your own computer).
+- You can [create a Igora stack in local market](/docs/installation) (a worker and a client on your own computer). Avantages : your data stay on your computer, Disadvantages : you can not use other llms or workers.
 - You can [use decentralized Igora market](/docs/decentralized). Allowing you to use Igora protocol on a decentralized network.
- With this way, market, worker(s) and client(s) are distributed on the network. You specify which machine is a worker and which machine is a client.
+ With this way, market, worker(s) and client(s) are distributed on the network. You specify which machine is a worker and which machine is a client. Advantages: Use a large bunch of llm , earn money or tokens with your workers

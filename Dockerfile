@@ -2,4 +2,10 @@ FROM node
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN npm install
-CMD "npm" "start"
+RUN npm run fix
+RUN cp .env-example .env
+RUN cd igora_web && npm install
+EXPOSE 1234/udp
+EXPOSE 1234/tcp
+EXPOSE 5173
+CMD ./start.sh
