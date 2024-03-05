@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'Installation'
+sidebar_label: 'Decentralized Igora'
 sidebar_position: 2
 ---
 
