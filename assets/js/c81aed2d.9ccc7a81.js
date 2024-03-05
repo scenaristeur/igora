@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdoc=self.webpackChunkdoc||[]).push([[3273],{5475:l=>{l.exports=JSON.parse('{"label":"hello","permalink":"/igora/blog/tags/hello","allTagsPath":"/igora/blog/tags","count":2,"unlisted":false}')}}]);
