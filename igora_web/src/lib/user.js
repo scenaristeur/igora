@@ -5,15 +5,23 @@ import { v4 as uuidv4 } from 'uuid'
 import store from '@/store';
 
 
+console.log("ENV",import.meta.env.VITE_YJS_ENV)
+
+
+let yjs_url = import.meta.env.VITE_YJS_ENV== "remote" ? import.meta.env.VITE_YJS_REMOTE_URL : import.meta.env.VITE_YJS_LOCAL_URL
+
+
+let yjs_room = import.meta.env.VITE_YJS_MARKET_ROOM || "market"
 
 // import { handleAction } from './helper'
 
 const doc = new Y.Doc()
 const wsProvider = new WebsocketProvider(
   //'ws://localhost:9999',
-  'ws://localhost:1234',
+  //'ws://localhost:1234',
   //'wss://ylm-websocket.glitch.me',
-  'market',
+  yjs_url,
+  yjs_room,
   doc
 )
 

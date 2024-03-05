@@ -24,6 +24,7 @@ cd igora
 npm install
 npm run fix
 # download a gguf llm model like https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF
+# available models : https://huggingface.co/TheBloke?search_models=gguf
 # or use `sh download_model.sh`
 wget -O ./models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBloke/dolphin-2.2.1-mistral-7B-GGUF/resolve/main/dolphin-2.2.1-mistral-7b.Q2_K.gguf?download=true
 
@@ -196,6 +197,42 @@ assistant : D'après mes calculs, en deux ans, vous aurez 47 ans.
 
 docker build -t igora .
 
-docker run --rm --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora
+docker run --rm -d --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora
 
 
+or without -d 
+-> docker run --rm --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora
+you can see the logs and wait for the "broker" and "worker" connected
+
+```
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.0.30:5173/
+  ➜  Network: http://172.17.0.1:5173/
+[20:8:30]	 [YJS][Broker] connecting
+[20:8:30]	 [YJS][worker1] connecting
+[20:8:31]	 [YJS][Broker] connecting
+[20:8:31]	 [YJS][worker1] connecting
+[20:8:31]	 [YJS][Broker] connecting
+[20:8:31]	 [YJS][worker1] connecting
+[20:8:33]	 [YJS][Broker] connecting
+[20:8:33]	 [YJS][worker1] connecting
+running at 'localhost' on port 1234
+[20:8:35]	 [YJS][Broker] connecting
+[20:8:35]	 [YJS][worker1] connecting
+[20:8:35]	 [YJS][Broker] connected
+[20:8:35]	 [YJS][worker1] connected
+
+```
+
+
+
+
+--> front is running on http://localhost:5173
+
+exit in another terminal with ```docker stop igora``` (Ctrl+C does not work here because aof the start.sh script) 
+
+
+access the container with ```docker exec -it igora bash```
+
+# using remote decentralized with docker 
+change locale to remote in .env, in .env-example and in igora_web/.env then rebuilt docker image with ```docker build -t igora .``` and re-run the container with ```docker run --rm -d --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora```
