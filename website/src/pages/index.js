@@ -26,11 +26,11 @@ function HomepageHeader() {
             Igora Tutorial - 5min ⏱️
           </Link>
 
-          <Link
+          {/* <Link
             className="button button--secondary button--lg"
             to="https://scenaristeur.github.io/igora/fr">
             Voir la doc en Français
-          </Link>
+          </Link> */}
         </div>
       </div>
     </header>
