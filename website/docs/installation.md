@@ -6,7 +6,7 @@ sidebar_position: 2
 
 
 # Installation
-Igora source can be found at https://github.com/scenaristeur/igora, and if you need help, please [contact us](https://github.com/scenaristeur/igora/issues)
+if you have questions, please [contact us](./help)
 
 # Hardware
 - No GPU needed

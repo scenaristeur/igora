@@ -28,7 +28,7 @@ function HomepageHeader() {
 
           <Link
             className="button button--secondary button--lg"
-            to="https://scenaristeur.github.io/igora/docs/fr">
+            to="https://scenaristeur.github.io/igora/fr">
             Voir la doc en Français
           </Link>
         </div>

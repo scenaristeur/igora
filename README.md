@@ -2,9 +2,9 @@
 
 - No GPU needed
 - runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing)
 - see notebook https://github.com/scenaristeur/igora/blob/main/igora.ipynb
 - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/scenaristeur/igora/blob/main/igora.ipynb)
+- another [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/14lxt1XwkFtAAMauZzYsWEn7z2uKzUpzR?usp=sharing)
 
 broker for https://github.com/scenaristeur/catay
 
