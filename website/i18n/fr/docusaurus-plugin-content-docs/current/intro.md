@@ -8,7 +8,7 @@ Let's discover **Docusaurus in less than 5 minutes**.
 
 https://fr.wikipedia.org/wiki/Agora
 
-## Getting Started
+## Getting Started FRENCH
 
 Get started by **creating a new site**.
 
