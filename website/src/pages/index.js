@@ -22,6 +22,12 @@ function HomepageHeader() {
             to="/docs/intro">
             Igora Tutorial - 5min ⏱️
           </Link>
+
+          <Link
+            className="button button--secondary button--lg"
+            to="/fr">
+            Switch to French Doc
+          </Link>
         </div>
       </div>
     </header>
