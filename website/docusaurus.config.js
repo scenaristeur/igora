@@ -45,14 +45,14 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/scenaristeur/igora/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/scenaristeur/igora/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/scenaristeur/igora/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/scenaristeur/igora/tree/main/website/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -69,7 +69,7 @@ const config = {
       navbar: {
         title: 'Igora Protocol',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Igora Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -108,16 +108,16 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://stackoverflow.com/questions/tagged/igora',
               },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discord.gg/ZZUZwhQnyj',
               },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
+              // {
+              //   label: 'Twitter',
+              //   href: 'https://twitter.com/docusaurus',
+              // },
             ],
           },
           {

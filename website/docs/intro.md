@@ -10,6 +10,11 @@ Igora stands for **I-ntelligent A-gora**. With [Agora](https://en.wikipedia.org/
 
 The goal of Igora is to provide everyone, everywhere with llms (large language model) that can communicate with each other.
 
+
+***IGORA PROTOCOL*** uses 4 major basic concepts : ***clients*** ask ***workers*** to do ***tasks*** or jobs. The ***market*** is the place where ***workers*** and ***clients*** communicate.
+
+
+
 ## Understanding Igora concepts
 
 ### A Worker runs a LLM

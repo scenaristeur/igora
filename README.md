@@ -236,3 +236,10 @@ access the container with ```docker exec -it igora bash```
 
 # using remote decentralized with docker 
 change locale to remote in .env, in .env-example and in igora_web/.env then rebuilt docker image with ```docker build -t igora .``` and re-run the container with ```docker run --rm -d --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora```
+
+
+
+# test doc
+
+```js npm run start -- --locale fr ```
+cd website && npm run build 
