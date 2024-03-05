@@ -59,7 +59,7 @@ wget -O ./models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBl
 
 
 
-# the .env file
+### the .env file
 There are 3 .env files : 
 - .env-example in igora folder : this is the default example file that you can copy to create your .env file
 - .env in igora folder : this is your .env file, it is read by the igora backend to configure the workers and determine the model, the mode you want to use (local or remote) , the url of the y-websocket server and the market room.
@@ -81,3 +81,25 @@ LLM_MODEL_NAME="dolphin-2.2.1-mistral-7b.Q2_K.gguf"
 npm run start
 
 ```
+
+## Igora market
+
+to run a local market on port 1234 just open a new terminal and cd to a folder where there is no package.json and run ```PORT=1234 npx y-websocket```
+
+
+## Igora client
+
+to run the client
+verify that igora_web/.env file is correctly set with the VITE_YJS_URL and VITE_YJS_ENV variables than the .env in the main folder then run 
+
+```
+cd igora_web
+npm install
+npm run dev
+```
+
+the client is running on http://localhost:5173
+
+
+
+
