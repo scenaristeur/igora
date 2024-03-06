@@ -201,12 +201,30 @@ user : quel âge aurais-je dans deux ans ?
 assistant : D'après mes calculs, en deux ans, vous aurez 47 ans. 
 ```
 
-# Docker
+# New Docker
+docker compose --env-file .env-local  config
+docker compose --env-file .env-remote  config
+
+docker compose --env-file .env --env-file .env-local up
+docker compose --env-file .env --env-remote .env-local up
+
+docker compose --env-file .env --env-file .env-local up --build
+
+docker compose up
+
+
+
+
+# Docker (move oldDocker files to root folder)
 - https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211567-utilisez-des-images-grace-au-partage-sur-le-docker-hub
 
 docker build -t igora .
 
 docker run --rm -d --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp -p 1234:1234/udp -p 5173:5173 --net="host" igora
+
+# test docker perfs
+- managed with portainer
+docker run --rm -d --name igora -v ./models:/usr/src/app/models --cpus=4 --memory=8g --net="host" igora --> 200% cpu
 
 
 or without -d 

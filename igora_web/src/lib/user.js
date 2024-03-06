@@ -8,7 +8,7 @@ import store from '@/store';
 console.log("ENV",import.meta.env.VITE_YJS_ENV)
 
 
-let yjs_url = import.meta.env.VITE_YJS_ENV== "remote" ? import.meta.env.VITE_YJS_REMOTE_URL : import.meta.env.VITE_YJS_LOCAL_URL
+let yjs_url = import.meta.env.VITE_YJS_ENV== "REMOTE" ? import.meta.env.VITE_YJS_REMOTE_URL : import.meta.env.VITE_YJS_LOCAL_URL
 
 
 let yjs_room = import.meta.env.VITE_YJS_MARKET_ROOM || "market"

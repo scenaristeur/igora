@@ -1,0 +1,40 @@
+services:
+  backend:
+    image: "backend:${TAG}"
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    # ports:
+    #   - "3000:3000"
+    environment:
+      - YJS_ENV=${YJS_ENV}
+      - YJS_REMOTE_URL=${YJS_REMOTE_URL}
+      - YJS_LOCAL_URL=${YJS_LOCAL_URL}
+      - YJS_MARKET_ROOM=${YJS_MARKET_ROOM}
+      - LLM_MODEL_NAME=${LLM_MODEL_NAME}
+    volumes:
+      - ./models:/app/models
+  market:
+    image: "market:${TAG}"
+    build:
+      context: .
+      dockerfile: ./docker/market/Dockerfile
+    ports:
+      - "1234:1234"
+    environment:
+      - YJS_ENV=${YJS_ENV}
+    volumes:
+      - ./market_db:/app
+  frontend:
+    image: "frontend:${TAG}"
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_YJS_ENV=${VITE_YJS_ENV}
+      - VITE_YJS_REMOTE_URL=${VITE_YJS_REMOTE_URL}
+      - VITE_YJS_LOCAL_URL=${VITE_YJS_LOCAL_URL}
+  #   volumes:
+  #     - ./src:/app

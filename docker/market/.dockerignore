@@ -1,4 +1,5 @@
 .gitignore
+.github
 .env
 models/*.gguf
 .ipynb_checkpoints
@@ -7,3 +8,4 @@ Dockerfile
 docker-compose.yaml
 .dockerignore
 market_db
+website

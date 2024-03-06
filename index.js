@@ -2,7 +2,7 @@ import { Broker } from "./src/broker/index.js";
 import { Worker } from "./src/worker/index.js";
 
 // define your environment variables in the .env file 
-let yjs_url = process.env.YJS_ENV== "remote" ? process.env.YJS_REMOTE_URL : process.env.YJS_LOCAL_URL
+let yjs_url = process.env.YJS_ENV== "REMOTE" ? process.env.YJS_REMOTE_URL : process.env.YJS_LOCAL_URL
 //'wss://ylm-websocket.glitch.me'// "ws://localhost:1234"
 let yjs_room = process.env.YJS_MARKET_ROOM
 

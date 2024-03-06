@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env index.js",
+    "start_backend_docker": "node index.js",
     "dev": "nodemon --env-file=./.env index.js",
     "fix": "cp fix_bugs/package.json node_modules/y-websocket/package.json && cp fix_bugs/y-websocket.js node_modules/y-websocket/src/y-websocket.js",
     "openai": "node --env-file=.env openai/openai.js",
