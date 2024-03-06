@@ -32,8 +32,7 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales:['en']
-   // locales: ['en', 'fr'],
+    locales: ['en', 'fr'],
   },
 
   presets: [
@@ -94,10 +93,10 @@ const config = {
             label: 'Tutorial',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'left',
-          // },
+          {
+            type: 'localeDropdown',
+            position: 'left',
+          },
           {
             href: 'https://github.com/scenaristeur/igora',
             label: 'GitHub',
