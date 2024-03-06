@@ -6,12 +6,12 @@ sidebar_position: 2
 
 
 # Installation
-if you have questions, please [contact us](./help)
+If you have questions or issues, please [contact the community](./help)
 
 # Hardware
-- No GPU needed
-- tested on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
-- tested on a VirtualBox python 3.10 Machine with 4 CPU and 4 GB Ram
+- No GPU needed, works on a CPU laptop
+- tested on a [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
+- tested on a VirtualBox Xubuntu image with 4 CPU and 4 GB Ram
 - see [Igora Workers](./Igora%20Protocol/Igora%20workers)  or [Igora Docker](./Igora%20Docker) for more examples
 
 
