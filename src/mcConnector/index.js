@@ -26,6 +26,7 @@ export class McConnector extends Base {
     model = new LlamaModel({
       llama,
       modelPath: modelPath,
+      gpuLayers: 64 // or any other number of layers you want for use with gpu
     });
     this.flag = "[MULTI-CHANNEL]";
     this.chalk = this.chalk.rgb(145, 167, 45); //.hex('#DEADED')
