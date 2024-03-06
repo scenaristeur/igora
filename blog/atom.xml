@@ -2,11 +2,30 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://scenaristeur.github.io/igora/blog</id>
     <title>Igora Protocol Blog</title>
-    <updated>2021-08-26T00:00:00.000Z</updated>
+    <updated>2024-03-05T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://scenaristeur.github.io/igora/blog"/>
     <subtitle>Igora Protocol Blog</subtitle>
     <icon>https://scenaristeur.github.io/igora/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[C'est parti !]]></title>
+        <id>https://scenaristeur.github.io/igora/blog/c'est parti !</id>
+        <link href="https://scenaristeur.github.io/igora/blog/c'est parti !"/>
+        <updated>2024-03-05T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Ca y est ! La première version du protocole Igora est maintenant disponible !]]></summary>
+        <content type="html"><![CDATA[<p>Ca y est ! La première version du <em><strong>protocole Igora</strong></em> est maintenant disponible !</p>
+<p>Mais qu'est-ce que c'est, le protocole Igora ?</p>]]></content>
+        <author>
+            <name>Scenaristeur</name>
+            <uri>https://github.com/scenaristeur</uri>
+        </author>
+        <category label="igora" term="igora"/>
+        <category label="llm" term="llm"/>
+        <category label="chatGPT" term="chatGPT"/>
+        <category label="decentralized" term="decentralized"/>
+        <category label="horde" term="horde"/>
+        <category label="crowdsourced" term="crowdsourced"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
         <id>https://scenaristeur.github.io/igora/blog/welcome</id>

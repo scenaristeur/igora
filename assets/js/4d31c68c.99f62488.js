@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdoc=self.webpackChunkdoc||[]).push([[91],{6986:s=>{s.exports=JSON.parse('{"label":"crowdsourced","permalink":"/igora/blog/tags/crowdsourced","allTagsPath":"/igora/blog/tags","count":1,"unlisted":false}')}}]);

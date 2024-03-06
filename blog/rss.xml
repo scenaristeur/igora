@@ -4,10 +4,25 @@
         <title>Igora Protocol Blog</title>
         <link>https://scenaristeur.github.io/igora/blog</link>
         <description>Igora Protocol Blog</description>
-        <lastBuildDate>Thu, 26 Aug 2021 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 05 Mar 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[C'est parti !]]></title>
+            <link>https://scenaristeur.github.io/igora/blog/c'est parti !</link>
+            <guid>https://scenaristeur.github.io/igora/blog/c'est parti !</guid>
+            <pubDate>Tue, 05 Mar 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Ca y est ! La première version du protocole Igora est maintenant disponible !]]></description>
+            <content:encoded><![CDATA[<p>Ca y est ! La première version du <em><strong>protocole Igora</strong></em> est maintenant disponible !</p>
+<p>Mais qu'est-ce que c'est, le protocole Igora ?</p>]]></content:encoded>
+            <category>igora</category>
+            <category>llm</category>
+            <category>chatGPT</category>
+            <category>decentralized</category>
+            <category>horde</category>
+            <category>crowdsourced</category>
+        </item>
         <item>
             <title><![CDATA[Welcome]]></title>
             <link>https://scenaristeur.github.io/igora/blog/welcome</link>
