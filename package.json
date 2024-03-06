@@ -20,7 +20,7 @@
     "dotenv": "^16.4.5",
     "ipull": "^2.0.3",
     "minimist": "^1.2.8",
-    "node-llama-cpp": "^2.8.8",
+    "node-llama-cpp": "^3.0.0-beta.13",
     "uuid": "^9.0.1",
     "y-websocket": "^1.5.4"
   }

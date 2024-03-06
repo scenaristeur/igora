@@ -2,12 +2,12 @@ import { Base } from "../base/index.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
-import { LlamaModel, LlamaContext, LlamaChatSession } from "node-llama-cpp";
+import { getLlama, LlamaModel, LlamaContext, LlamaChatSession, TemplateChatWrapper } from "node-llama-cpp";
 // import { get_encoding, encoding_for_model } from "tiktoken";
 // const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+const llama = await getLlama({gpu:false})
 let model = undefined;
 
 let prompts = [];
@@ -22,6 +22,7 @@ export class McConnector extends Base {
     console.log("Loading LLM model from", modelPath);
 
     model = new LlamaModel({
+      llama,
       modelPath: modelPath,
     });
     this.flag = "[MULTI-CHANNEL]";
@@ -168,28 +169,42 @@ export class McConnector extends Base {
       options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1;
     this.log("### " + options.user + " say " + options.prompt, "seed:", seed);
     this.log("### starting session n°" + options.id);
-    const context = new LlamaContext({ model, seed });
+    // const context = new LlamaContext({ model, seed });
+    const context = new LlamaContext({ model, seed ,  contextSize: Math.min(4096, model.trainContextSize)});
 
     // let tokens = enc.encode(JSON.stringify(options.conversationHistory))
-    let tokens = context.encode(JSON.stringify(options.conversationHistory));
-    console.log("TIKTOKEN length", tokens, tokens.length);
+    // let tokens = context.encode(JSON.stringify(options.conversationHistory));
+    // console.log("TIKTOKEN length", tokens, tokens.length);
 
-    while (tokens.length > 300) {
-      console.log("token too long", tokens);
-      // keep system_prompt
-      // let system_message = options.conversationHistory.pop()
-      // remove the older message
-      let removed = options.conversationHistory.shift();
-      console.log("removed", removed);
-      // add the system message
-      // options.conversationHistory.unshift(system_message)
-      tokens = context.encode(JSON.stringify(options.conversationHistory));
-      console.log("TIKTOKEN length", tokens, tokens.length);
-    }
+    // while (tokens.length > 300) {
+    //   console.log("token too long", tokens);
+    //   // keep system_prompt
+    //   // let system_message = options.conversationHistory.pop()
+    //   // remove the older message
+    //   let removed = options.conversationHistory.shift();
+    //   console.log("removed", removed);
+    //   // add the system message
+    //   // options.conversationHistory.unshift(system_message)
+    //   tokens = context.encode(JSON.stringify(options.conversationHistory));
+    //   console.log("TIKTOKEN length", tokens, tokens.length);
+    // }
+    const chatWrapper = new TemplateChatWrapper({
+      template: "{{systemPrompt}}\n{{history}}model:{{completion}}\nuser:",
+      historyTemplate: "{{roleName}}: {{message}}\n",
+      modelRoleName: "model",
+      userRoleName: "user",
+      systemRoleName: "system", // optional
+      // functionCallMessageTemplate: [ // optional
+      //     "[[call: {{functionName}}({{functionParams}})]]",
+      //     " [[result: {{functionCallResult}}]]"
+      // ]
+  });
 
     let sessionOptions = {
-      context: context,
-      conversationHistory: options.conversationHistory || [],
+     // context: context,
+      contextSequence: context.getSequence(),
+      chatWrapper
+     // conversationHistory: options.conversationHistory || [],
     };
 
     // https://github.com/withcatai/node-llama-cpp/blob/c0f5bd8/src/llamaEvaluator/LlamaChatSession.ts#L180
@@ -211,15 +226,15 @@ export class McConnector extends Base {
     sessions[options.id] = s;
 
     this.log("### sessions actives ", sessions);
-    let maxTokens = context.getContextSize();
-    console.log("MAXTOKENS", maxTokens);
+    // let maxTokens = context.getContextSize();
+    // console.log("MAXTOKENS", maxTokens);
 
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
-      maxTokens: maxTokens,
+     // maxTokens: maxTokens,
       onToken(chunk) {
-        const tok = context.decode(chunk);
+        const tok =  model.detokenize(chunk) // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
         that.log(
           Object.keys(sessions).length + "sessions- " + options.id + " : " + tok
         );

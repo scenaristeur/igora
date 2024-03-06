@@ -6,7 +6,9 @@
 - Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
 
 
-
+# test node-llama-cpp beta v3
+- https://github.com/withcatai/node-llama-cpp/pull/105
+- history does not work for now https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1981521765
 
 
 - No GPU needed
@@ -252,3 +254,5 @@ change locale to remote in .env, in .env-example and in igora_web/.env then rebu
 
 ```js npm run start -- --locale fr ```
 cd website && npm run build 
+
+

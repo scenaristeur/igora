@@ -22,3 +22,9 @@ docker run --rm -d --name igora -v ./models:/usr/src/app/models -p 1234:1234/tcp
 ```
 
 - to stop the container use ```docker stop igora```
+
+
+# node-llama-cpp-beta-v3
+
+```npm install node-llama-cpp@beta --save ```
+
