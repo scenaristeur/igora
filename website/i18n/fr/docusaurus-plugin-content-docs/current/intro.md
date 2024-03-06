@@ -32,14 +32,16 @@ C'est un bon exemple de ce qu'est un LLM. Mais d'autres solutions existent, qui 
 - Le protocole ***Igora*** est basé sur [Yjs](https://docs.yjs.dev/) qui permet de créer une base de données distribuée de workers, où les clients peuvent demander à un worker d'effectuer un tâche.
 
 ### Un client créé un job (ou tâche) 
-- A client create a job and ask for its completion on the market.
-- The market will give the job to a worker.
-- The worker will give a response to the client.
+- Un client créé un job ou ***task*** (tâche) et la soumet au ***market*** pour exécution.
+- Le marché ( par le biais d'un ***broker*** (trieur)) va attribuer la tâche à un worker.
+- Le ***worker*** exécute la ***tâche*** et donne la ***réponse*** au ***client***.
 
 
-## Getting Started
+## Pour bien démarrer
 
-There are two ways to get started:
-- You can [create a Igora stack in local market](/docs/installation) (a worker and a client on your own computer). Avantages : your data stay on your computer, Disadvantages : you can not use other llms or workers.
-- You can [use decentralized Igora market](/docs/decentralized). Allowing you to use Igora protocol on a decentralized network.
- With this way, market, worker(s) and client(s) are distributed on the network. You specify which machine is a worker and which machine is a client. Advantages: Use a large bunch of llm , earn money or tokens with your workers
+Il y a deux options pour démarrer avec le ***protocole Igora*** :
+- Vous pouvez [créer un market (marché) local](/docs/installation) ( un worker et un client sur votre propre ordinateur). 
+  - Avantages : vos données restent su votre ordinateur, 
+  - Inconvénients: Vous ne pouvez-pas utiliser d'autres llm ou workers.
+- Vous pouvez [utiliser un market Igora décentralisé](/docs/decentralized). Vous utilisez alors le ***protocole Igora*** sur un réseau décentralisé. Dans ce mode, les markets, clients et workers sont distribués sur le réseau. Vous spécifiez quelles machines sont clients et lesquelles sont workers.
+   - Avantages : Vous pouvez utiliser un npmbre important de LLM différents proposés par différents workers, gagnez de l'argent, ou des cryptomonnaies en mettant à disposition les services de vos workers.
