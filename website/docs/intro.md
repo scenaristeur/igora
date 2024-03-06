@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Let's discover **Igora Protocol** and **learn how to use it in less than 5 minutes**.
 
-Igora stands for **I-ntelligent A-gora**. With [Agora](https://en.wikipedia.org/wiki/Agora) meaning "market" in Modern Greek was a central public space in ancient Greek city-states.
+Igora stands for **I-ntelligent A-gora**. With [Agora](https://en.wikipedia.org/wiki/Agora) meaning "market" in Modern Greek, a central public space in ancient Greek city-states.
 
 The goal of Igora is to provide everyone, everywhere with llms (large language model) that can communicate with each other.
 

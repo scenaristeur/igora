@@ -1,5 +1,9 @@
 # Website
 
+start fr doc 
+
+npm run start -- --locale fr
+
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ### Installation
