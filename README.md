@@ -1,4 +1,13 @@
-# Igora
+# Igora Protocol
+***Large Language Model everywhere.***
+***Les larges modèles de langage partout, pour tout le monde.***
+
+- Documentation in [English](https://scenaristeur.github.io/igora/)
+- Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
+
+
+
+
 
 - No GPU needed
 - runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
