@@ -7,7 +7,9 @@ import { getLlama, LlamaModel, LlamaContext, LlamaChatSession, TemplateChatWrapp
 // const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const llama = await getLlama({gpu:false})
+const llama = await getLlama(
+ // {gpu:false}
+  )
 let model = undefined;
 
 let prompts = [];
@@ -191,7 +193,7 @@ export class McConnector extends Base {
     const chatWrapper = new TemplateChatWrapper({
       template: "{{systemPrompt}}\n{{history}}model:{{completion}}\nuser:",
       historyTemplate: "{{roleName}}: {{message}}\n",
-      modelRoleName: "model",
+      modelRoleName: "assistant",
       userRoleName: "user",
       systemRoleName: "system", // optional
       // functionCallMessageTemplate: [ // optional
