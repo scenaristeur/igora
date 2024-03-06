@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdoc=self.webpackChunkdoc||[]).push([[673],{5661:e=>{e.exports=JSON.parse('{"label":"decentralized","permalink":"/igora/fr/blog/tags/decentralized","allTagsPath":"/igora/fr/blog/tags","count":1,"unlisted":false}')}}]);

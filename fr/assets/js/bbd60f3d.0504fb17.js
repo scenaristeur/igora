@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdoc=self.webpackChunkdoc||[]).push([[8242],{2127:a=>{a.exports=JSON.parse('{"label":"chatGPT","permalink":"/igora/fr/blog/tags/chat-gpt","allTagsPath":"/igora/fr/blog/tags","count":1,"unlisted":false}')}}]);
