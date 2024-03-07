@@ -212,6 +212,8 @@ docker compose --env-file .env --env-file .env-local up --build
 
 docker compose up
 
+- docker limit ram and cpu https://phoenixnap.com/kb/docker-memory-and-cpu-limit
+
 
 
 
