@@ -9,7 +9,7 @@ services:
     environment:
       - YJS_ENV=${YJS_ENV}
       - YJS_REMOTE_URL=${YJS_REMOTE_URL}
-      - YJS_LOCAL_URL=${YJS_LOCAL_URL}
+      - YJS_LOCAL_URL=${YJS_LOCAL_URL_DOCKER}
       - YJS_MARKET_ROOM=${YJS_MARKET_ROOM}
       - LLM_MODEL_NAME=${LLM_MODEL_NAME}
     volumes:

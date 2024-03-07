@@ -1,6 +1,6 @@
 // define your environment variables in the .env file
 let yjs_url =
-  process.env.YJS_ENV == "remote"
+  process.env.YJS_ENV == "REMOTE"
     ? process.env.YJS_REMOTE_URL
     : process.env.YJS_LOCAL_URL;
 let yjs_room = process.env.YJS_MARKET_ROOM;
