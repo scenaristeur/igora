@@ -16,7 +16,7 @@ let yjs_room = import.meta.env.VITE_YJS_MARKET_ROOM || "market"
 // import { handleAction } from './helper'
 
 const doc = new Y.Doc()
-const wsProvider = new WebsocketProvider(
+let wsProvider = new WebsocketProvider(
   //'ws://localhost:9999',
   //'ws://localhost:1234',
   //'wss://ylm-websocket.glitch.me',
