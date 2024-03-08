@@ -8,7 +8,7 @@ import { getLlama, LlamaModel, LlamaContext, LlamaChatSession, TemplateChatWrapp
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const llama = await getLlama(
- // {gpu:false}
+  {gpu:false}
   )
 let model = undefined;
 
@@ -26,7 +26,7 @@ export class McConnector extends Base {
     model = new LlamaModel({
       llama,
       modelPath: modelPath,
-      gpuLayers: 64 // or any other number of layers you want for use with gpu
+     // gpuLayers: 64 // or any other number of layers you want for use with gpu
     });
     this.flag = "[MULTI-CHANNEL]";
     this.chalk = this.chalk.rgb(145, 167, 45); //.hex('#DEADED')
@@ -226,6 +226,8 @@ export class McConnector extends Base {
       response: "",
     };
 
+    // setChatHistory is not defined https://github.com/nathanlesage/local-chat/issues/5
+    //s.setChatHistory(options.conversationHistory)
     sessions[options.id] = s;
 
     this.log("### sessions actives ", sessions);
