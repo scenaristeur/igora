@@ -272,3 +272,8 @@ change locale to remote in .env, in .env-example and in igora_web/.env then rebu
 
 ```js npm run start -- --locale fr ```
 cd website && npm run build 
+
+
+# free paas
+- cloudfare
+- https://freestuff.dev/tags/paas/

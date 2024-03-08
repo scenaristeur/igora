@@ -17,6 +17,10 @@ The goal of Igora is to provide everyone, everywhere with llms (large language m
 
 ## Understanding Igora concepts
 
+What is a LLM -> https://www.youtube.com/watch?v=osKyvYJ3PRM
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/osKyvYJ3PRM?si=zLg-od7MQ6QEKVxA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ### A Worker runs a LLM
 - A ***[Large Language Model](https://en.wikipedia.org/wiki/Large_language_model)*** ( LLM ) is a model that can "understand" and generate natural language.
 
