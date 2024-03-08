@@ -17,7 +17,7 @@ Le ***PROTOCOLE IGORA*** utilise 4 concepts principaux de base : les ***clients*
 
 C'est quoi un LLM ? -> https://www.youtube.com/watch?v=osKyvYJ3PRM
 
-la traduction est [ici](./_video_transcription.md), [traduite par langchain](https://colab.research.google.com/drive/18jZSrD_W1O24UGXSXK9L_9ucPDY8Yq9F?usp=sharing) 
+la traduction est [traduite par langchain](https://colab.research.google.com/drive/18jZSrD_W1O24UGXSXK9L_9ucPDY8Yq9F?usp=sharing) 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/osKyvYJ3PRM?si=zLg-od7MQ6QEKVxA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
