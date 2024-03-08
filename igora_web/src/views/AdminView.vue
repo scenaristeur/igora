@@ -4,8 +4,7 @@
 
         <!-- <BrokersView /> -->
         <ConfigView />
-        <WorkersView />
-        <TasksView />
+
         // BE CAREFULL //
         <button v-on:click="clean()" type="button" class="btn btn-warning">Clean</button>
     </div>
@@ -13,8 +12,7 @@
 
 <script>
 // import BrokersView from '@/views/BrokersView.vue'
-import WorkersView from '@/views/WorkersView.vue'
-import TasksView from '@/views/TasksView.vue'
+
 import ConfigView from './ConfigView.vue'
 
 
@@ -22,8 +20,8 @@ export default {
     name: "AdminView",
     components: {
         // BrokersView,
-        WorkersView,
-        TasksView,
+        // WorkersView,
+        // TasksView,
         ConfigView
     },
     methods: {

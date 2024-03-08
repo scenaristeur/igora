@@ -2,7 +2,8 @@
 import { RouterLink, RouterView } from 'vue-router'
 // import HelloWorld from './components/HelloWorld.vue'
 import UserView from './views/UserView.vue';
-import SendView from './views/SendView.vue'
+
+import IgoraChat from './views/IgoraChat.vue';
 // import AwarenessView from './views/AwarenessView.vue'
 // import AdminView from './views/AdminView.vue'
 </script>
@@ -12,8 +13,13 @@ import SendView from './views/SendView.vue'
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
-      <UserView/>
-      <SendView />  
+
+
+      <UserView />
+
+   
+      <IgoraChat />
+
       <!-- <HelloWorld msg="You did it!" /> -->
       <!-- <AdminView /> -->
       <!-- <AwarenessView/> -->
