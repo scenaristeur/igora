@@ -47,7 +47,14 @@ Partagez votre expérience avec nous dans les différents canaux de la page [Aid
 
 ## Vérifier votre équipement !
 Votre paquetage est votre meilleur ami. C'est votre boîte à outils, votre trousse de secours...
-Vous pourrez toujours les obtenir en cours de chemin, sur place, au moment opportun, d'aillleurs, si vous ne les entretenez pas régulièrement, vous serez amenés à les mettre à jour. En général, c'est pour qu'ils fonctionnement mieux, mais comme déjà évoqué, ces 
+
+ Si vous voulez vous aventurer... Si vous n'êtes pas prêt.e à essayer, à explorer, vous pouvez toujours continuer à lire ce récit, vous apprendrer de nombreuses choses et cela vous incitera peut-être à vous lancer par la suite...
+
+Dans ce cas, ces outils ne sont pas essentiels pour l'instant. 
+
+Vous pourrez toujours les obtenir en cours de chemin, sur place, au moment opportun, d'aillleurs, si vous ne les entretenez pas régulièrement, vous serez amenés à les mettre à jour. 
+
+En général, c'est pour qu'ils fonctionnement mieux, mais comme déjà évoqué, ces 
 mises à jours pourront aussi vous apporter parfois quelques désagréments, et vous devrez vous adapter...
 
 
@@ -57,6 +64,12 @@ Voici quelques outils essentiels pour vous aider à l'aventure :
 - [Node.js](https://nodejs.org/en) est un environnement de développement JavaScript et permet de créer des interfaces utilisateurs sympa
 - [Python](https://www.python.org/downloads/) est un langage de programmation populaire pour tout ce qui touche à l'IA
 - un compte [Github](https://github.com/) pour stocker et partager votre code, ou pour vous identifier sur stackblitz
+
+- installer votre environnement (désolé, mauvaise qualité audio, mettez un casque, notre ingénieur du son n'est pas encore rentré du bagne)
+
+        https://www.youtube.com/embed/i-hNkdMSQbw?si=saxZPrxv2NImJYQw
+
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/i-hNkdMSQbw?si=saxZPrxv2NImJYQw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Il n'est jamais trop tard pour acquérir de bonnes bases...
 
@@ -84,8 +97,9 @@ Ne vous inquiétez pas, en suivant les instructions de votre capitaine de bord, 
 
 ## Une première approche
 - Pour découvrir ce nouveau monde et pour que vous soyez certain.e que vous avez vraiment envie d'embarquer, nous vous proposons déjà cette première découverte d'[Exploria](https://chateau-des-robots.notion.site/Exploria-4ff9d532c2d1401fbb40e5653138821a)
+- llm, vectorisation, tokens... Comment ça fonctionne, mettons les mains dans le cambouis... [LLM un peu, beaucoup, passionément, à la folie...](https://chateau-des-robots.notion.site/LLM-un-peu-beaucoup-passion-ment-la-folie-e73a3f749d254337adc8d923cb3811de)
 
 
 
 
-[[[ Notion Formulaire pour créer les équipes]]]
+[ Notion Formulaire pour créer les équipes monter les équipes d'explorateurs]
