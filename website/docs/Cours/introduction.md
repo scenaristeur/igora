@@ -14,7 +14,7 @@ Lorsque la technologie est naissante, c'est encore pire...
 Cependant, si vous voulez bien nous suivre, on va essayer d'explorer ensemble les concepts de ***l'intelligence artificielle générative***, 
 et de voir comment chacun peut se les approprier.
 
-N'oubliez pas que si vous avez des questions ou des doutes, vous pouvez trouver des interlocuteurs dans [la section Aide et partage](../help.md)
+N'oubliez pas que si vous avez des questions ou des doutes, vous pouvez trouver des interlocuteurs dans [la section Aide et partage](../help)
 
 
 ## exemples
@@ -40,7 +40,7 @@ Avant de vous embarquer à bord de notre navire, vous devez être conscient de d
     car les fondations auront changé, les outils sont toujours en évolution.
     - Le temps que vous allez passer à bord de notre navire, est le meilleur atout sur lequel vous pouvez compter pour participer à l'aventure. Vous devrez souvent rebrousser chemin, essayer d'autres alternatives, mais au final, vous pourrez ainsi explorer de nouveaux horizons. 
     
-Partagez votre expérience avec nous dans les différents canaux de la page [Aide et partage](../help.md), et aidez les futurs explorateurs à découvrir ce que vous-même avez découvert, cela leur permettra à leur tour de partager aux futurs explorateurs...
+Partagez votre expérience avec nous dans les différents canaux de la page [Aide et partage](../help), et aidez les futurs explorateurs à découvrir ce que vous-même avez découvert, cela leur permettra à leur tour de partager aux futurs explorateurs...
 
 ## Vérifier votre équipement !
 
