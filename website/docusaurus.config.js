@@ -93,10 +93,13 @@ const config = {
             label: 'Tutorial',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/docs/Cours/introduction', label: 'Cours', position: 'left'},
           {
             type: 'localeDropdown',
             position: 'left',
           },
+
+
           {
             href: 'https://github.com/scenaristeur/igora',
             label: 'GitHub',
@@ -114,11 +117,19 @@ const config = {
                 label: 'Tutorial',
                 to: '/docs/intro',
               },
+              { 
+                label: 'Forum Château des Robots',
+                href: 'https://forum.chateaudesrobots.fr/',
+              }
             ],
           },
           {
             title: 'Community',
             items: [
+              { 
+                label: 'Forum Château des Robots',
+                href: 'https://forum.chateaudesrobots.fr/',
+              },
               {
                 label: 'Stack Overflow',
                 href: 'https://stackoverflow.com/questions/tagged/igora',
@@ -127,6 +138,7 @@ const config = {
                 label: 'Discord',
                 href: 'https://discord.gg/ZZUZwhQnyj',
               },
+
               // {
               //   label: 'Twitter',
               //   href: 'https://twitter.com/docusaurus',

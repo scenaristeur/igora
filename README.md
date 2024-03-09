@@ -277,3 +277,8 @@ cd website && npm run build
 # free paas
 - cloudfare
 - https://freestuff.dev/tags/paas/
+
+
+# autogen
+- https://www.youtube.com/watch?v=byPbxEH5V8E
+- crewai https://www.youtube.com/watch?v=sPzc6hMg7So

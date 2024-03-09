@@ -13,13 +13,11 @@ Le but d'Igora est de proposer à chacun, partout, un service de llms (large mod
 
 Le ***PROTOCOLE IGORA*** utilise 4 concepts principaux de base : les ***clients*** demandent  aux ***workers*** (ou travailleurs) d'exécuter des tâches (***tasks***) ou jobs. Le ***market*** (marché/agora) est l'endroit où les ***workers*** et les ***clients*** peuvent communiquer et échanger des informations sur les tâches à effectuer.
 
+## Cours
+- Pour découvrir les notions de base, jetez un oeil aux [Cours](./Cours/introduction)
+
+
 ## Comprendre les concepts d'Igora
-
-C'est quoi un LLM ? -> https://www.youtube.com/watch?v=osKyvYJ3PRM
-
-la traduction est [traduite par langchain](https://colab.research.google.com/drive/18jZSrD_W1O24UGXSXK9L_9ucPDY8Yq9F?usp=sharing) 
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/osKyvYJ3PRM?si=zLg-od7MQ6QEKVxA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### Un worker execute et propose un service LLM
 - Un ***[Large Modèle de Langage](https://fr.wikipedia.org/wiki/Grand_mod%C3%A8le_de_langage)*** ( LLM ) est un modèle de langage qui peut "comprendre" et générer du texte en langage naturel.

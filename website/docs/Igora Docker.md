@@ -1,7 +1,7 @@
 
 # Run Igora in Docker
 
-## build Igora Image
+## Build Igora Image
 
 For now all three services are in the same Dockerfile what is not a good solution but it works. You can check the Dockerfile in the root folder of the igora project.
 

@@ -13,7 +13,8 @@ The goal of Igora is to provide everyone, everywhere with llms (large language m
 
 ***IGORA PROTOCOL*** uses 4 major basic concepts : ***clients*** ask ***workers*** to do ***tasks*** or jobs. The ***market*** is the place where ***workers*** and ***clients*** communicate.
 
-
+## Courses
+To discover IA and LLM take a look at [Courses](./Cours/introduction.md)
 
 ## Understanding Igora concepts
 
