@@ -82,7 +82,8 @@ Ne vous inquiétez pas, en suivant les instructions de votre capitaine de bord, 
     - [le tutoriel Python](https://docs.python.org/fr/3/tutorial/)
     - [recherche 'apprendre python'](https://www.google.com/search?q=apprendre+python)
 
-
+## Une première approche
+- Pour découvrir ce nouveau monde et pour que vous soyez certain.e que vous avez vraiment envie d'embarquer, nous vous proposons déjà cette première découverte d'[Exploria](https://chateau-des-robots.notion.site/Exploria-4ff9d532c2d1401fbb40e5653138821a)
 
 
 
