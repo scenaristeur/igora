@@ -7,7 +7,9 @@
             <li v-for="message in messages" :key="message.id"
                 :class="'list-group-item ' +
         (message.role == 'assistant' ? 'list-group-item-dark assistant' : 'list-group-item-primary user')">
-                <b>{{ message.role }} : </b>{{ message.content }}
+                <b>{{ message.role }} : </b>
+                <!-- {{ message.content }} -->
+                <VueMarkdown :source="message.content" />
                 <!-- <br>{{ message.id }}  -->
                 <span v-if="message.partial"> ⌛</span>
             </li>
@@ -17,10 +19,13 @@
 </template>
 
 <script>
-
+import VueMarkdown from 'vue-markdown-render'
 // import TasksView from '@/views/TasksView.vue'
 export default {
     name: "MessagesView",
+    components: {
+        VueMarkdown
+    },
     data() {
         return {
             shouldScroll: true
