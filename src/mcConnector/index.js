@@ -2,14 +2,18 @@ import { Base } from "../base/index.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
-import { getLlama, LlamaModel, LlamaContext, LlamaChatSession, TemplateChatWrapper } from "node-llama-cpp";
+import {
+  getLlama,
+  LlamaModel,
+  LlamaContext,
+  LlamaChatSession,
+  TemplateChatWrapper,
+} from "node-llama-cpp";
 // import { get_encoding, encoding_for_model } from "tiktoken";
 // const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const llama = await getLlama(
-  {gpu:false}
-  )
+const llama = await getLlama({ gpu: false });
 let model = undefined;
 
 let prompts = [];
@@ -26,7 +30,7 @@ export class McConnector extends Base {
     model = new LlamaModel({
       llama,
       modelPath: modelPath,
-     // gpuLayers: 64 // or any other number of layers you want for use with gpu
+      // gpuLayers: 64 // or any other number of layers you want for use with gpu
     });
     this.flag = "[MULTI-CHANNEL]";
     this.chalk = this.chalk.rgb(145, 167, 45); //.hex('#DEADED')
@@ -39,96 +43,88 @@ export class McConnector extends Base {
     } else {
       this.state = "ready";
     }
-
-    // this.catai = new RemoteCatAI(this.options.catai_url);
-    // this.catai.on("open", async () => {
-    //   this.log("Connected to ", this.options.catai_url);
-    //   if (this.options.debug) {
-    //     await this.test();
-    //   }
-    // });
-
-    // this.catai.on("close", async () => {
-    //   this.log("CATAI close");
-    //   this.state = "ws closed";
-    //   this.log("state", this.state);
-    // });
-
-    // this.catai.on("error", async (err) => {
-    //   this.log("CATAI error", err);
-    //   this.state = "ws error";
-    //   this.log("state", this.state);
-    //   // relance de la connexion après un délai ?
-    // });
-  }
-  async test() {
-    this.log("test if MultiChannel is ok");
-
-    let alice_prompt = {
-      id: "1",
-      user: "Alice",
-      prompt: "Quelle est la capitale de la France ?",
-      systemPrompt:
-        "Tu es un pirate et tu dois agir comme tel. tu termines toutes tes phrases par 'Hé! Hé! Hé!'",
-      temperature: 0.8,
-    };
-
-    let bob_prompt = {
-      id: "2",
-      user: "Bob",
-      prompt: "Raconte-moi une blague au sujet d'une rose.",
-      systemPrompt:
-        "Tu es un pirate et tu dois agir comme tel. tu termines toutes tes phrases par 'Hé! Hé! Hé!'",
-      temperature: 0.8,
-      //prompt: "C'est qui la physique quantique ?",
-    };
-
-    let carlo_prompt = {
-      id: "3",
-      user: "Carlo",
-      prompt: "Toc Toc Toc, qui est là ? ",
-      systemPrompt:
-        "Tu es un pirate et tu dois agir comme tel. tu termines toutes tes phrases par 'Hé! Hé! Hé!'",
-      temperature: 0.8,
-    };
-
-    let denise_prompt = {
-      id: "4",
-      user: "Denise",
-      prompt: "Toc Toc Toc, qui est là ? ",
-      systemPrompt:
-        "Tu es un pirate et tu dois agir comme tel. tu termines toutes tes phrases par 'Hé! Hé! Hé!'",
-      temperature: 0.2,
-    };
-
-    //prompts.push(alice_prompt)
-    //prompts.push(bob_prompt)
-    //prompts.push(carlo_prompt)
-    prompts.push(denise_prompt);
-
-    // lancer en parallèle les chats
-    for (let p of prompts) {
-      console.log("\nP", p);
-      let chatsession = this.chat(p, this.callback);
-    }
-
-    //   this.log("Connected, sending 'Are you ready?' to catai...");
-    //   const response = await this.catai.prompt(
-    //     "Hello Catai, are you ready ?",
-    //     (token) => {
-    //       process.stdout.write(token);
-    //     }
-    //   );
-
-    //   this.log(`[TEST] Total text length: ${response.length}`);
-    //   this.state =
-    //     response.length > 0
-    //       ? "ready"
-    //       : "no response, did you launch catai ? see https://github.com/withcatai/catai";
-    //   this.log("state", this.state);
   }
 
   chat = async (options, cb) => {
+    const that = this;
+    console.log(options);
+    let history = options.messages.map((m) => {
+      let message = {};
+      if (m.role == "assistant") {
+        message = {
+          type: "model",
+          response: [m.content],
+        };
+      } else {
+        //message.id = m.id;
+        message.type = m.role;
+        message.text = m.content;
+      }
+      return message;
+    });
+
+    let seed =
+      options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1;
+    this.log("### " + options.user + " say " + options.prompt, "seed:", seed);
+    this.log("### starting session n°" + options.id);
+
+    const context = new LlamaContext({
+      model,
+      seed,
+      contextSize: Math.min(4096, model.trainContextSize),
+    });
+
+    const session = new LlamaChatSession({
+      contextSequence: context.getSequence(),
+    });
+
+    session.setChatHistory(history);
+
+    let s = {
+      options: options,
+      //context: context,
+      modelName: that.modelName,
+      session: session,
+      start: Date.now(),
+      response: "",
+    };
+    console.log("history",history)
+
+    sessions[options.id] = s;
+    this.log("### sessions actives ", sessions);
+    const chat = await session.prompt(options.prompt, {
+      // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
+      temperature: options.temperature || 0.7,
+      // maxTokens: maxTokens,
+      onToken(chunk) {
+        const tok = model.detokenize(chunk); // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
+        that.log(
+          Object.keys(sessions).length + "sessions- " + options.id + " : " + tok
+        );
+        cb(tok);
+        s.response += tok;
+      },
+    });
+
+    s.end = Date.now();
+    s.duration = s.end - s.start;
+    this.log("!!! session terminée n°" + options.id + " : " + s.response, s);
+
+    this.log(`[TEST] Total text length: ${s.response.length}`);
+    this.state =
+      s.response.length > 0
+        ? "ready"
+        : "no response, error with multiChannelConnector, did you download a model ?";
+    this.log("state", this.state);
+
+    this.estimationTime = s.duration;
+
+    delete sessions[options.id];
+    this.log("estimation time : ", this.estimationTime);
+    console.log("!!! sessions actives ", sessions.toString());
+  };
+
+  chat1 = async (options, cb) => {
     const that = this;
 
     if (options.prompt == undefined) {
@@ -173,7 +169,11 @@ export class McConnector extends Base {
     this.log("### " + options.user + " say " + options.prompt, "seed:", seed);
     this.log("### starting session n°" + options.id);
     // const context = new LlamaContext({ model, seed });
-    const context = new LlamaContext({ model, seed ,  contextSize: Math.min(4096, model.trainContextSize)});
+    const context = new LlamaContext({
+      model,
+      seed,
+      contextSize: Math.min(4096, model.trainContextSize),
+    });
 
     // let tokens = enc.encode(JSON.stringify(options.conversationHistory))
     // let tokens = context.encode(JSON.stringify(options.conversationHistory));
@@ -201,13 +201,13 @@ export class McConnector extends Base {
       //     "[[call: {{functionName}}({{functionParams}})]]",
       //     " [[result: {{functionCallResult}}]]"
       // ]
-  });
+    });
 
     let sessionOptions = {
-     // context: context,
+      // context: context,
       contextSequence: context.getSequence(),
-      chatWrapper
-     // conversationHistory: options.conversationHistory || [],
+      chatWrapper,
+      // conversationHistory: options.conversationHistory || [],
     };
 
     // https://github.com/withcatai/node-llama-cpp/blob/c0f5bd8/src/llamaEvaluator/LlamaChatSession.ts#L180
@@ -237,9 +237,9 @@ export class McConnector extends Base {
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
-     // maxTokens: maxTokens,
+      // maxTokens: maxTokens,
       onToken(chunk) {
-        const tok =  model.detokenize(chunk) // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
+        const tok = model.detokenize(chunk); // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
         that.log(
           Object.keys(sessions).length + "sessions- " + options.id + " : " + tok
         );
