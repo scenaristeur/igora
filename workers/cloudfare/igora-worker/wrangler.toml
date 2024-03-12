@@ -1,0 +1,4 @@
+name = "igora-worker"
+main = "src/worker.js"
+compatibility_date = "2024-03-09"
+workers_dev = true
