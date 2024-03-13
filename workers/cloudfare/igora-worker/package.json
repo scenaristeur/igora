@@ -1,0 +1,18 @@
+{
+  "name": "igora-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "y-websocket": "^1.5.4",
+    "yjs": "^13.6.14"
+  }
+}

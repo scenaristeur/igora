@@ -202,6 +202,11 @@ assistant : D'après mes calculs, en deux ans, vous aurez 47 ans.
 ```
 
 # New Docker
+
+`docker compose up --build`
+
+old docker tests :
+
 docker compose --env-file .env-local  config
 docker compose --env-file .env-remote  config
 
