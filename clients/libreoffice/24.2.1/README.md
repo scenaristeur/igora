@@ -1,5 +1,10 @@
 # LibreOffice / OpenOffice
 
+
+copy http-client.py in ~/.config/libreoffice/4/user/Scripts/python , then open a libreoffice writer doc , type some text, select and run the macro
+
+
+
 Télécharger la dernière version (24.2.1)  https://fr.libreoffice.org/download/telecharger-libreoffice/  + pack de langue fr
 
 doc https://wiki.documentfoundation.org/ReleaseNotes/24.2/fr

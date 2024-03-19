@@ -25,18 +25,18 @@ def getNewString(theString):
     if (not theString):
         return ""
 
-    # should we tokenize on "."?
-    if len(theString) >= 2 and theString[:2].isupper():
-        # first two chars are UC => first UC, rest LC
-        newString = theString[0].upper() + theString[1:].lower()
+    # # should we tokenize on "."?
+    # if len(theString) >= 2 and theString[:2].isupper():
+    #     # first two chars are UC => first UC, rest LC
+    #     newString = theString[0].upper() + theString[1:].lower()
 
-    elif theString[0].isupper():
-        # first char UC => all to LC
-        newString = theString.lower()
+    # elif theString[0].isupper():
+    #     # first char UC => all to LC
+    #     newString = theString.lower()
 
-    else:
-        # all to UC.
-        newString = theString.upper()
+    # else:
+    #     # all to UC.
+    #     newString = theString.upper()
 
     host = "192.168.0.30:5678"
     headers = {'Content-type': 'application/json'}
@@ -46,10 +46,10 @@ def getNewString(theString):
     # foo = {'text': 'Hello HTTP #1 **cool**, and #1!'}
     data = {'model': "ehartford_dolphin-2.2.1-mistral-7b",
             'messages': [{"role": "system",
-                          "content": "You are an assistant who perfectly describes images."},
+                          "content": "Agis comme un écrivain. Développe le texte suivant en ajoutant plus de détails, tout en gardant le même sens. Sors uniquement le texte et rien d'autre. Ne discute pas, pas de préambule, va à l'essentiel."},
                          {
                 "role": "user",
-                "content": "Describe this image in detail please."
+                "content": theString
             }
             ]
             }
@@ -90,7 +90,7 @@ def getNewString(theString):
     return newString
 
 
-def llmHttpClient():
+def llmHttpClient(arg1 = None):
     """Change the case of the selected or current word(s).
     If at least the first two characters are "UPpercase, then it is changed
     to first char "Uppercase".
@@ -102,6 +102,7 @@ def llmHttpClient():
     # all BeanShell scripts executed by the Script Framework
     xModel = XSCRIPTCONTEXT.getDocument()
 
+    print("wwhat is arg1",arg1)
 
 
     # the writer controller impl supports the css.view.XSelectionSupplier
