@@ -36,7 +36,8 @@ const port = process.env.PORT || 5678;
 const app = express();
 const httpServer = createServer(app);
 
-const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+//const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+const allowedOrigins = ["*"];
 
 const cors_options = {
   origin: allowedOrigins
