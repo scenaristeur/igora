@@ -5,7 +5,8 @@
 - Documentation in [English](https://scenaristeur.github.io/igora/)
 - Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
 
-easyest way to use Igora:   ```docker compose up```
+easyest way to use Igora:   ```docker compose up --build``` 
+see [Igora Docker doc](https://scenaristeur.github.io/igora/fr/docs/Igora%20Docker)
 
 
 
