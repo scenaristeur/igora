@@ -62,7 +62,7 @@ wget -O ./models/dolphin-2.2.1-mistral-7b.Q2_K.gguf https://huggingface.co/TheBl
 ### The 3 .env files
 For now, we use 3 ***.env*** files : 
 - ***.env-example*** in igora root folder : this is the default example of the environment file that you can copy to create your .env file
-- ***.env*** in igora root folder : this is your .env file, it is read by the igora backend to configure the workers and determine the model, the mode you want to use (local or remote) , the url of the y-websocket server and the market room.
+- ***.env*** in igora root folder : this is your .env file, it is read by the igora backend to configure the workers and determine the model, the mode you want to use (LOCAL or REMOTE) , the url of the y-websocket server and the market room.
 - ***.env*** in ***igora_web*** folder : this one is used by the web app / client ! be carefull , all the settings in igora_web/.env file MUST to start with "VUE_" to be accessed by the web app.
 
 Copy the .env-example file to .env
@@ -74,9 +74,9 @@ cp .env-example .env
 
 example of .env file
 ```
-YJS_ENV=local # local, remote
-YJS_LOCAL_URL="ws://localhost:1234" # your local y-websocket server
-YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
+YJS_ENV=LOCAL # LOCAL, REMOTE
+YJS_LOCAL_URL="ws://localhost:1234" # your LOCAL y-websocket server
+YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the REMOTE y-websocket server
 YJS_MARKET_ROOM="market"
 LLM_MODEL_NAME="dolphin-2.2.1-mistral-7b.Q2_K.gguf"
 
@@ -86,9 +86,9 @@ For now, you must create your frontend .env in igora_web folder.
 
 igora_web/.env file :
 ```
-VITE_YJS_ENV=local # local, remote
-VITE_YJS_LOCAL_URL="ws://localhost:1234" # your local y-websocket server
-VITE_YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the remote y-websocket server
+VITE_YJS_ENV=LOCAL # LOCAL, REMOTE
+VITE_YJS_LOCAL_URL="ws://localhost:1234" # your LOCAL y-websocket server
+VITE_YJS_REMOTE_URL="wss://ylm-websocket.glitch.me/" # the REMOTE y-websocket server
 VITE_YJS_MARKET_ROOM="market"
 ```
 
