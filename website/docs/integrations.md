@@ -5,6 +5,6 @@
 
 - Using OpenAi compatible endpoint (in [igora/openai](https://github.com/scenaristeur/igora/tree/main/openai) folder):
     - [x] Obsidian
-    - [/] LibreOffice see [clients/libreoffice/24.2.1/AskLlm.py](clients/libreoffice/24.2.1/AskLlm.py)
+    - [/] LibreOffice see [clients/libreoffice/24.2.1/AskLlm.py](https://github.com/scenaristeur/igora/tree/main/clients/libreoffice/24.2.1/AskLlm.py)
     - [ ] Langchain
     - 
