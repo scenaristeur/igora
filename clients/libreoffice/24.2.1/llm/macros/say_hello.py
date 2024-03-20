@@ -3,6 +3,8 @@ from ooodev.loader import Lo
 from ooodev.write import WriteDoc
 from ooodev.dialog.input import Input
 from ooodev.dialog import Dialog # https://python-ooo-dev-tools.readthedocs.io/en/main/src/dialog/dialog.html
+from my_mod.radio_group_box import RadioGroupBox
+
 
 
 def say_hello(*args):
@@ -39,6 +41,10 @@ def config_dialog():
     dialog.set_visible(False)
     #dialog.to_front()
 
+def radio():
+    rg = RadioGroupBox() # TODO : import radio_group_box.py
+    rg.show()
+
 
 def print_config_DOESNOTWORK():
     doc = WriteDoc.from_current_doc()    
@@ -63,4 +69,4 @@ def print_config_DOESNOTWORK():
         print(f"\nTemplates Dirs: {Info.get_paths('Template')}")
         print(f"\nGallery Dir: {Info.get_paths('Gallery')}")
 
-g_exportedScripts = (say_hello, ecrire_salut, input_system_prompt, config_dialog)
+g_exportedScripts = (say_hello, ecrire_salut, input_system_prompt, config_dialog, radio)
