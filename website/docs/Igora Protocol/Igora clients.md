@@ -20,6 +20,7 @@ For example works with :
     - [X] obsidian ollama plugin
     - [X] Microsoft Autogen
     - [X] CrewAi 
+    - [X] Libreoffice [clients/libreoffice/24.2.1/llm/README.md](https://github.com/scenaristeur/igora/tree/main/clients/libreoffice/24.2.1/llm/README.md)
 
 ```
 cd openai
