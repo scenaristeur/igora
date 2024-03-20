@@ -20,10 +20,9 @@ if TYPE_CHECKING:
 
 
 class LlmConfigD:
-    def __init__(self, text, font, config):
-        self._text = text
-        self._font = font
+    def __init__(self, config):   
         self._config = config
+        self._text = self._config["actions"][0]["systemPrompt"]
         self._border_kind = BorderKind.BORDER_SIMPLE
         self._width = 400
         self._height = 310
@@ -128,11 +127,12 @@ class LlmConfigD:
             dialog_ctrl=self._dialog.control,
             x=self._margin,
             y=self._padding + sz_lbl.X + sz_lbl.Height,
-            height=self._height
-            - (sz_lbl.X + sz_lbl.Height)
-            - self._btn_height
-            - (self._padding * 3),
-            width=round(self._width / 2) - (self._margin * 2),
+            # height=self._height
+            # - (sz_lbl.X + sz_lbl.Height)
+            # - self._btn_height
+            # - (self._padding * 3),
+            height = 40,
+            width=self._width - (self._margin*2), #round(self._width / 2) - (self._margin * 2),
             text=self._config["actions"][0]["systemPrompt"],
         )
 

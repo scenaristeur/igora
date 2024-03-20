@@ -38,7 +38,7 @@ def getNewString(theString):
     #     # all to UC.
     #     newString = theString.upper()
 
-    host = "192.168.0.30:5678"
+    host = "127.0.0.1:5678"
     headers = {'Content-type': 'application/json'}
     conn = http.client.HTTPConnection(host)
     # conn = http.client.HTTPSConnection()
