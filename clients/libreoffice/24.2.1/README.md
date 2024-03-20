@@ -40,3 +40,8 @@ import any module https://thebiasplanet.blogspot.com/2020/10/importinganymodulei
 sauvage copie des site packages MAIS FONCTIONNE !
 
 /opt/libreoffice24.2/program/python-core-3.8.18/lib$ sudo ln -s ~/.local/lib/python3.10/site-packages .
+
+
+# more options
+ - see README.md in clients/libreoffice/24.2.1/llm 
+ - https://help.libreoffice.org/latest/ro/text/sbasic/python/python_dialogs.html
