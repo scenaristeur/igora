@@ -5,10 +5,16 @@
 - Documentation in [English](https://scenaristeur.github.io/igora/)
 - Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
 
-easyest way to use Igora:   ```docker compose up --build``` 
+easyest way to use Igora:  
+ ```
+ git clone https://github.com/scenaristeur/igora.git
+ cd igora 
+ docker compose up --build
+ ``` 
 see [Igora Docker doc](https://scenaristeur.github.io/igora/fr/docs/Igora%20Docker)
 
-
+# Bring your Libreoffice to the Genius level
+- [libreoffice client](https://github.com/scenaristeur/igora/blob/main/clients/libreoffice/24.2.1/llm/README.md)
 
 - No GPU needed
 - runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram

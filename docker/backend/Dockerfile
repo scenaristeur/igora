@@ -6,4 +6,4 @@ RUN npm run fix
 #COPY . /app
 # RUN npm install
 # RUN npm run fix
-CMD npm run start_backend_docker
+CMD npm run start
