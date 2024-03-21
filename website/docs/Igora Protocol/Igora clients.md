@@ -27,7 +27,6 @@ For example works with :
 
         [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/VUpspZo40_M/0.jpg)](https://www.youtube.com/watch?v=VUpspZo40_M)
 
-https://github.com/scenaristeur/igora/raw/main/clients/libreoffice/24.2.1/plantes_robotiques_1.odt
 
 ```
 cd openai
