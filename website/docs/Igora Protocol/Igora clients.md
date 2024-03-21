@@ -33,8 +33,9 @@ cd openai
 npm install
 npm run dev
 ```
-then the openAi Api compatible endpoint can be accessed at http://127.0.0.1:5678/v1/caht/completions
-You can open a rudiment ui to test at http://127.0.0.1:5678
+then the openAi Api compatible endpoint can be accessed at http://127.0.0.1:5678/v1/chat/completions
+
+You can open a sparse ui to test at http://127.0.0.1:5678
 
 
 
