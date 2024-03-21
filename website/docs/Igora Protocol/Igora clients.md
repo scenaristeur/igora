@@ -21,6 +21,13 @@ For example works with :
     - [X] Microsoft Autogen
     - [X] CrewAi 
     - [X] Libreoffice [clients/libreoffice/24.2.1/llm/README.md](https://github.com/scenaristeur/igora/tree/main/clients/libreoffice/24.2.1/llm/README.md)
+        - exemple "Plantes robotiques" [clients/libreoffice/24.2.1/llm/plantes_robotiques_1.odt](https://github.com/scenaristeur/igora/tree/main/clients/libreoffice/24.2.1/llm/plantes_robotiques_1.odt)
+        
+        https://youtu.be/VUpspZo40_M
+
+        [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/VUpspZo40_M/0.jpg)](https://www.youtube.com/watch?v=VUpspZo40_M)
+
+
 
 ```
 cd openai
