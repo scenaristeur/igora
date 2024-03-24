@@ -26,8 +26,8 @@ teachable_agent = ConversableAgent(
 
 # Instantiate the Teachability capability. Its parameters are all optional.
 teachability = Teachability(
-    verbosity=0,  # 0 for basic info, 1 to add memory operations, 2 for analyzer messages, 3 for memo lists.
-    reset_db=True,
+    verbosity=3, #0,  # 0 for basic info, 1 to add memory operations, 2 for analyzer messages, 3 for memo lists.
+    reset_db=False, #True,
     path_to_db_dir="./tmp/notebook/teachability_db",
     recall_threshold=1.5,  # Higher numbers allow more (but less relevant) memos to be recalled.
 )
