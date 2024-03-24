@@ -2,6 +2,9 @@
 - https://docs.crewai.com/how-to/Creating-a-Crew-and-kick-it-off/
 
 
+!!! Actually blocked until https://github.com/joaomdmoura/crewAI/issues/202 and https://github.com/langchain-ai/langchain/issues/16930 resolution !!!
+
+
 ```
 python -m venv .venv
 source .venv/bin/activate

@@ -15,7 +15,7 @@ def main():
     user_proxy = UserProxyAgent("user", code_execution_config=False)
 
     # Let the assistant start the conversation.  It will end when the user types exit.
-    assistant.initiate_chat(user_proxy, message="How can I help you today?")
+    assistant.initiate_chat(user_proxy, message="Comment puis-je vous aider, aujourd'hui?")
 
 
 if __name__ == "__main__":
