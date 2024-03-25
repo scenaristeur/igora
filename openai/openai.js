@@ -88,6 +88,29 @@ app.get("/", (req, res) => {
   res.sendFile(new URL("./index.html", import.meta.url).pathname);
 });
 
+app.get("/v1/models", (req, res) => {
+  let models = {
+    object: "list",
+    data: [
+      {
+        id: "./models/dolphin-2.2.1-mistral-7b.Q2_K.gguf",
+        object: "model",
+        owned_by: "me",
+        permissions: [],
+      },
+    ],
+  };
+
+  // res.writeHead(200, {
+  //   "Content-Type": "text/plain",
+  //   "Transfer-Encoding": "chunked",
+  // });
+
+  res.write(JSON.stringify(models));
+
+  res.end();
+});
+
 var sendAndSleep1 = function (response, counter) {
   if (counter > 10) {
     console.log("end");
@@ -315,9 +338,10 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
 
     const result = await textPromise; // Attendre que la promesse soit résolue
     //result.text = text;
-    console.log("RETURN RESULT", result);
+    //console.log("RETURN RESULT", result);
     response.choices[0].message.content = result.response.trim();
     //   stream.write(JSON.stringify(result) + "\r\n");
+    console.log("response", response);
     res.status(200).json(response);
   }
 });
