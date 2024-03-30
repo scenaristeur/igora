@@ -13,10 +13,6 @@ async function main() {
   });
 
 
-console.log(stream)
-console.log(stream.iterator)
-
-
   for await (const chunk of stream) {
     process.stdout.write(chunk.choices[0]?.delta?.content || "");
   }
