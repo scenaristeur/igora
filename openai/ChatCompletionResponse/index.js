@@ -3,7 +3,7 @@ export class ChatCompletionResponse {
     constructor(options = {}) {
         this.id = "chatcmpl-" + uuidv4()
         this.object = options.stream ?  "chat.completion.chunk" : "chat.completion" 
-        this.created= Date.now() / 1000
+        this.created= Math.floor(Date.now() / 1000)
         this.model= options.model
         this.system_fingerprint= "fp_"+uuidv4(),
         this.choices= [
