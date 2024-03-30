@@ -2,7 +2,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: "My API Key",
-  baseURL: "http://127.0.0.1:5678/v1/",
+  baseURL: "http://127.0.0.1:5678/v1",
 });
 
 async function main() {
@@ -11,6 +11,12 @@ async function main() {
     messages: [{ role: "user", content: "Say this is a test" }],
     stream: true,
   });
+
+
+console.log(stream)
+console.log(stream.iterator)
+
+
   for await (const chunk of stream) {
     process.stdout.write(chunk.choices[0]?.delta?.content || "");
   }

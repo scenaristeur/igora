@@ -167,35 +167,9 @@ app.get("/stream/:chunks", function (req, res, next) {
   res.end();
   next();
 });
-app.get("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("received GET ", req.query);
-
-  res.writeHead(200, {
-    "Cache-Control": "no-store",
-    // "Content-Type": "text/plain",
-    "Content-Type": "text/event-stream",
-    "Transfer-Encoding": "chunked",
-  });
-
-  // response.setHeader('Connection', 'Transfer-Encoding');
-  // response.setHeader('Content-Type', 'text/html; charset=utf-8');
-  // response.setHeader('Transfer-Encoding', 'chunked');
-  // res.write("event: ping\n")
-  res.write("event: foo\ndata: bar\n\n");
-  console.log("send bar");
-  // res.write(' BIM ');
-  // res.end();
-
-  setTimeout(function () {
-    console.log("send baz");
-    res.write("event: foo\ndata: done\n\n");
-    res.end();
-    console.log("end");
-  }, 10000);
-});
 
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("received POST", req.body);
+  console.log("received", req.body);
   //   const session = req.session;
   //   session.count = (session.count || 0) + 1;
 
@@ -245,16 +219,127 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
 
   // stream https://github.com/hyperonym/basaran/blob/a73dc6e712a6b5e672fe80cdc12a25451ef2c0ce/basaran/__main__.py#L176
   if (req.body.stream == true) {
-    res.setHeader("Connection", "Transfer-Encoding");
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Transfer-Encoding", "chunked");
+    res.writeHead(200, {
+      "Content-Type": "text/plain",
+      "Transfer-Encoding": "chunked",
+    });
 
-    res.write("hello");
+    // FIRST
+    res.write(
+      JSON.stringify({
+        id: id,
+        object: "chat.completion.chunk",
+        created: Date.now() / 1000,
+        model: model,
+        system_fingerprint: "fp_44709d6fcb",
+        choices: [
+          {
+            index: 0,
+            delta: { role: "assistant", content: "" },
+            logprobs: null,
+            finish_reason: null,
+          },
+        ],
+      })
+    );
 
-    setTimeout(function () {
-      res.write(" world!");
-      res.end();
-    }, 10000);
+
+
+    doing.observeDeep((events, transaction) => {
+      //this.log("events", events, transaction)
+      // this.prepare();
+      let chunky = doing.get(id);
+      console.log("chunky", chunky)
+
+      res.write(
+        JSON.stringify({
+          id: id,
+          object: "chat.completion.chunk",
+          created: Date.now() / 1000,
+          model: model,
+          system_fingerprint: "fp_44709d6fcb",
+          choices: [
+            {
+              index: 0,
+              delta: chunky.delta,
+              logprobs: null,
+              finish_reason: null,
+            },
+          ],
+        })
+      ) + "\n";
+    })
+
+    let chunks = 2;
+
+    // if (chunks > 100) chunks = 100;
+
+    var count = 1;
+
+    while (count <= chunks) {
+      // res.write(
+      //   JSON.stringify({
+      //     type: "stream",
+      //     chunk: count++,
+      //   }) + "\n"
+      // );
+
+      // res.write(
+      //   JSON.stringify({
+      //     type: "stream",
+      //     chunk: count++,
+      //   }) + "\n"
+      // );
+
+      // CHUNK
+      count++;
+      res.write(
+        JSON.stringify({
+          id: id,
+          object: "chat.completion.chunk",
+          created: Date.now() / 1000,
+          model: model,
+          system_fingerprint: "fp_44709d6fcb",
+          choices: [
+            {
+              index: 0,
+              delta: { content: "Hello" },
+              logprobs: null,
+              finish_reason: null,
+            },
+          ],
+        })
+      ) + "\n";
+    }
+
+    // END
+
+    res.write(
+      JSON.stringify({
+        id: id,
+        object: "chat.completion.chunk",
+        created: Date.now() / 1000,
+        model: model,
+        system_fingerprint: "fp_44709d6fcb",
+        choices: [
+          { index: 0, delta: {}, logprobs: null, finish_reason: "stop" },
+        ],
+      })
+    );
+
+    res.end();
+    // res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    // res.setHeader('Transfer-Encoding', 'chunked');
+
+    // res.write("Thinking...");
+    // sendAndSleep(res, 1);
+    //   res.writeHead(200, {
+    //     "Content-Type": "text/event-stream",
+    //     "Cache-Control": "no-cache",
+    //     Connection: "keep-alive",
+    //   });
+    //   res.write("data: " + JSON.stringify(response) + "\n\n");
+    //   res.flush();
   } else {
     let textPromise = new Promise((resolve, reject) => {
       let timer = setInterval(async function () {

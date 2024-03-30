@@ -167,9 +167,100 @@ app.get("/stream/:chunks", function (req, res, next) {
   res.end();
   next();
 });
+app.get("/v1/chat/completions", express.json(), async (req, res) => {
+  console.log("received GET ", req.query);
 
+  res.writeHead(200, {
+    "Cache-Control": "no-store",
+    // "Content-Type": "text/plain",
+    "Content-Type": "text/event-stream",
+    "Transfer-Encoding": "chunked",
+  });
+
+  // response.setHeader('Connection', 'Transfer-Encoding');
+  // response.setHeader('Content-Type', 'text/html; charset=utf-8');
+  // response.setHeader('Transfer-Encoding', 'chunked');
+  // res.write("event: ping\n")
+  res.write("event: foo\ndata: bar\n\n");
+  console.log("send bar");
+  // res.write(' BIM ');
+  // res.end();
+
+  setTimeout(function () {
+    console.log("send baz");
+    res.write("event: foo\ndata: done\n\n");
+    res.end();
+    console.log("end");
+  }, 10000);
+});
+
+
+
+function generateResponseChunks(userInput) {
+  // Cette fonction doit générer les chunks de réponse
+  // en fonction de l'entrée de l'utilisateur
+  // et retourner un générateur ou une fonction itérable
+  // qui produit chaque chunk de réponse
+  // Voici un exemple simplifié pour illustrer :
+  const chunks = [
+    {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1694268190,"model":"gpt-3.5-turbo-0125", "system_fingerprint": "fp_44709d6fcb", "choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}]},
+    {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1694268190,"model":"gpt-3.5-turbo-0125", "system_fingerprint": "fp_44709d6fcb", "choices":[{"index":0,"delta":{"content":"Hello"},"logprobs":null,"finish_reason":null}]},
+    // Ajoutez d'autres chunks ici...
+  ];
+
+  // Retournez un générateur qui itère sur chaque chunk
+  return function*() {
+    for (const chunk of chunks) {
+      yield JSON.stringify(chunk) + '\n'; // Assurez-vous d'ajouter un séparateur de ligne entre les chunks
+    }
+  };
+}
+
+
+// Endpoint pour recevoir les requêtes des clients
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("received", req.body);
+    console.log("received POST", req.body);
+  try {
+    // Exemple de traitement avec la méthode de génération de chunks
+    const userInput = req.body.userInput; // Supposons que le client envoie le texte de l'utilisateur
+    const responseChunksGenerator = generateResponseChunks(userInput);
+
+    // Envoyer les chunks de réponse au client de manière itérative
+    res.set('Content-Type', 'application/json');
+    res.set('Transfer-Encoding', 'chunked');
+
+    for (const chunk of responseChunksGenerator()) {
+      res.write(chunk);
+      console.log(chunk)
+      await new Promise(resolve => setTimeout(resolve, 500)); // Attendez un peu entre chaque envoi de chunk (pour l'exemple)
+    }
+
+    res.end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post("/v1/chat/completions2", express.json(), async (req, res) => {
+  console.log("received POST", req.body);
   //   const session = req.session;
   //   session.count = (session.count || 0) + 1;
 
@@ -219,128 +310,81 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
 
   // stream https://github.com/hyperonym/basaran/blob/a73dc6e712a6b5e672fe80cdc12a25451ef2c0ce/basaran/__main__.py#L176
   if (req.body.stream == true) {
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
-      "Transfer-Encoding": "chunked",
-    });
+    res.setHeader("Connection", "Transfer-Encoding");
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Transfer-Encoding", "chunked");
 
-    // FIRST
-    res.write(
-      JSON.stringify({
-        id: id,
-        object: "chat.completion.chunk",
-        created: Date.now() / 1000,
-        model: model,
-        system_fingerprint: "fp_44709d6fcb",
-        choices: [
-          {
-            index: 0,
-            delta: { role: "assistant", content: "" },
-            logprobs: null,
-            finish_reason: null,
-          },
-        ],
-      })
-    );
+    res.write("hello");
 
-
-
-    doing.observeDeep((events, transaction) => {
-      //this.log("events", events, transaction)
-      // this.prepare();
-      let chunky = doing.get(id);
-      console.log("chunky", chunky)
-
-      res.write(
-        JSON.stringify({
-          id: id,
-          object: "chat.completion.chunk",
-          created: Date.now() / 1000,
-          model: model,
-          system_fingerprint: "fp_44709d6fcb",
-          choices: [
-            {
-              index: 0,
-              delta: chunky.delta,
-              logprobs: null,
-              finish_reason: null,
-            },
-          ],
-        })
-      ) + "\n";
-    })
-
-    let chunks = 2;
-
-    // if (chunks > 100) chunks = 100;
-
-    var count = 1;
-
-    while (count <= chunks) {
-      // res.write(
-      //   JSON.stringify({
-      //     type: "stream",
-      //     chunk: count++,
-      //   }) + "\n"
-      // );
-
-      // res.write(
-      //   JSON.stringify({
-      //     type: "stream",
-      //     chunk: count++,
-      //   }) + "\n"
-      // );
-
-      // CHUNK
-      count++;
-      res.write(
-        JSON.stringify({
-          id: id,
-          object: "chat.completion.chunk",
-          created: Date.now() / 1000,
-          model: model,
-          system_fingerprint: "fp_44709d6fcb",
-          choices: [
-            {
-              index: 0,
-              delta: { content: "Hello" },
-              logprobs: null,
-              finish_reason: null,
-            },
-          ],
-        })
-      ) + "\n";
-    }
-
-    // END
-
-    res.write(
-      JSON.stringify({
-        id: id,
-        object: "chat.completion.chunk",
-        created: Date.now() / 1000,
-        model: model,
-        system_fingerprint: "fp_44709d6fcb",
-        choices: [
-          { index: 0, delta: {}, logprobs: null, finish_reason: "stop" },
-        ],
-      })
-    );
-
-    res.end();
-    // res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    // res.setHeader('Transfer-Encoding', 'chunked');
-
-    // res.write("Thinking...");
-    // sendAndSleep(res, 1);
-    //   res.writeHead(200, {
-    //     "Content-Type": "text/event-stream",
-    //     "Cache-Control": "no-cache",
-    //     Connection: "keep-alive",
-    //   });
-    //   res.write("data: " + JSON.stringify(response) + "\n\n");
-    //   res.flush();
+    setTimeout(function () {
+      res.write(" world!");
+      res.end();
+    }, 10000);
   } else {
+
+
+/* dans openai/src/lib/AssistantStream.ts ligne 431
+plusieurs event.event
+'thread.message.created':
+thread.message.in_progress -> rien
+'thread.message.delta' ->
+'thread.message.completed' et 'thread.message.incomplete'
+ et il y en a d'autres avec step
+*/
+res.writeHead(200, {
+  "Cache-Control": "no-store",
+  // "Content-Type": "text/plain",
+  "Content-Type": "text/event-stream",
+  "Transfer-Encoding": "chunked",
+});
+
+// response.setHeader('Connection', 'Transfer-Encoding');
+// response.setHeader('Content-Type', 'text/html; charset=utf-8');
+// response.setHeader('Transfer-Encoding', 'chunked');
+// res.write("event: ping\n")
+res.write("event: thread.message.created\ndata: data\n\n");
+res.write("event: thread.message.delta\ndata: data\n\n");
+res.write("event: thread.message.completed\ndata: data\n\n");
+res.end();
+
+    // doing.observeDeep((events, transaction) => {
+    //   //this.log("events", events, transaction)
+    //   // this.prepare();
+    //   let chunky = doing.get(id);
+    //   console.log("chunky", chunky)
+    //   res.write("event: foo\ndata: bar\n\n");
+    //   console.log("send bar");
+    //   // res.write(' BIM ');
+    //   // res.end();
+    //   res.write("event: thread.message.delta\ndata: data\n\n");
+      
+    //   setTimeout(function () {
+    //     console.log("send baz");
+    //     // res.write("event: foo\ndata: done\n\n");
+    //     res.write("event: thread.message.completed\ndata: data\n\n");
+    //     res.end();
+    //     console.log("end");
+    //   }, 10000);
+    //   // res.write(
+    //   //   JSON.stringify({
+    //   //     id: id,
+    //   //     object: "chat.completion.chunk",
+    //   //     created: Date.now() / 1000,
+    //   //     model: model,
+    //   //     system_fingerprint: "fp_44709d6fcb",
+    //   //     choices: [
+    //   //       {
+    //   //         index: 0,
+    //   //         delta: chunky.delta,
+    //   //         logprobs: null,
+    //   //         finish_reason: null,
+    //   //       },
+    //   //     ],
+    //   //   })
+    //   // ) + "\n";
+    // })
+
+
     let textPromise = new Promise((resolve, reject) => {
       let timer = setInterval(async function () {
         let check = done.get(todo.id);
