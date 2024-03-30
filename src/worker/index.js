@@ -73,6 +73,7 @@ export class Worker extends Base {
       process.stdout.write(token);
       current.response += token;
       current.delta={"role":"assistant","content":token}
+      current.chunkDate = Date.now();
       this.doing.set(current.id, current);
     });
 

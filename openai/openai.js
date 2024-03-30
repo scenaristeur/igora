@@ -4,37 +4,27 @@ let yjs_url =
     ? process.env.YJS_REMOTE_URL
     : process.env.YJS_LOCAL_URL;
 let yjs_room = process.env.YJS_MARKET_ROOM;
-
 console.log("yjs_url:", yjs_url, "\tyjs_room:", yjs_room);
 
 // https://socket.io/how-to/use-with-express-session
+// import session from "express-session";
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
-
-// import session from "express-session";
-
 import { YjsConnector } from "../src/yjsConnector/index.js";
-
-import {ChatCompletionResponse} from "./ChatCompletionResponse/index.js";
-
+import { ChatCompletionResponse } from "./ChatCompletionResponse/index.js";
 
 const port = process.env.PORT || 5678;
-
 const app = express();
 const httpServer = createServer(app);
-
-//const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
-const allowedOrigins = ["*"];
-
+const allowedOrigins = ["*"]; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
 const cors_options = {
   origin: allowedOrigins,
 };
-
 app.use(cors(cors_options));
-
+let openai_server_id = uuidv4();
 let options = {
   name: "openai",
   yjs_url: yjs_url,
@@ -45,9 +35,6 @@ let options = {
   debug: true,
 };
 let yjs = new YjsConnector(options);
-
-let openai_server_id = uuidv4();
-
 yjs.awareness.setLocalStateField("agent", {
   id: openai_server_id,
   name: options.name,
@@ -56,7 +43,6 @@ yjs.awareness.setLocalStateField("agent", {
   state: options.state,
   date: Date.now(),
 });
-
 yjs.wsProvider.on("status", (event) => {
   console.log("Websocket provider", event.status); // logs "connected" or "disconnected"
 });
@@ -68,12 +54,12 @@ const prepared = doc.getMap("prepared");
 const doing = doc.getMap("doing");
 const done = doc.getMap("done");
 
-doc.on("update", (/*update*/) => {
-  console.log("todo", todos.toJSON());
-  console.log("prepared", prepared.toJSON());
-  console.log("doing", doing.toJSON());
-  console.log("done", done.toJSON());
-});
+// doc.on("update", (/*update*/) => {
+//   console.log("todo", todos.toJSON());
+//   console.log("prepared", prepared.toJSON());
+//   console.log("doing", doing.toJSON());
+//   console.log("done", done.toJSON());
+// });
 
 app.get("/", (req, res) => {
   res.sendFile(new URL("./index.html", import.meta.url).pathname);
@@ -95,7 +81,6 @@ app.get("/v1/models", (req, res) => {
   res.end();
 });
 
-
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
   console.log("received", req.body);
   res.writeHead(200, {
@@ -105,102 +90,74 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     "Transfer-Encoding": "chunked",
   });
 
+  // CREATE RESPONSE
+  let chatCompletionReponse = new ChatCompletionResponse(req.body);
+  console.log("chatCompletionReponse", chatCompletionReponse);
 
-let chatCompletionChunkReponse = {
-  id: "chatcmpl-" + uuidv4(),
-  object: "chat.completion.chunk",
-  created: Date.now() / 1000,
-  model: req.body.model,
-  system_fingerprint: "fp_44709d6fcb",
-  choices: [
-    {
-      index: 0,
-      delta: {
-        role: "assistant",
-        content: "ONE Hello "+Date.now()/1000,
-      },
-      logprobs: null,
-      finish_reason: null,
-    },
-  ],
-  usage: {
-    prompt_tokens: 0,
-    completion_tokens: 0,
-    total_tokens: 0,
-  },
-}
+// CREATE LISTENERS
 
-
-let chatCompletionReponse = new ChatCompletionResponse(req.body)
-
-console.log("chatCompletionReponse", chatCompletionReponse);
-
-
-let count=0;
-let intervalId = setInterval(function() {
-  let d = Math.floor(Date.now() / 1000)
-  console.log("Hello World! "+d);
-  chatCompletionReponse.updateContent(" Content --"+count+"--"+d)
-  res.write("data: "+chatCompletionReponse.toString()+"\n\n");
-  if(count >= 4) {
-    clearInterval(intervalId);
-    // let d = Math.floor(Date.now() / 1000)
-    // console.log("Hello World! "+d);
-    // chatCompletionChunkReponse.created= d
-    // chatCompletionChunkReponse.choices[0].delta.content = "{}"
-    // chatCompletionChunkReponse.finish_reason = "stop";
-    // res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
-    chatCompletionReponse.finish("stop")
-    // chatCompletionReponse.updateContent(" Content --"+count+"--"+d)
-    res.write("data: "+chatCompletionReponse.toString()+"\n\n");
-
-    res.end();
-  
-  
+doing.observeDeep((events, transaction) => {
+  let current_doing = doing.get(chatCompletionReponse.id);
+  if (current_doing != undefined && current_doing.delta != undefined && current_doing.delta.content != undefined && current_doing.chunkDate != chatCompletionReponse.chunkDate) {
+    console.log("\n CURENT DOING ", current_doing);
+    chatCompletionReponse.updateContent(current_doing.delta.content, current_doing.chunkDate);
+    res.write("data: " + chatCompletionReponse.toString() + "\n\n");
   }
-  count++;
-}, 1000);
+})
+done.observeDeep((events, transaction) => {
+  let current_done = done.get(chatCompletionReponse.id);
+  if (current_done != undefined){
+    console.log("\n CURRENT done", current_done);
+    chatCompletionReponse.updateContent("{}", null);
+    chatCompletionReponse.finish("stop");
+      res.write("data: " + chatCompletionReponse.toString() + "\n\n");
+      res.end();
+     // console.log("FINISH", chatCompletionReponse.toString() )
+  }
+})
 
 
 
 
-// setTimeout(function () {
-//   // response.setHeader('Connection', 'Transfer-Encoding');
-//   // response.setHeader('Content-Type', 'text/html; charset=utf-8');
-//   // response.setHeader('Transfer-Encoding', 'chunked');
-//   // res.write("event: ping\n")
-//   res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
-//   console.log("send one");
-//   // res.write(' BIM ');
-//   // res.end();
-// }, 1000);
 
-//   setTimeout(function () {
-//   chatCompletionReponse.choices[0].message.content = "TWO Hello "+Date.now()/1000;
-//   //chatCompletionReponse.choices[0].finish_reason = "stop";
-//   res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
-//   console.log("send two");
-// }, 1000);
+// CREATE TODO
+  let model = req.body.model;
+  let todo = {
+    //id: req.body.id, //id,
+    id: chatCompletionReponse.id,
+    asker: openai_server_id, // should be client id
+    type: "text",
+    // systemPrompt should comme from client
+    systemPrompt: `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`,
+    //prompt:
+    messages: req.body.messages,
+    state: "todo",
+    model: model,
+    // seed: options.seed || 0,
+    temperature: req.body.temperature || 0,
+    date: Date.now(),
+  };
+  console.log(todo);
+  todos.set(todo.id, todo);
 
-//   setTimeout(function () {
-//     chatCompletionReponse.choices[0].message.content = {}
-//     chatCompletionReponse.choices[0].finish_reason = "stop";
-//     res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
-//     console.log("send three");
-//     console.log("send done");
-//     res.write("data:[DONE]\n\n");
-//     res.end();
-//     console.log("end");
-//   }, 1000);
-
+  // let count = 0;
+  // let intervalId = setInterval(function () {
+  //   let d = Math.floor(Date.now() / 1000);
+  //   console.log("Hello World! " + d);
+  //   chatCompletionReponse.updateContent(" Content --" + count + "--" + d);
+  //   res.write("data: " + chatCompletionReponse.toString() + "\n\n");
+  //   if (count >= 4) {
+  //     clearInterval(intervalId);
+  //     chatCompletionReponse.finish("stop");
+  //     res.write("data: " + chatCompletionReponse.toString() + "\n\n");
+  //     res.end();
+  //   }
+  //   count++;
+  // }, 1000);
 });
-
-
 
 app.post("/v1/chat/completions1", express.json(), async (req, res) => {
   console.log("received", req.body);
-  //   const session = req.session;
-  //   session.count = (session.count || 0) + 1;
 
   let id = "chatcmpl-" + uuidv4();
   let model = req.body.model;
@@ -272,13 +229,11 @@ app.post("/v1/chat/completions1", express.json(), async (req, res) => {
       })
     );
 
-
-
     doing.observeDeep((events, transaction) => {
       //this.log("events", events, transaction)
       // this.prepare();
       let chunky = doing.get(id);
-      console.log("chunky", chunky)
+      console.log("chunky", chunky);
 
       res.write(
         JSON.stringify({
@@ -297,7 +252,7 @@ app.post("/v1/chat/completions1", express.json(), async (req, res) => {
           ],
         })
       ) + "\n";
-    })
+    });
 
     let chunks = 2;
 
@@ -401,16 +356,6 @@ app.post("/v1/chat/completions1", express.json(), async (req, res) => {
     res.status(200).json(response);
   }
 });
-
-// function checkStatus(todo_id){
-//     let isDone = done.get(todo_id)
-//     console.log("isDone", isDone)
-//     if (isDone) {
-//         clearInterval(myInterval);
-//         res.status(200).json(isDone);
-//     }
-
-// }
 
 const io = new Server(httpServer);
 

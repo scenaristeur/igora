@@ -11,7 +11,7 @@ export class ChatCompletionResponse {
                 index: 0,
                 delta: {
                     role: "assistant",
-                    content: "ONE Hello "+Date.now()/1000,
+                    content: ""
                 },
                 logprobs: null,
                 finish_reason: null,
@@ -24,13 +24,16 @@ export class ChatCompletionResponse {
         }
     }
 
-    updateContent(content) {
+    updateContent(content, chunkDate) {
+        console.log("UPDATEcontent", content)
         this.choices[0].delta.content = content
+        this.chunkDate = chunkDate
     }
     finish(reason) {
         this.choices[0].finish_reason = reason
     }
     toString() {
+        console.log("toString", JSON.stringify(this))
         return JSON.stringify(this)
     }
 }
