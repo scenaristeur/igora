@@ -21,7 +21,7 @@ config_list = autogen.config_list_from_json(env_or_file="OAI_CONFIG_LIST")
 # Start by instantiating any agent that inherits from ConversableAgent.
 teachable_agent = ConversableAgent(
     name="teachable_agent",  # The name is flexible, but should not contain spaces to work in group chat.
-    llm_config={"config_list": config_list, "timeout": 120, "cache_seed": None},  # Disable caching.
+    llm_config={"config_list": config_list, "timeout": 120, "cache_seed": 121},  # Disable caching.
 )
 
 # Instantiate the Teachability capability. Its parameters are all optional.

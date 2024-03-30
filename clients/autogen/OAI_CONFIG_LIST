@@ -1,6 +1,6 @@
 [
     {
-        "model": "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
+        "model": "gpt-3.5-turbo",
         "api_key": "<your Azure OpenAI API key here>",
         "base_url": "http://localhost:5678/v1"
     }

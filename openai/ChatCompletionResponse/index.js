@@ -21,6 +21,7 @@ export class ChatCompletionResponse {
           prompt_tokens: 0,
           completion_tokens: 0,
           total_tokens: 0,
+          cost: 0
         }
     }
 
@@ -31,7 +32,7 @@ export class ChatCompletionResponse {
     }
     finish(reason) {
         this.choices[0].finish_reason = reason
-        this.choices[0].delta.content = "{}"
+       // this.choices[0].delta.content = "{}" // Does not seems necessary for crewai
     }
     toString() {
         console.log("toString", JSON.stringify(this))
