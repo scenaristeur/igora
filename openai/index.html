@@ -8,18 +8,11 @@
   </head>
   <body>
     <h1>Igora compatible with OpenAI endpoint</h1>
-    <ul id="list">
-       </ul>
-System Prompt:<br>
-       <textarea id="systemPrompt" cols="50" rows="10">
-    
-       </textarea><br>
-       Conversation:<br>
-    <textarea
-      id="prompt"
-      cols="50"
-      rows="10"
-    ></textarea>
+    <ul id="list"></ul>
+    System Prompt:<br />
+    <textarea id="systemPrompt" cols="50" rows="10"> </textarea><br />
+    Conversation:<br />
+    <textarea id="prompt" cols="50" rows="10"></textarea>
     <br />
     <button onclick="sendChatCompletion()">
       Send openai compatible chat completion
@@ -34,7 +27,8 @@ System Prompt:<br>
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      let systemPrompt = "Tu es un pirate et tu commences toutes tes phrases par 'Hé! Hé! Hé!'."
+      let systemPrompt =
+        "Tu es un pirate et tu commences toutes tes phrases par 'Hé! Hé! Hé!'.";
       document.getElementById("systemPrompt").value = systemPrompt;
       let messages = [
         {
@@ -46,7 +40,7 @@ System Prompt:<br>
       ];
 
       const socket = io();
-
+      let evtSource = null;
       socket.on("connect", () => {
         console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
       });
@@ -55,13 +49,13 @@ System Prompt:<br>
         console.log("message", data);
       });
 
-      function removeHistory(){
+      function removeHistory() {
         messages = [];
         messages.push({
           role: "system",
-          content: document.getElementById("systemPrompt").value 
-        })
-        console.log("history removed", messages)
+          content: document.getElementById("systemPrompt").value,
+        });
+        console.log("history removed", messages);
       }
 
       function send() {
@@ -70,15 +64,29 @@ System Prompt:<br>
         document.getElementById("prompt").value = "";
       }
 
+      function manageEvent(event) {
+        console.log("event", event);
+        const newElement = document.createElement("li");
+        const eventList = document.getElementById("list");
+        newElement.innerHTML = event.data;
+        eventList.appendChild(newElement);
+        if (event.data == "done") {
+          evtSource.close();
+          console.log("evtSource close", evtSource);
+        }
+      }
+
       function sendChatCompletion() {
-        const message = document.getElementById("prompt").value;
         const stream = document.getElementById("stream").checked;
+
+        const message = document.getElementById("prompt").value;
+
         console.log(stream);
         messages.push({ role: "user", content: message });
         const body = {
           messages: messages,
           model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
-          temperature: 0,//0.7,
+          temperature: 0, //0.7,
           stream: stream,
           max_tokens: 800,
           stop: [
@@ -87,46 +95,80 @@ System Prompt:<br>
           ],
         };
 
-        //         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
-        //   //withCredentials: true,
-        // });
+        if (stream == true) {
+          evtSource = new EventSource(
+            "http://127.0.0.1:5678/v1/chat/completions?message=" + message
+            //  { withCredentials: true }
+          );
+          evtSource.addEventListener("foo", manageEvent);
+          // evtSource.onmessage = (event) => {
+          //   console.log('event', event);
+          //   const newElement = document.createElement("li");
+          //   const eventList = document.getElementById("list");
 
-        // evtSource.onmessage = function (event) {
-        // console.log("event", event);
-        // };
+          //   newElement.textContent = `message: ${event.data}`;
+          //   eventList.appendChild(newElement);
+          // };
 
-        axios
-          .post(
-            `http://127.0.0.1:5678/v1/chat/completions`,
+          console.log("evtSource", evtSource);
+        } else {
+          const message = document.getElementById("prompt").value;
 
-            body,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          )
-          .then(function (response) {
-            console.log(response.data);
-            console.log(response.data.choices[0].message);
-            let m = response.data.choices[0].message
-            let message = {
-              role: m.role,
-              content: m.content,
-            }
-            messages.push(message);
-            console.log("messages", messages);
-            list = document.getElementById("list");
-            list.innerHTML = "";
-            messages.forEach((message) => {
-              list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+          console.log(stream);
+          messages.push({ role: "user", content: message });
+          const body = {
+            messages: messages,
+            model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
+            temperature: 0, //0.7,
+            stream: stream,
+            max_tokens: 800,
+            stop: [
+              //"\n",
+              "###",
+            ],
+          };
+
+          //         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
+          //   //withCredentials: true,
+          // });
+
+          // evtSource.onmessage = function (event) {
+          // console.log("event", event);
+          // };
+
+          axios
+            .post(
+              `http://127.0.0.1:5678/v1/chat/completions`,
+
+              body,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            )
+            .then(function (response) {
+              console.log(response.data);
+              console.log(response.data.choices[0].message);
+              let m = response.data.choices[0].message;
+              let message = {
+                role: m.role,
+                content: m.content,
+              };
+              messages.push(message);
+              console.log("messages", messages);
+              list = document.getElementById("list");
+              list.innerHTML = "";
+              messages.forEach((message) => {
+                list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+              });
+            })
+            .catch(function (error) {
+              console.log(error);
             });
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        document.getElementById("prompt").value = "";
+          document.getElementById("prompt").value = "";
+        }
       }
     </script>
     <!-- FIN CODE SOCKET -->

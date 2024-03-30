@@ -72,6 +72,7 @@ export class Worker extends Base {
     const response = await this.mcConnector.chat(current, (token) => {
       process.stdout.write(token);
       current.response += token;
+      current.delta={"role":"assistant","content":token}
       this.doing.set(current.id, current);
     });
 
