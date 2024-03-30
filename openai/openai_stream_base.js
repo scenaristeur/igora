@@ -7,19 +7,28 @@ let yjs_room = process.env.YJS_MARKET_ROOM;
 
 console.log("yjs_url:", yjs_url, "\tyjs_room:", yjs_room);
 
+// https://blog.postman.com/set-up-a-websockets-server-in-node-js-postman/
+// import { WebSocketServer } from 'ws';
+
+// const wss = new WebSocketServer({ port: 8080 });
+
+// wss.on('connection', function connection(ws) {
+//   ws.on('message', function message(data) {
+//     console.log('received: %s', data);
+//   });
+
+//   ws.send('something');
+// });
+
 // https://socket.io/how-to/use-with-express-session
 import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
-
 // import session from "express-session";
 
 import { YjsConnector } from "../src/yjsConnector/index.js";
-
-import {ChatCompletionResponse} from "./ChatCompletionResponse/index.js";
-
 
 const port = process.env.PORT || 5678;
 
@@ -91,8 +100,72 @@ app.get("/v1/models", (req, res) => {
       },
     ],
   };
+
+  // res.writeHead(200, {
+  //   "Content-Type": "text/plain",
+  //   "Transfer-Encoding": "chunked",
+  // });
+
   res.write(JSON.stringify(models));
+
   res.end();
+});
+
+var sendAndSleep1 = function (response, counter) {
+  if (counter > 10) {
+    console.log("end");
+    response.end();
+  } else {
+    console.log("sendAndSleep", counter);
+    response.write(" ;i=" + counter);
+    //response.json({"text": " ;i=" + counter});
+    counter++;
+    setTimeout(function () {
+      sendAndSleep(response, counter);
+    }, 1000);
+  }
+};
+
+var sendAndSleep = function (response, counter) {
+  if (counter > 10) {
+    console.log("end");
+    response.end();
+  } else {
+    console.log("sendAndSleep", counter);
+    response.write(" ;i=" + counter);
+    //response.json({"text": " ;i=" + counter});
+    counter++;
+    setTimeout(function () {
+      sendAndSleep(response, counter);
+    }, 1000);
+  }
+};
+
+app.get("/stream/:chunks", function (req, res, next) {
+  res.writeHead(200, {
+    "Content-Type": "text/plain",
+    "Transfer-Encoding": "chunked",
+  });
+
+  // set default chunks to 10
+  var chunks = req.params.chunks || 10;
+
+  // max out chunks at 100
+  if (chunks > 100) chunks = 100;
+
+  var count = 1;
+
+  while (count <= chunks) {
+    res.write(
+      JSON.stringify({
+        type: "stream",
+        chunk: count++,
+      }) + "\n"
+    );
+  }
+
+  res.end();
+  next();
 });
 
 
@@ -105,6 +178,28 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     "Transfer-Encoding": "chunked",
   });
 
+
+let chatCompletionReponse = {
+  id: "chatcmpl-" + uuidv4(),
+  object: "chat.completion",
+  created: Date.now() / 1000,
+  model: req.body.model,
+  choices: [
+    {
+      index: 0,
+      message: {
+        role: "assistant",
+        content: "Hello "+Date.now()/1000,
+      },
+      finish_reason: null,
+    },
+  ],
+  usage: {
+    prompt_tokens: 0,
+    completion_tokens: 0,
+    total_tokens: 0,
+  },
+};
 
 let chatCompletionChunkReponse = {
   id: "chatcmpl-" + uuidv4(),
@@ -129,31 +224,57 @@ let chatCompletionChunkReponse = {
     total_tokens: 0,
   },
 }
+// {"id":"chatcmpl-123",
+// "object":"chat.completion.chunk",
+// "created":1694268190,
+// "model":"gpt-3.5-turbo-0125",
+//  "system_fingerprint": "fp_44709d6fcb", 
+//  "choices":[{"index":0,"delta":{"role":"assistant","content":""},
+//  "logprobs":null,
+//  "finish_reason":null}]}
+
+// {"id":"chatcmpl-123",
+// "object":"chat.completion.chunk",
+// "created":1694268190,
+// "model":"gpt-3.5-turbo-0125",
+//  "system_fingerprint": "fp_44709d6fcb", 
+//  "choices":[{"index":0,"delta":{"content":"Hello"},
+//  "logprobs":null,"finish_reason":null}]}
+
+// ....
+
+// {"id":"chatcmpl-123",
+// "object":"chat.completion.chunk",
+// "created":1694268190,
+// "model":"gpt-3.5-turbo-0125", 
+// "system_fingerprint": "fp_44709d6fcb", 
+// "choices":[{"index":0,"delta":{},"logprobs":null,
+// "finish_reason":"stop"}]}
 
 
-let chatCompletionReponse = new ChatCompletionResponse(req.body)
-
-console.log("chatCompletionReponse", chatCompletionReponse);
-
-
+// function myFunction() {
+//   let d = Date.now() / 1000
+//   console.log("Hello World! "+d);
+//   chatCompletionChunkReponse.created= d
+//   res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
+//   if(count >= 4) clearInterval(intervalId);
+//   count++;
+// }
 let count=0;
 let intervalId = setInterval(function() {
   let d = Math.floor(Date.now() / 1000)
   console.log("Hello World! "+d);
-  chatCompletionReponse.updateContent(" Content --"+count+"--"+d)
-  res.write("data: "+chatCompletionReponse.toString()+"\n\n");
+  chatCompletionChunkReponse.created= d
+  chatCompletionChunkReponse.choices[0].delta.content = " Hello --"+count+"--"+d
+  res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
   if(count >= 4) {
     clearInterval(intervalId);
-    // let d = Math.floor(Date.now() / 1000)
-    // console.log("Hello World! "+d);
-    // chatCompletionChunkReponse.created= d
-    // chatCompletionChunkReponse.choices[0].delta.content = "{}"
-    // chatCompletionChunkReponse.finish_reason = "stop";
-    // res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
-    chatCompletionReponse.finish("stop")
-    // chatCompletionReponse.updateContent(" Content --"+count+"--"+d)
-    res.write("data: "+chatCompletionReponse.toString()+"\n\n");
-
+    let d = Math.floor(Date.now() / 1000)
+    console.log("Hello World! "+d);
+    chatCompletionChunkReponse.created= d
+    chatCompletionChunkReponse.choices[0].delta.content = "{}"
+    chatCompletionChunkReponse.finish_reason = "stop";
+    res.write("data: "+JSON.stringify(chatCompletionChunkReponse)+"\n\n");
     res.end();
   
   
