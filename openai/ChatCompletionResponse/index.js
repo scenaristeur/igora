@@ -21,7 +21,6 @@ export class ChatCompletionResponse {
           prompt_tokens: 0,
           completion_tokens: 0,
           total_tokens: 0,
-          cost: 0
         }
     }
 
