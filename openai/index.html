@@ -4,29 +4,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Igora compatible server to OpenAI api</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <h1>Igora compatible with OpenAI endpoint</h1>
+    <div id="state"></div>
     <ul id="list"></ul>
     System Prompt:<br />
     <textarea id="systemPrompt" cols="50" rows="10"> </textarea><br />
     Conversation:<br />
     <textarea id="prompt" cols="50" rows="10"></textarea>
     <br />
-    <button onclick="sendChatCompletion()">
+    <button onclick="sendChatCompletion()" id="generateBtn">
       Send openai compatible chat completion
     </button>
+    <button onclick="stop()" id="stopBtn" disabled>Stop</button>
     <br /><br />
     <button onclick="removeHistory()">Remove history</button>
     <hr />
     not implemented yet
     <hr />
     <button onclick="send()">Send websocket</button>
-    <input type="checkbox" id="stream" /> Stream (not implemented yet)
+    <input type="checkbox" id="stream" checked /> Stream
     <!-- CREATION SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      const API_URL = "http://127.0.0.1:5678/v1/chat/completions";
+      const API_KEY = "sk-y'a rien à voir ici, Circulez... Allez Hop!";
       let systemPrompt =
         "Tu es un pirate et tu commences toutes tes phrases par 'Hé! Hé! Hé!'.";
       document.getElementById("systemPrompt").value = systemPrompt;
@@ -38,7 +41,7 @@
         // {role: "user", content: "Je m'appelle David."},
         // {role: "assistant", content: "Nice to meet you, David! How can I assist you today?"}
       ];
-
+      let controller = null;
       const socket = io();
       let evtSource = null;
       socket.on("connect", () => {
@@ -76,13 +79,25 @@
         }
       }
 
-      function sendChatCompletion() {
+      async function sendChatCompletion() {
+        stopBtn.disabled = false;
+        generateBtn.disabled = true;
+        state.innerHTML = "Generating...";
+
+        controller = new AbortController();
+        const { signal } = controller;
+
         const stream = document.getElementById("stream").checked;
 
-        const message = document.getElementById("prompt").value;
+        const message = document.getElementById("prompt").value.trim();
 
         console.log(stream);
         messages.push({ role: "user", content: message });
+        list = document.getElementById("list");
+        let ligne = document.createElement("li");
+        list.appendChild(ligne);
+        ligne.innerHTML = "<b>User :</b> " + message;
+        let assistant_message = "";
         const body = {
           messages: messages,
           model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
@@ -95,79 +110,119 @@
           ],
         };
 
-        if (stream == true) {
-          evtSource = new EventSource(
-            "http://127.0.0.1:5678/v1/chat/completions?message=" + message
-            //  { withCredentials: true }
-          );
-          evtSource.addEventListener("foo", manageEvent);
-          // evtSource.onmessage = (event) => {
-          //   console.log('event', event);
-          //   const newElement = document.createElement("li");
-          //   const eventList = document.getElementById("list");
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${API_KEY}`,
+            },
+            body: JSON.stringify(body),
+            signal,
+          });
 
-          //   newElement.textContent = `message: ${event.data}`;
-          //   eventList.appendChild(newElement);
-          // };
+          if (stream == true) {
+            // https://www.youtube.com/watch?v=wDtjBb4ZJwA
+            const reader = response.body.getReader();
+            list = document.getElementById("list");
+            let ligne = document.createElement("li");
+            list.appendChild(ligne);
+            ligne.innerHTML = "<b>Assistant :</b> ";
+            let assistant_message = "";
 
-          console.log("evtSource", evtSource);
-        } else {
-          const message = document.getElementById("prompt").value;
-
-          console.log(stream);
-          messages.push({ role: "user", content: message });
-          const body = {
-            messages: messages,
-            model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
-            temperature: 0, //0.7,
-            stream: stream,
-            max_tokens: 800,
-            stop: [
-              //"\n",
-              "###",
-            ],
-          };
-
-          //         const evtSource = new EventSource("http://127.0.0.1:5678/v1/chat/completions", {
-          //   //withCredentials: true,
-          // });
-
-          // evtSource.onmessage = function (event) {
-          // console.log("event", event);
-          // };
-
-          axios
-            .post(
-              `http://127.0.0.1:5678/v1/chat/completions`,
-
-              body,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
+            while (true) {
+              const chunk = await reader.read();
+              const { done, value } = chunk;
+              if (done) {
+                console.log("done");
+                break;
               }
-            )
-            .then(function (response) {
-              console.log(response.data);
-              console.log(response.data.choices[0].message);
-              let m = response.data.choices[0].message;
-              let message = {
-                role: m.role,
-                content: m.content,
-              };
-              messages.push(message);
-              console.log("messages", messages);
-              list = document.getElementById("list");
-              list.innerHTML = "";
-              messages.forEach((message) => {
-                list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
-              });
-            })
-            .catch(function (error) {
-              console.log(error);
+
+              const decoder = new TextDecoder("utf-8");
+              const decodedChunk = decoder.decode(value);
+              const lines = decodedChunk.split("\n");
+              const parsedLines = lines
+                .map((line) => line.replace(/^data: /, "").trim())
+                .filter((line) => line != "" && line !== "[DONE]")
+                .map((line) => JSON.parse(line));
+
+              for (const parsedLine of parsedLines) {
+                const { choices } = parsedLine;
+                const { delta } = choices[0];
+                const { content } = delta;
+                if (content && content != "{}") {
+                  //console.log(content)
+                  ligne.innerHTML += content;
+                  assistant_message += content;
+                  // const m = { role: "assistant", content: content };
+                  // let message = {
+                  //   role: m.role,
+                  //   content: m.content,
+                  // };
+                  // messages.push(message);
+                  // console.log("messages", messages);
+                  // list = document.getElementById("list");
+                  // list.innerHTML = "";
+                  // messages.forEach((message) => {
+                  //   list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+                  // });
+                }
+              }
+
+              // console.log("text", text)
+              // let m = text;
+              // let message = {
+              //   role: m.role,
+              //   content: m.content,
+              // };
+              // messages.push(message);
+
+              // list = document.getElementById("list");
+              // list.innerHTML = "";
+              // messages.forEach((message) => {
+              //   list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+              // });
+            }
+            messages.push({ role: "assistant", content: assistant_message });
+            console.log("messages", messages);
+            state.innerHTML = "";
+          } else {
+            console.log(response.data);
+            console.log("json", await response.json());
+            console.log(response.data.choices[0].message);
+            let m = response.data.choices[0].message;
+            let message = {
+              role: m.role,
+              content: m.content,
+            };
+            messages.push(message);
+            console.log("messages", messages);
+            list = document.getElementById("list");
+            list.innerHTML = "";
+            messages.forEach((message) => {
+              list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
             });
-          document.getElementById("prompt").value = "";
+          }
+        } catch (error) {
+          if (signal.aborted) {
+            state.innerHTML = "Request aborted.";
+          } else {
+            state.innerHTML = "Error occurred while generating.";
+            console.log(error);
+          }
+        } finally {
+          stopBtn.disabled = true;
+          generateBtn.disabled = false;
+          controller = null;
+        }
+        document.getElementById("prompt").value = "";
+      }
+
+      function stop() {
+        if (controller) {
+          controller.abort();
+          controller = null;
         }
       }
     </script>

@@ -108,9 +108,9 @@ done.observeDeep((events, transaction) => {
   let current_done = done.get(chatCompletionReponse.id);
   if (current_done != undefined){
     console.log("\n CURRENT done", current_done);
-    chatCompletionReponse.updateContent("{}", null);
+   
     chatCompletionReponse.finish("stop");
-      res.write("data: " + chatCompletionReponse.toString() + "\n\n");
+      res.write("data: " + chatCompletionReponse.toString() + "\n\n[DONE]\n\n");
       res.end();
      // console.log("FINISH", chatCompletionReponse.toString() )
   }

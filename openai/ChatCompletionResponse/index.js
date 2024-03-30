@@ -31,6 +31,7 @@ export class ChatCompletionResponse {
     }
     finish(reason) {
         this.choices[0].finish_reason = reason
+        this.choices[0].delta.content = "{}"
     }
     toString() {
         console.log("toString", JSON.stringify(this))
