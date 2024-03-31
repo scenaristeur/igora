@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "js-md5": "^0.8.3"
+    "js-md5": "^0.8.3",
+    "llamaindex": "^0.2.1"
   }
 }

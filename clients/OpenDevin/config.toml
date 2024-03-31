@@ -1,0 +1,6 @@
+# This is a template. Run `cp config.toml.template config.toml` to use it.
+
+LLM_API_KEY="<YOUR OPENAI API KEY>"
+WORKSPACE_DIR="./workspace"
+LLM_BASE_URL="http://localhost:5678/v1"
+LLM_MODEL="openai/mistral" https://docs.litellm.ai/docs/providers/openai_compatible#usage---completion

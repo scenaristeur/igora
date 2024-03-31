@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+console.log('Loading dotenv file...');
 import { Explorer } from "./lib/explorer/index.js";
 
 let options = {    

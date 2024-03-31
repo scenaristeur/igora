@@ -294,3 +294,6 @@ cd website && npm run build
 # autogen
 - https://www.youtube.com/watch?v=byPbxEH5V8E
 - crewai https://www.youtube.com/watch?v=sPzc6hMg7So
+
+# embeddings 
+- https://github.com/langchain-ai/langchainjs/issues/3626#issuecomment-1880245464

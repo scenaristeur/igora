@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { md5 } from "js-md5";
+
+import { VectorStoreIndex } from "llamaindex";
+
 export class Explorer {
   constructor(options = {}) {
     this.id = uuidv4();
@@ -7,12 +10,38 @@ export class Explorer {
     //this.md5_fetch_method = "GET" //"HEAD"
   }
 
-  scan(options) {
+  async scan(options) {
     const urls = options.urls;
+    const docs = []
     for (let url of options.urls) {
-      this._scan_url(url, options);
+      let doc =await this._scan_url(url, options);
+      docs.push(JSON.stringify(doc))
     }
+
+this._query_docs(docs)
+
   }
+
+
+async _query_docs(docs){
+  console.log("docs",docs)
+  // Split text and create embeddings. Store them in a VectorStoreIndex
+  const index = await VectorStoreIndex.fromDocuments(docs);
+
+  // Query the index
+  const queryEngine = index.asQueryEngine();
+  const response = await queryEngine.query({
+    //query: "What is the license grant in the TOS?",
+    query: "Where is the brain?",
+  });
+
+  // Output response
+  console.log(response.toString());
+}
+
+
+
+
 
   async _scan_url(url, options) {
     let emprunte = await this._emprunte(url);
@@ -26,6 +55,7 @@ export class Explorer {
     if (options.friends) {
       this.log("friends", url);
     }
+    return emprunte;
   }
 
   async _emprunte(url) {
