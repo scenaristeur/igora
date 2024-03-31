@@ -143,6 +143,8 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
         // console.log("FINISH", chatCompletionReponse.toString() )
       }
     });
+    todos.set(todo.id, todo);
+    console.log("NEW STREAM TODO ADDED ", todo.id)
   } else {
     let response = {
       id: todo.id,
@@ -174,6 +176,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
 
     // console.log(todo);
     todos.set(todo.id, todo);
+    console.log("NEW NORMAL TODO ADDED ", todo.id)
 
     let textPromise = new Promise((resolve, reject) => {
       let timer = setInterval(async function () {
@@ -191,6 +194,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     console.log("response", response);
     res.status(200).json(response);
   }
+
 });
 
 const io = new Server(httpServer);

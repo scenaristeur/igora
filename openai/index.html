@@ -90,6 +90,7 @@
         const stream = document.getElementById("stream").checked;
 
         const message = document.getElementById("prompt").value.trim();
+        document.getElementById("prompt").value = "";
 
         console.log(stream);
         messages.push({ role: "user", content: message });
@@ -188,10 +189,11 @@
             console.log("messages", messages);
             state.innerHTML = "";
           } else {
-            console.log(response.data);
-            console.log("json", await response.json());
-            console.log(response.data.choices[0].message);
-            let m = response.data.choices[0].message;
+            //console.log(response.data);
+            const r = await response.json()
+            console.log( r);
+            // console.log(r.choices[0].message);
+            let m = r.choices[0].message;
             let message = {
               role: m.role,
               content: m.content,
@@ -216,7 +218,7 @@
           generateBtn.disabled = false;
           controller = null;
         }
-        document.getElementById("prompt").value = "";
+
       }
 
       function stop() {
