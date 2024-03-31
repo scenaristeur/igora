@@ -90,6 +90,7 @@
         const stream = document.getElementById("stream").checked;
 
         const message = document.getElementById("prompt").value.trim();
+        document.getElementById("prompt").value = "";
 
         console.log(stream);
         messages.push({ role: "user", content: message });
@@ -169,29 +170,15 @@
                   // });
                 }
               }
-
-              // console.log("text", text)
-              // let m = text;
-              // let message = {
-              //   role: m.role,
-              //   content: m.content,
-              // };
-              // messages.push(message);
-
-              // list = document.getElementById("list");
-              // list.innerHTML = "";
-              // messages.forEach((message) => {
-              //   list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
-              // });
             }
             messages.push({ role: "assistant", content: assistant_message });
             console.log("messages", messages);
             state.innerHTML = "";
           } else {
-            console.log(response.data);
-            console.log("json", await response.json());
-            console.log(response.data.choices[0].message);
-            let m = response.data.choices[0].message;
+            const r = await response.json();
+            console.log(r);
+
+            let m = r.choices[0].message;
             let message = {
               role: m.role,
               content: m.content,
@@ -216,7 +203,7 @@
           generateBtn.disabled = false;
           controller = null;
         }
-        document.getElementById("prompt").value = "";
+       
       }
 
       function stop() {

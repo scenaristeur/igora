@@ -27,7 +27,6 @@ Si vous des problèmes ou des questions, n'hésitez pas à [interroger la commun
 git clone https://github.com/scenaristeur/igora
 cd igora
 npm install
-npm run fix
 ```
 
 ### Télécharger un modèle de language

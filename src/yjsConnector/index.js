@@ -4,6 +4,19 @@ import WebSocket from "ws";
 
 import { Base } from "../base/index.js";
 
+
+// to work with gltch.me that need a user agent https://github.com/yjs/y-websocket/pull/173#issuecomment-1962889278
+const headers = {"headers": {"User-Agent" :"Mozilla/5.0 (X11; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"} }
+class WebSocketPolyfillPolyfill extends WebSocket {
+  constructor(...args) {
+    super(...args, headers)
+  }
+}
+
+
+
+
+
 export class YjsConnector extends Base {
   constructor(options = {}) {
     super(options);
@@ -20,7 +33,7 @@ export class YjsConnector extends Base {
       this.options.yjs_url,
       this.options.yjs_room,
       this.doc,
-      { WebSocketPolyfill: WebSocket /*, params */ }
+      { WebSocketPolyfill: WebSocketPolyfillPolyfill /*, params */ }
     );
     this.awareness = this.wsProvider.awareness;
     // this.awareness.clientId = this.id;

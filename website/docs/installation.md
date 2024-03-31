@@ -28,7 +28,6 @@ If you have questions or issues, please [contact the community](./help)
 git clone https://github.com/scenaristeur/igora
 cd igora
 npm install
-npm run fix
 ```
 
 ### Download a model
