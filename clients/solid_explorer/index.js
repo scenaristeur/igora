@@ -21,7 +21,8 @@ let urls =[
     // "https://spoggy-test5.solidcommunity.net/public",
     // "https://spoggy-test5.solidcommunity.net/private",
     "https://spoggy-test5.solidcommunity.net/public/brains/",
-    // "https://spoggy-test5.solidcommunity.net/public/bookmarks/Music/Pink%20Floyd/bookmarks.ttl"
+    // "https://spoggy-test5.solidcommunity.net/public/bookmarks/Music/Pink%20Floyd/bookmarks.ttl",
+    "https://spoggy-test5.solidcommunity.net/public/Fractopia/v0.2/spaces"
 ]
 
 let scan_options = { // scan_options can differ for each url and override default explorer options
