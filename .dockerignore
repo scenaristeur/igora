@@ -1,6 +1,6 @@
 .gitignore
 .github
-.env
+#.env
 models/*.gguf
 .ipynb_checkpoints
 node_modules
@@ -10,3 +10,4 @@ docker-compose.yaml
 market_db
 website
 docker
+clients
