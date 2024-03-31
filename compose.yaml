@@ -36,5 +36,25 @@ services:
       - VITE_YJS_ENV=${VITE_YJS_ENV}
       - VITE_YJS_REMOTE_URL=${VITE_YJS_REMOTE_URL}
       - VITE_YJS_LOCAL_URL=${VITE_YJS_LOCAL_URL}
+  openai:
+    image: "openai:${TAG}"
+    build:
+      context: .
+      dockerfile: ./docker/openai/Dockerfile
+    environment:
+      - YJS_ENV=${YJS_ENV}
+      - YJS_REMOTE_URL=${YJS_REMOTE_URL}
+      - YJS_LOCAL_URL=${YJS_LOCAL_URL_DOCKER}
+      - YJS_MARKET_ROOM=${YJS_MARKET_ROOM}
+      - LLM_MODEL_NAME=${LLM_MODEL_NAME}
+    ports:
+      - "5678:5678"
+    depends_on:
+      - backend
+      - market
+    volumes:
+      - ./models:/app/models
+
+
   #   volumes:
   #     - ./src:/app
