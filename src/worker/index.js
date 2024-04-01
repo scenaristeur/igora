@@ -2,23 +2,82 @@ import { Base } from "../base/index.js";
 import { McConnector } from "../mcConnector/index.js";
 import { YjsConnector } from "../yjsConnector/index.js";
 
+/**
+ * Classe représentant un Worker
+ * Un Worker est un agent qui va travailler sur des tâches en attente
+ * Il est lié à un projet (McConnector) et à une liste de tâches prêtes
+ * (YjsConnector)
+ */
 export class Worker extends Base {
+  /**
+   * Constructeur de la classe Worker
+   * @param {Object} options Options pour initialiser le Worker
+   */
   constructor(options = {}) {
     super(options);
+    /**
+     * Type du Worker
+     * @type {String}
+     */
     this.options.type = "text";
+    /**
+     * Style de la console pour les logs du Worker
+     * @type {String}
+     */
     this.options.style = "node_llama_cpp";
+    /**
+     * Flag pour les logs du Worker
+     * @type {String}
+     */
     this.options.state = "ready";
+    /**
+     * Flag pour les logs du Worker
+     * @type {String}
+     */
     this.flag = "[WORKER][" + this.options.name + "]";
+    /**
+     * Couleur pour les logs du Worker
+     * @type {Function}
+     */
     this.chalk = this.chalk.yellow;
+    /**
+     * Instance de YjsConnector pour communiquer avec la liste des tâches prêtes
+     * @type {YjsConnector}
+     */
     this.yjs = new YjsConnector(this.options);
+    /**
+     * Instance de McConnector pour communiquer avec le projet lié
+     * @type {McConnector}
+     */
     this.mcConnector = new McConnector(this.options);
+    /**
+     * Méthode pour mettre à jour l'état de l'awareness
+     */
     this.updateAwareness();
+    /**
+     * Map de tâches prêtes pour être traitée
+     * @type {Y.Map<String, Task>}
+     */
     this.prepared = this.yjs.doc.getMap("prepared");
+    /**
+     * Map de tâches en cours de traitement
+     * @type {Y.Map<String, Task>}
+     */
     this.doing = this.yjs.doc.getMap("doing");
+    /**
+     * Map de tâches terminées
+     * @type {Y.Map<String, Task>}
+     */
     this.done = this.yjs.doc.getMap("done");
+    /**
+     * Méthode pour écouter les changements dans la liste des tâches prêtes
+     */
     this.listenDoing()
   }
 
+  /**
+   * Méthode pour écouter les changements dans la liste des tâches prêtes
+   */
   listenDoing() {
     this.prepared.observeDeep((events, transaction) => {
       this.log("events", events, transaction)
@@ -26,6 +85,11 @@ export class Worker extends Base {
     })
   }
 
+  /**
+   * Prépare les tâches prêtes pour être traitée
+   * Cette fonction est appelée quand on ajoute une tâche
+   * dans la liste "prepared"
+   */
   prepare() {
     let tasks = Array.from(this.prepared.values())
 
@@ -35,15 +99,17 @@ export class Worker extends Base {
         this.processTask(task)
       }
     })
-
-
-
     //   if(tasks.length>0){
     //     this.options.state = "working";
     //     this.updateAwareness();
     //   }
   }
 
+  /**
+   * Traite une tâche, en l'ajoutant dans la liste "doing"
+   * et en appelant le mcConnector pour générer la réponse
+   * @param {*} task 
+   */
   processTask(task) {
 
 
@@ -58,6 +124,11 @@ export class Worker extends Base {
     }
   }
 
+  /**
+   * Traite une tâche en cours, en appelant le mcConnector
+   * pour générer la réponse associée
+   * @param {string} id l'id de la tâche
+   */
   async process_doing_mc(id) {
     let current = this.doing.get(id);
     console.log("!!!!!! PROCESSING ", current)
@@ -94,6 +165,9 @@ export class Worker extends Base {
 
 
 
+  /**
+   * Met à jour les informations de l'agent dans la liste d'awareness
+   */
   updateAwareness() {
     this.yjs.awareness.setLocalStateField("agent", {
       id: this.id,
