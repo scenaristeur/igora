@@ -7,6 +7,7 @@ import {
   LlamaModel,
   LlamaContext,
   LlamaChatSession,
+  DisposedError
   // TemplateChatWrapper,
 } from "node-llama-cpp";
 // import { get_encoding, encoding_for_model } from "tiktoken";
@@ -110,8 +111,11 @@ export class McConnector extends Base {
    * @param {Function} cb - The callback function.
    * @returns {Promise} - The promise that resolves when the message has been processed.
    */
-  chat = async (options, cb) => {
+  chat = async (data, cb) => {
     const that = this;
+
+    let options = data.current;
+    let abortSignal = data.abortSignal
     const s_id = options.id.split("-").slice(-1); // short_id
     //console.log(options);
     let history = options.messages.map((m) => {
@@ -167,11 +171,12 @@ export class McConnector extends Base {
     this.log("!!! sessions actives ", Object.keys(sessions).length);
     const model = this.model;
     s.tokens_cpt = 0;
+    try{
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
       // maxTokens: maxTokens,
-
+      signal: abortSignal, // https://github.com/withcatai/node-llama-cpp/issues/95
       onToken(chunk) {
         const tok = model.detokenize(chunk); // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
         s.tokens_cpt++;
@@ -195,6 +200,13 @@ export class McConnector extends Base {
         cb(tok);
       },
     });
+  }catch(e){
+   // console.log(e.message)
+   // if (!(e instanceof DisposedError))
+    console.log("\n!!!ABORTED", options.id)
+  cb("\n[ABORTED]")
+  }
+  finally{
     s.load_time = (s.start - s.start_chat_session) / 1000;
     this.log(
       "!XXX FINISHED n°" +
@@ -216,5 +228,7 @@ export class McConnector extends Base {
     delete sessions[options.id];
 
     this.log("!!! sessions actives ", Object.keys(sessions).length);
+  }
+
   };
 }

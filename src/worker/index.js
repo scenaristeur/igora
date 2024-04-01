@@ -130,7 +130,10 @@ export class Worker extends Base {
    * @param {string} id l'id de la tâche
    */
   async process_doing_mc(id) {
+    const abortController = new AbortController()
+    console.log("***************TODO ABORTED CAPABILITY in WORKER")
     let current = this.doing.get(id);
+    
     //console.log("!!!!!! PROCESSING ", current)
     if (current.systemPrompt == undefined || current.systemPrompt.length == 0) {
       current.systemPrompt =
@@ -141,12 +144,21 @@ export class Worker extends Base {
     //current.seed = this.options.seed
     this.log("process_doing_mc", id, "llm state", this.mcConnector.state);
     current.response = "";
-    const response = await this.mcConnector.chat(current, (token) => {
+    let cpt = 0
+    const response = await this.mcConnector.chat({ current: current, abortSignal: abortController.signal },  (token) => {
       //process.stdout.write(token);
       current.response += token;
       current.delta = { role: "assistant", content: token };
       current.chunkDate = Date.now();
       this.doing.set(current.id, current);
+
+ 
+      // if (cpt >3){
+      //   abortController.abort()
+      // }else{cpt ++
+      //   console.log(cpt)
+      // }
+
     });
 
     //this.log(`Total text length: ${current.response.length}`);
