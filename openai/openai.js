@@ -29,8 +29,8 @@ let options = {
   name: "openai",
   yjs_url: yjs_url,
   yjs_room: yjs_room,
-  type: "openai_compatible_endpoint",
-  style: "igora",
+  type: "client",
+  style: "openai_compatible_endpoint",
   state: "ready",
   debug: true,
 };
@@ -94,7 +94,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     //id: req.body.id, //id,
     id: chatCompletionReponse.id,
     asker: openai_server_id, // should be client id
-    type: "text",
+    style: "text",
     // systemPrompt should comme from client
     systemPrompt: `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`,
     //prompt:

@@ -38,14 +38,17 @@ export class Broker extends Base {
      * @type {YjsConnector}
      */
     this.yjs = new YjsConnector(this.options);
-    
-    
+
     this.todos = this.yjs.doc.getMap("todos");
     this.prepared = this.yjs.doc.getMap("prepared");
     this.doing = this.yjs.doc.getMap("doing");
     this.done = this.yjs.doc.getMap("done");
     this.activeBroker = this.yjs.doc.getMap("activeBroker");
-    
+    this.agents = [];
+    this.brokers = [];
+    this.workers = [];
+    this.clients = [];
+
     /**
      * Méthode pour écouter les changements d'état dans l'awareness
      */
@@ -54,124 +57,228 @@ export class Broker extends Base {
     /**
      * Méthode pour mettre à jour l'état de l'awareness
      */
-    this.updateAwareness();
+    this.setLocalState();
 
-
-    this.listenTodos();
+    // this.listenTodos();
   }
   /**
    * Méthode pour écouter les changements sur la map todos
    */
   listenTodos() {
     this.todos.observeDeep((events, transaction) => {
-      console.log("[broker] prepare TODOS")
+      console.log("[broker] prepare TODOS");
       this.prepare();
     });
   }
 
-  _recense(){
+  _recense() {
     let todos = Array.from(this.todos.values());
     let prepared = Array.from(this.prepared.values());
     let doing = Array.from(this.doing.values());
     let done = Array.from(this.done.values());
-    this.log("active broker",this.activeBroker.get("active"))
-    this.log(todos.length,"todos ",prepared.length,"prepared", doing.length, "doing", done.length, "done")
-
+    this.log("active broker", this.activeBroker.get("active"));
+    this.log(
+      todos.length,
+      "todos ",
+      prepared.length,
+      "prepared",
+      doing.length,
+      "doing",
+      done.length,
+      "done"
+    );
+    // console.log("AGENTS", this.agents);
+    //console.log("brokers", this.brokers)
+    this.workers.forEach((w) => {
+      console.log("w", w.id, w.state);
+    });
+    // console.log("clients", this.clients)
   }
   /**
    * Méthode pour préparer les tâches en attente
    */
   prepare() {
-    this.yjs.awareness.setLocalStateField("truc", "machin")
-    this.log("active broker",this.activeBroker.get("active"), "my id", this.id)
+    // this.yjs.awareness.setLocalStateField("truc", "machin");
+    // this.log(
+    //   "active broker",
+    //   this.activeBroker.get("active"),
+    //   "my id",
+    //   this.id
+    // );
 
-    if (this.activeBroker.get("active") == this.id) {
-      //if this broker is the active broker
-      this._recense()
-      let todos = Array.from(this.todos.values());
+    // if (this.activeBroker.get("active") == this.id) {
+    //if this broker is the active broker
+    // this._recense();
+    let todos = Array.from(this.todos.values());
+    // console.log("todos", todos.length);
 
-      todos.forEach((todo) => {
-        let job = this.todos.get(todo.id);
-        this.log("job", JSON.stringify(job));
-        let workers = Array.from(
-          this.yjs.awareness.getStates().values()
-        ).filter((a) => {
-          return a.type == job.type && a.state == "ready";
-        });
-        this.log("workers", workers.length, JSON.stringify(workers));
-        if (workers.length > 0) {
-          job.worker = workers[0].id;
-          job.state = "prepared";
-          job.worker = workers[0].id;
-          job.attemps = 1;
-          job.start = Date.now();
-          this.prepared.set(job.id, job);
-          this.todos.delete(job.id);
-          this.log(JSON.stringify(job));
-          this.log("prepare job", job.id, "for worker ", workers[0].id);
-        } else {
-          this.log("!!!!! no workers for job", job.id);
-        }
+    todos.forEach((todo) => {
+      let job = this.todos.get(todo.id);
+      this.log("\njob", job.style, job.id, "for clientID", job.clientID);
+      let workers = this.workers.filter((a) => {
+        this.log("  ", a.id, a.style, a.state);
+        return a.style == job.style && a.state == "ready";
       });
-    }
+      this.log("workers", workers.length, JSON.stringify(workers));
+      if (workers.length > 0) {
+        job.worker = workers[0].id;
+        job.state = "prepared";
+        job.worker = workers[0].id;
+        job.attemps = 1;
+        job.start = Date.now();
+        this.prepared.set(job.id, job);
+        this.todos.delete(job.id);
+        this.log(JSON.stringify(job));
+        this.log("prepare job", job.id, "for worker ", workers[0].id);
+      } else {
+        this.log("!!!!! no workers for job", job.id);
+      }
+    });
+    // }
   }
 
   /**
    * Méthode pour écouter les changements d'état des agents
    */
+
   listenAwareness() {
-  
     let awareness = this.yjs.awareness;
-    awareness.on("change", (changes) => {
-      this.log("      ",JSON.stringify(changes))
-      console.log(awareness.getStates())
+    awareness.on("changes", (changes, tr) => {
+      //console.log(tr)
+      console.log("\nCHANGES", changes);
+    });
+    awareness.on("update", (updates, tr) => {
+      // console.log(tr)
+      // this._update_agents(updates);
+      let agents = Array.from(this.yjs.awareness.getStates(), ([id, agent]) => {
+        agent.clientID = id;
+        return agent;
+      }).sort((a, b) => a.date - b.date);
+      if (JSON.stringify(agents) != JSON.stringify(this.agents)) {
+        this.agents = agents
+        this.brokers = this.get_agents("broker");
+        this.workers = this.get_agents("worker");
+        this.clients = this.get_agents("client");
+        this.log(
+          "agents",
+          this.agents.length,
+          "brokers",
+          this.brokers.length,
+          "workers",
+          this.workers.length,
+          "clients",
+          this.clients.length
+        );
+      }
+    });
+  }
+
+
+  get_agents(type) {
+    return this.agents
+      .filter((a) => a.type == type)
+      .sort((a, b) => a.date - b.date);
+  }
+
+  _update_agents(updates) {
+    console.log("updates", updates);
+    updates.updated.forEach((updated_agent) => {
+      let candidate = this.agents.find((a) => a.clientID == updated_agent);
+      console.log("candidate", candidate, updated_agent);
+    });
+    this.agents = Array.from(this.yjs.awareness.getStates(), ([id, agent]) => {
+      agent.clientID = id;
+      return agent;
+    });
+    this.agents.forEach((a) => {
+      console.log(a.type, a.id, a.name, a.clientID, a.state, a.truc);
+    });
+    this.brokers = this.agents
+      .filter((a) => a.type == "broker")
+      .sort((a, b) => a.date - b.date);
+    this.workers = this.agents
+      .filter((a) => a.type == "worker")
+      .sort((a, b) => a.date - b.date);
+    this.clients = this.agents
+      .filter((a) => a.type == "client")
+      .sort((a, b) => a.date - b.date);
+    this.prepare();
+  }
+
+  listenAwareness1() {
+    let awareness = this.yjs.awareness;
+    awareness.on("update", (changes) => {
+      this.log("      ", JSON.stringify(changes.updated[0]));
+      // console.log(awareness.getStates());
+
+      Array.from(awareness.getStates()).forEach((a) => {
+        if (a[0] == changes.updated[0]) console.log(" updated", a);
+      });
+
+      this.agents = Array.from(awareness.getStates(), ([id, state]) => {
+        state.clientId = id;
+        return state;
+      });
+
+      this.brokers = this.agents
+        .filter((a) => a.type == "broker")
+        .sort((a, b) => a.date - b.date);
+      this.workers = this.agents
+        .filter((a) => a.type == "worker")
+        .sort((a, b) => a.date - b.date);
+      this.clients = this.agents
+        .filter((a) => a.type == "client")
+        .sort((a, b) => a.date - b.date);
+      this._recense();
+      this.prepare();
+
       // for (let [key, value] of awareness.getStates()) {
       //   console.log(key + " = " + value);
       //   }
       // //let agents = Array.from(awareness.getStates().values());
       // //this.log("######BROKER AWARENESS", agents.length, "agents");
-      let brokers = [];
-      // let agents = {}
-      awareness.getStates().forEach((a, clientId) => {
-        console.log(clientId, a)
-  
-        try {
-          // agents[a.agent.type== undefined]? agents[a.agent.type] = []: null
-          // agents[a.agent.type].push({clientId: a})
-          this.log(
-            clientId,
-            a.name,
-            a.type,
-            // a.agent.type,
-            a.state
-            // a.agent.name,
-            // a.agent.id,
-            // a.agent.style
-            // JSON.stringify(a.agent.id)
-          );
-          if (a.type == "broker") {
-            brokers.push({
-              id: a.id,
-              clientId: clientId,
-              //name: a.agent.name,
-              date: a.date,
-             // type: a.agent.type,
-            });
-          }
-        } catch (e) {
-          this.log(e, a);
-        }
-      });
-      brokers = brokers.sort((a, b) => a.date - b.date);
-       console.log("brokers", brokers);
-      let active = brokers[0].id;
+      // let brokers = [];
+      // // let agents = {}
+      // awareness.getStates().forEach((a, clientId) => {
+      //   //console.log(clientId, a)
 
-      if (this.activeBroker.get("active") != active) {
-        this.activeBroker.set("active", active);
-      }
-      this.log("active broker", brokers[0].id);
-      this.log("######BROKER AWARENESS", brokers.length, "brokers");
-      this._recense()
+      //   try {
+      //     // agents[a.agent.type== undefined]? agents[a.agent.type] = []: null
+      //     // agents[a.agent.type].push({clientId: a})
+      //     this.log(
+      //       clientId,
+      //       a.name,
+      //       a.type,
+      //       // a.agent.type,
+      //       a.state
+      //       // a.agent.name,
+      //       // a.agent.id,
+      //       // a.agent.style
+      //       // JSON.stringify(a.agent.id)
+      //     );
+      //     if (a.type == "broker") {
+      //       brokers.push({
+      //         id: a.id,
+      //         clientId: clientId,
+      //         //name: a.agent.name,
+      //         date: a.date,
+      //         // type: a.agent.type,
+      //       });
+      //     }
+      //   } catch (e) {
+      //     this.log(e, a);
+      //   }
+      // });
+      // brokers = brokers.sort((a, b) => a.date - b.date);
+      // console.log("brokers", brokers);
+      // let active = brokers[0].id;
+
+      // if (this.activeBroker.get("active") != active) {
+      //   this.activeBroker.set("active", active);
+      // }
+      // this.log("active broker", brokers[0].id);
+      // this.log("######BROKER AWARENESS", brokers.length, "brokers");
+
       // this.log("######BROKER agents", agents);
     });
   }
@@ -179,7 +286,7 @@ export class Broker extends Base {
   /**
    * Méthode pour mettre à jour l'état local de l'agent dans l'awareness
    */
-  updateAwareness() {
+  setLocalState() {
     this.yjs.awareness.setLocalState({
       id: this.id,
       name: this.options.name,
@@ -189,5 +296,3 @@ export class Broker extends Base {
     });
   }
 }
-
-

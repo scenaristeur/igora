@@ -19,12 +19,13 @@ export class Worker extends Base {
      * Type du Worker
      * @type {String}
      */
-    this.options.type = "text";
+    this.options.type = "worker";
     /**
      * Style de la console pour les logs du Worker
      * @type {String}
      */
-    this.options.style = "node_llama_cpp";
+    this.options.style = "text";
+    this.options.engine = "node-llama-cpp"
     /**
      * Flag pour les logs du Worker
      * @type {String}
@@ -175,6 +176,7 @@ export class Worker extends Base {
       name: this.options.name,
       style: this.options.style,
       type: this.options.type,
+      engine: this.options.engine,
       state: this.options.state,
       date: Date.now(),
     });

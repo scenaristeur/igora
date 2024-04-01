@@ -3,7 +3,11 @@
         <MessagesView />
         <label for="promptTextarea" class="form-label">Prompt</label>
         <textarea id="promptTextarea" class="form-control" rows="2" v-model="prompt" @keyup.enter="send()"></textarea>
-        <button v-on:click="send()" type="button" class="btn btn-success">Send</button><br>
+
+        MACHIN
+        <button v-on:click="change()" type="button" class="btn btn-success">change</button><br>
+        <button v-on:click="send()" type="button" class="btn btn-success">Send spund</button><br>
+
 
         <div class="row">
             <div class="col">
@@ -14,10 +18,7 @@
                     v-model="temperature">
             </div>
             <div class="col">
-
                 Seed: <input type="number" v-model="seed">
-
-
             </div>
         </div>
         <label for="systemPromptTextarea" class="form-label">System Prompt</label>
@@ -67,6 +68,10 @@ tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et
             this.user.addTodo({ id: id, prompt: prompt, systemPrompt: this.systemPrompt, temperature: parseFloat(this.temperature), seed: this.seed || randomSeed })
             this.prompt = ""
 
+        },
+
+        change(){
+            this.$store.commit("core/updateAwareness", Date.now())
         }
     },
     computed: {

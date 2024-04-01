@@ -31,6 +31,10 @@ const mutations = {
     // // console.log(state.agents)
     // this.commit('core/setAgents', agents)
   },
+  updateAwareness(state, data) {
+    state.awareness.setLocalStateField("truc", data)
+
+  },
   test(state, data) {
     console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", data, state)
   },

@@ -38,7 +38,10 @@
        </div>
        <div class="col-2">
          <button v-on:click="send()" type="button" class="btn btn-primary">Send</button>
-         </div>
+        
+         <button v-on:click="change()" type="button" class="btn btn-success">change</button><br>
+
+        </div>
     </div>
   </div>
 
@@ -82,6 +85,9 @@ tu dois décrire les personnages qui s'y trouvent, l'ambiance, ce qu'ils font et
         updateSystemPrompt() {
             this.systemPrompt = this.agents.find(agent => agent.name === this.agent).systemPrompt
             console.log("systemPrompt", this.systemPrompt)
+        },
+        change(){
+            this.$store.commit("core/updateAwareness", Date.now())
         },
         send() {
             console.log(this.prompt, this.seed)

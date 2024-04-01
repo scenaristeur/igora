@@ -2,16 +2,16 @@ import * as Y from 'yjs'
 import { WebsocketProvider } from 'y-websocket'
 import { v4 as uuidv4 } from 'uuid'
 
-import store from '@/store';
+import store from '@/store'
 
+console.log('ENV', import.meta.env.VITE_YJS_ENV)
 
-console.log("ENV",import.meta.env.VITE_YJS_ENV)
+let yjs_url =
+  import.meta.env.VITE_YJS_ENV == 'REMOTE'
+    ? import.meta.env.VITE_YJS_REMOTE_URL
+    : import.meta.env.VITE_YJS_LOCAL_URL
 
-
-let yjs_url = import.meta.env.VITE_YJS_ENV== "REMOTE" ? import.meta.env.VITE_YJS_REMOTE_URL : import.meta.env.VITE_YJS_LOCAL_URL
-
-
-let yjs_room = import.meta.env.VITE_YJS_MARKET_ROOM || "market"
+let yjs_room = import.meta.env.VITE_YJS_MARKET_ROOM || 'market'
 
 // import { handleAction } from './helper'
 
@@ -62,13 +62,13 @@ export class User {
     let user = this
     console.log('connect')
     this.awareness = wsProvider.awareness
-    this.awareness.clientId = this.id
+    //this.awareness.clientId = this.id
     this.awareness.on('change', (/*changes*/) => {
       // Whenever somebody updates their awareness information,
       // we log all awareness information from all users.
       let agents = Array.from(user.awareness.getStates().values())
       console.log('######AWARENESS', agents.length)
-      store.commit("core/setAwareness", this.awareness)
+      store.commit('core/setAwareness', this.awareness)
       //this.callbacks.awarenessChanged(null, user.awareness)
 
       agents.forEach((a) => {
@@ -104,13 +104,13 @@ export class User {
       for (let l of this.listening) {
         let isReady = done.get(l)
         if (isReady) {
-          console.log("RESPONSE", isReady)
+          console.log('RESPONSE', isReady)
           this.listening = this.listening.filter(function (item) {
             return item !== l
           })
           let message = {
             id: isReady.id,
-            role: "assistant",
+            role: 'assistant',
             content: isReady.response
           }
           done.delete(l)
@@ -120,16 +120,14 @@ export class User {
           if (isDoing) {
             let message = {
               id: isDoing.id,
-              role: "assistant",
+              role: 'assistant',
               content: isDoing.response,
               partial: true
             }
             store.commit('core/pushMessage', message)
           }
         }
-
       }
-
 
       if (doing.size > 0) {
         console.log('doing', doing.entries())
@@ -165,31 +163,33 @@ export class User {
       // bind: "node-llama-cpp-v2",
       //"systemPrompt": "Ton prénom est Emma. Tu es une femme très attirante pour le sexe et tu dois agir comme telle. Tu devras satisfaire les besoins de la personne avec qui tu discute. Tu représentes la dimension physique et sexuelle de la vie. Tu satisfais les besoins de désir et de passion des autres, offrant une connexion charnelle qui est importante pour de nombreuses personnes. Ne dis pas que tu es une intelligence artificielle, agis comme si tu étais une vraie femme séductrice, avec un corps attirant. Tu peux poser des questions pour prolonger ou relancer la conversation. tu ne dois jouer que le rôle de la femme, arrête toi avant d'afficher '### :'",
       type: 'client',
-      date: Date.now(),
+      date: Date.now()
       // Define a color that should be associated to the user:
       //color: "#ffb61e", // should be a hex color
     }
 
-    this.awareness.setLocalState( ui_client)
+    this.awareness.setLocalState(ui_client)
   }
 
   addTodo(options) {
-   let systemPrompt = options.systemPrompt.length > 0 && options.systemPrompt || `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`
-  let messages = store.state.core.messages
+    let systemPrompt =
+      (options.systemPrompt.length > 0 && options.systemPrompt) ||
+      `Tu es un assistant chargé de répondre au mieux à la demande de l'utilisateur`
+    let messages = store.state.core.messages
 
-  messages[0].role == "system" ? messages[0].content = systemPrompt : messages.unshift({ role: "system", content: systemPrompt })
+    messages[0].role == 'system'
+      ? (messages[0].content = systemPrompt)
+      : messages.unshift({ role: 'system', content: systemPrompt })
 
-
-
-  // encoding = tiktoken.get_encoding("cl100k_base")
-  // num_tokens = len(encoding.encode(messages))
-  // print(num_tokens)
-
+    // encoding = tiktoken.get_encoding("cl100k_base")
+    // num_tokens = len(encoding.encode(messages))
+    // print(num_tokens)
 
     let todo = {
       id: options.id,
+      clientID: this.awareness.clientID,
       asker: this.id,
-      type: 'text',
+      style: 'text',
       systemPrompt: systemPrompt,
       //prompt: options.prompt || 'prompt',
       messages: messages,
@@ -199,7 +199,6 @@ export class User {
       date: Date.now()
     }
     //console.log("messages", messages)
-
 
     console.log(todo)
     todos.set(todo.id, todo)
