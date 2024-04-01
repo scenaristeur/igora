@@ -83,7 +83,6 @@ export class McConnector extends Base {
 
     //this.log("model", JSON.stringify(this.model, null, 2))
 
-
     // this._init();
     this.state = "ready";
   }
@@ -113,6 +112,7 @@ export class McConnector extends Base {
    */
   chat = async (options, cb) => {
     const that = this;
+    const s_id = options.id.split("-").slice(-1); // short_id
     //console.log(options);
     let history = options.messages.map((m) => {
       let message = {};
@@ -136,20 +136,18 @@ export class McConnector extends Base {
 
     let context = new LlamaContext({
       model: this.model,
-     // seed,
-     contextSize: Math.min(4096, this.model.trainContextSize), // CPU can not allocate more than 4096 tokens
+      // seed,
+      contextSize: Math.min(4096, this.model.trainContextSize), // CPU can not allocate more than 4096 tokens
       //contextSize:  model.trainContextSize
     });
 
     //this.log("context", JSON.stringify(context, null, 2))
 
-//console.log("SEQUENCE",this.context.getSequence())
+    //console.log("SEQUENCE",this.context.getSequence())
 
     const session = new LlamaChatSession({
       contextSequence: context.getSequence(),
     });
-
-
 
     session.setChatHistory(history);
 
@@ -160,44 +158,63 @@ export class McConnector extends Base {
       //context: context,
       modelName: that.modelName,
       session: session,
-      start: Date.now(),
+      start_chat_session: Date.now(),
       response: "",
     };
     //console.log("history",history)
 
     sessions[options.id] = s;
-    this.log("### sessions actives ", sessions.length);
+    console.log("!!! sessions actives ", Object.keys(sessions).length);
     const model = this.model;
+    s.tokens_cpt = 0;
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
       // maxTokens: maxTokens,
+
       onToken(chunk) {
         const tok = model.detokenize(chunk); // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
+        s.tokens_cpt++;
+        s.end = Date.now();
+        s.start == undefined ? (s.start = s.end) : null;
+        s.duration = (s.end - s.start) / 1000;
+        s.token_per_sec = { tokens: s.tokens_cpt, duration: s.duration };
+        s.response += tok;
+        // that.log(s_id, " tokens/sec:\t" , s.token_per_sec.tokens, "\t", s.token_per_sec.duration , "\t" , tok);
         that.log(
-          //Object.keys(sessions).length + "sessions- " + 
-          options.id + " : " + tok
+          s_id +
+            "\t(" +
+            s.tokens_cpt +
+            "|duration:" +
+            s.duration +
+            "|tok/sec:" +
+            Math.floor(s.token_per_sec.tokens / s.token_per_sec.duration) +
+            "):\t" +
+            tok
         );
         cb(tok);
-        s.response += tok;
       },
     });
+    s.load_time = (s.start - s.start_chat_session) / 1000;
+    this.log(
+      "!XXX FINISHED n°" +
+        s_id +
+        " chat_session_load_time: " +
+        s.load_time +
+        " : \n" +
+        s.response
+    ); //, "\n", JSON.stringify(s), "\n");
 
-    s.end = Date.now();
-    s.duration = s.end - s.start;
-    this.log("!!! session terminée n°" + options.id + " : " + s.response, s);
-
-    this.log(`[TEST] Total text length: ${s.response.length}`);
-    this.state =
-      s.response.length > 0
-        ? "ready"
-        : "no response, error with multiChannelConnector, did you download a model ?";
-    this.log("state", this.state);
-
-    this.estimationTime = s.duration;
+    //this.log(`[TEST] Total text length: ${s.response.length}`);
+    // this.state =
+    //   s.response.length > 0
+    //     ? "ready"
+    //     : "no response, error with multiChannelConnector, did you download a model ?";
+    // this.log("state", this.state);
+    //this.state = ready
 
     delete sessions[options.id];
-    this.log("estimation time : ", this.estimationTime);
-    console.log("!!! sessions actives ", sessions.toString());
+
+    console.log("!!! sessions actives ", Object.keys(sessions).length);
   };
 }

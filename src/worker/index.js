@@ -112,7 +112,7 @@ export class Worker extends Base {
    * @param {*} task 
    */
   processTask(task) {
-    this.log("processTask", task.id)
+    this.log("processTask", task.id, "llm state", this.mcConnector.state);
     if (this.mcConnector && this.mcConnector.state == "ready") {
       this.options.state = "working";
       this.updateAwareness();
