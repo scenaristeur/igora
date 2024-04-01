@@ -116,6 +116,7 @@ export class Worker extends Base {
     this.log("processTask", task.id, "llm state", this.mcConnector.state);
     if (this.mcConnector && this.mcConnector.state == "ready") {
       this.options.state = "working";
+      task.state="doing"
       this._updateState("working");
       this.log("process task", task.id);
       this.doing.set(task.id, task);
@@ -147,11 +148,19 @@ export class Worker extends Base {
     let cpt = 0
     const response = await this.mcConnector.chat({ current: current, abortSignal: abortController.signal },  (token) => {
       //process.stdout.write(token);
+      let aborted_test = this.doing.get(current.id)
+    
       current.response += token;
       current.delta = { role: "assistant", content: token };
       current.chunkDate = Date.now();
       this.doing.set(current.id, current);
 
+    
+      if(aborted_test!= undefined &&aborted_test.aborted == "aborted"){
+
+        console.log("ABORTING", id)
+        abortController.abort()
+      }
  
       // if (cpt >3){
       //   abortController.abort()
