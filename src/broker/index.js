@@ -59,14 +59,14 @@ export class Broker extends Base {
      */
     this.setLocalState();
 
-    // this.listenTodos();
+    this.listenTodos();
   }
   /**
    * Méthode pour écouter les changements sur la map todos
    */
   listenTodos() {
     this.todos.observeDeep((events, transaction) => {
-      console.log("[broker] prepare TODOS");
+      // console.log("[broker] prepare TODOS");
       this.prepare();
     });
   }
@@ -76,7 +76,7 @@ export class Broker extends Base {
     let prepared = Array.from(this.prepared.values());
     let doing = Array.from(this.doing.values());
     let done = Array.from(this.done.values());
-    this.log("active broker", this.activeBroker.get("active"));
+    // this.log("active broker", this.activeBroker.get("active"));
     this.log(
       todos.length,
       "todos ",
@@ -89,9 +89,9 @@ export class Broker extends Base {
     );
     // console.log("AGENTS", this.agents);
     //console.log("brokers", this.brokers)
-    this.workers.forEach((w) => {
-      console.log("w", w.id, w.state);
-    });
+    // this.workers.forEach((w) => {
+    //   console.log("w", w.id, w.state);
+    // });
     // console.log("clients", this.clients)
   }
   /**
@@ -105,7 +105,7 @@ export class Broker extends Base {
     //   "my id",
     //   this.id
     // );
-
+this._recense()
     // if (this.activeBroker.get("active") == this.id) {
     //if this broker is the active broker
     // this._recense();
@@ -118,8 +118,8 @@ export class Broker extends Base {
       let workers = this.workers.filter((a) => {
         this.log("  ", a.id, a.style, a.state);
         return a.style == job.style && a.state == "ready";
-      });
-      this.log("workers", workers.length, JSON.stringify(workers));
+      }).sort(() => Math.random() - 0.5); // shuffle workers
+      this.log("candidate workers", workers.length);
       if (workers.length > 0) {
         job.worker = workers[0].id;
         job.state = "prepared";
@@ -128,11 +128,12 @@ export class Broker extends Base {
         job.start = Date.now();
         this.prepared.set(job.id, job);
         this.todos.delete(job.id);
-        this.log(JSON.stringify(job));
+       // this.log(JSON.stringify(job));
         this.log("prepare job", job.id, "for worker ", workers[0].id);
       } else {
         this.log("!!!!! no workers for job", job.id);
       }
+      this._recense()
     });
     // }
   }
@@ -155,6 +156,7 @@ export class Broker extends Base {
         return agent;
       }).sort((a, b) => a.date - b.date);
       if (JSON.stringify(agents) != JSON.stringify(this.agents)) {
+        console.log(updates)
         this.agents = agents
         this.brokers = this.get_agents("broker");
         this.workers = this.get_agents("worker");
@@ -169,6 +171,12 @@ export class Broker extends Base {
           "clients",
           this.clients.length
         );
+
+        this.workers.forEach((w) => {
+          this.log("**worker***",w.clientID, w.id, w.state);
+        });
+
+
       }
     });
   }
@@ -178,31 +186,6 @@ export class Broker extends Base {
     return this.agents
       .filter((a) => a.type == type)
       .sort((a, b) => a.date - b.date);
-  }
-
-  _update_agents(updates) {
-    console.log("updates", updates);
-    updates.updated.forEach((updated_agent) => {
-      let candidate = this.agents.find((a) => a.clientID == updated_agent);
-      console.log("candidate", candidate, updated_agent);
-    });
-    this.agents = Array.from(this.yjs.awareness.getStates(), ([id, agent]) => {
-      agent.clientID = id;
-      return agent;
-    });
-    this.agents.forEach((a) => {
-      console.log(a.type, a.id, a.name, a.clientID, a.state, a.truc);
-    });
-    this.brokers = this.agents
-      .filter((a) => a.type == "broker")
-      .sort((a, b) => a.date - b.date);
-    this.workers = this.agents
-      .filter((a) => a.type == "worker")
-      .sort((a, b) => a.date - b.date);
-    this.clients = this.agents
-      .filter((a) => a.type == "client")
-      .sort((a, b) => a.date - b.date);
-    this.prepare();
   }
 
   listenAwareness1() {
