@@ -164,7 +164,7 @@ export class McConnector extends Base {
     //console.log("history",history)
 
     sessions[options.id] = s;
-    console.log("!!! sessions actives ", Object.keys(sessions).length);
+    this.log("!!! sessions actives ", Object.keys(sessions).length);
     const model = this.model;
     s.tokens_cpt = 0;
     const chat = await session.prompt(options.prompt, {
@@ -215,6 +215,6 @@ export class McConnector extends Base {
 
     delete sessions[options.id];
 
-    console.log("!!! sessions actives ", Object.keys(sessions).length);
+    this.log("!!! sessions actives ", Object.keys(sessions).length);
   };
 }

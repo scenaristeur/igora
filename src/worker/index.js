@@ -147,13 +147,13 @@ export class Worker extends Base {
       this.doing.set(current.id, current);
     });
 
-    this.log(`\nTotal text length: ${current.response.length}`);
+    //this.log(`Total text length: ${current.response.length}`);
 
     current.end = Date.now();
 
     current.state = "done";
     current.duration = current.end - current.start;
-    console.log("done", current);
+    //console.log("done", current);
     this.done.set(current.id, current);
     this.doing.delete(current.id);
     this.options.state = "ready";

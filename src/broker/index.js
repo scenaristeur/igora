@@ -78,17 +78,17 @@ export class Broker extends Base {
     if (this.activeBroker.get("active") == this.id) {
       //if this broker is the active broker
       let todos = Array.from(this.todos.values());
-      console.log("TODOS tasks", todos.length, todos);
+      this.log("TODOS tasks", todos.length);
 
       todos.forEach((todo) => {
         let job = this.todos.get(todo.id);
-        console.log("job", job);
+        this.log("job", JSON.stringify(job));
         let workers = Array.from(
           this.yjs.awareness.getStates().values()
         ).filter((a) => {
           return a.agent.type == job.type && a.agent.state == "ready";
         });
-        console.log("workers", workers.length, workers);
+        this.log("workers", workers.length, JSON.stringify(workers));
         if (workers.length > 0) {
           job.worker = workers[0].agent.id;
           job.state = "prepared";
@@ -97,10 +97,10 @@ export class Broker extends Base {
           job.start = Date.now();
           this.prepared.set(job.id, job);
           this.todos.delete(job.id);
-          console.log(job);
+          this.log(JSON.stringify(job));
           this.log("prepare job", job.id, "for worker ", workers[0].agent.id);
         } else {
-          this.log("no workers for job", job.id);
+          this.log("!!!!! no workers for job", job.id);
         }
       });
     }
@@ -149,7 +149,7 @@ export class Broker extends Base {
             });
           }
         } catch (e) {
-          console.log(e, a);
+          this.log(e, a);
         }
       });
       brokers = brokers.sort((a, b) => a.date - b.date);
