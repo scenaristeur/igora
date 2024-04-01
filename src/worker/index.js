@@ -53,7 +53,7 @@ export class Worker extends Base {
     /**
      * Méthode pour mettre à jour l'état de l'awareness
      */
-    this.updateAwareness();
+    this.setLocalState();
     /**
      * Map de tâches prêtes pour être traitée
      * @type {Y.Map<String, Task>}
@@ -72,7 +72,7 @@ export class Worker extends Base {
     /**
      * Méthode pour écouter les changements dans la liste des tâches prêtes
      */
-    this.listenPrepared()
+    this.listenPrepared();
   }
 
   /**
@@ -82,7 +82,7 @@ export class Worker extends Base {
     this.prepared.observeDeep((events, transaction) => {
       //this.log("events", JSON.stringify(events), transaction)
       this.prepare();
-    })
+    });
   }
 
   /**
@@ -91,15 +91,15 @@ export class Worker extends Base {
    * dans la liste "prepared"
    */
   prepare() {
-    this.log("prepare")
-    let tasks = Array.from(this.prepared.values())
+    this.log("prepare");
+    let tasks = Array.from(this.prepared.values());
 
     tasks.forEach((task) => {
       // console.log("task", task)
       if (task.worker == this.id) {
-        this.processTask(task)
+        this.processTask(task);
       }
-    })
+    });
     //   if(tasks.length>0){
     //     this.options.state = "working";
     //     this.updateAwareness();
@@ -109,16 +109,16 @@ export class Worker extends Base {
   /**
    * Traite une tâche, en l'ajoutant dans la liste "doing"
    * et en appelant le mcConnector pour générer la réponse
-   * @param {*} task 
+   * @param {*} task
    */
   processTask(task) {
     this.log("processTask", task.id, "llm state", this.mcConnector.state);
     if (this.mcConnector && this.mcConnector.state == "ready") {
       this.options.state = "working";
-      this.updateAwareness();
-      this.log("process task", task.id)
-      this.doing.set(task.id, task)
-      this.prepared.delete(task.id)
+      this._updateState("working");
+      this.log("process task", task.id);
+      this.doing.set(task.id, task);
+      this.prepared.delete(task.id);
       this.process_doing_mc(task.id);
     }
   }
@@ -132,8 +132,9 @@ export class Worker extends Base {
     let current = this.doing.get(id);
     //console.log("!!!!!! PROCESSING ", current)
     if (current.systemPrompt == undefined || current.systemPrompt.length == 0) {
-      current.systemPrompt = this.options.systemPrompt || "Tu es une petite souris et tu dois agir comme telle, en finissant toutes te phrases par 'Hi!Hi!Hi'"
-
+      current.systemPrompt =
+        this.options.systemPrompt ||
+        "Tu es une petite souris et tu dois agir comme telle, en finissant toutes te phrases par 'Hi!Hi!Hi'";
     }
     //current.temperature = this.options.temperature || 0.7
     //current.seed = this.options.seed
@@ -142,7 +143,7 @@ export class Worker extends Base {
     const response = await this.mcConnector.chat(current, (token) => {
       //process.stdout.write(token);
       current.response += token;
-      current.delta={"role":"assistant","content":token}
+      current.delta = { role: "assistant", content: token };
       current.chunkDate = Date.now();
       this.doing.set(current.id, current);
     });
@@ -159,16 +160,17 @@ export class Worker extends Base {
     this.options.state = "ready";
     this.log("DONE", current.id);
     // this.prepare();
-    this.updateAwareness()
+    this._updateState("ready");
   }
 
-
-
+  _updateState(state){
+    this.yjs.awareness.setLocalStateField("state",state)
+  }
   /**
    * Met à jour les informations de l'agent dans la liste d'awareness
    */
-  updateAwareness() {
-    this.yjs.awareness.setLocalState( {
+  setLocalState() {
+    this.yjs.awareness.setLocalState({
       id: this.id,
       name: this.options.name,
       style: this.options.style,
