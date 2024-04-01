@@ -105,7 +105,7 @@ export class Broker extends Base {
     //   "my id",
     //   this.id
     // );
-this._recense()
+    this._recense();
     // if (this.activeBroker.get("active") == this.id) {
     //if this broker is the active broker
     // this._recense();
@@ -115,10 +115,12 @@ this._recense()
     todos.forEach((todo) => {
       let job = this.todos.get(todo.id);
       this.log("\njob", job.style, job.id, "for clientID", job.clientID);
-      let workers = this.workers.filter((a) => {
-        this.log("  ", a.id, a.style, a.state);
-        return a.style == job.style && a.state == "ready";
-      }).sort(() => Math.random() - 0.5); // shuffle workers
+      let workers = this.workers
+        .filter((a) => {
+          this.log("  ", a.id, a.style, a.state);
+          return a.style == job.style && a.state == "ready";
+        })
+        .sort(() => Math.random() - 0.5); // shuffle workers
       this.log("candidate workers", workers.length);
       if (workers.length > 0) {
         job.worker = workers[0].id;
@@ -128,12 +130,12 @@ this._recense()
         job.start = Date.now();
         this.prepared.set(job.id, job);
         this.todos.delete(job.id);
-       // this.log(JSON.stringify(job));
+        // this.log(JSON.stringify(job));
         this.log("prepare job", job.id, "for worker ", workers[0].id);
       } else {
         this.log("!!!!! no workers for job", job.id);
       }
-      this._recense()
+      this._recense();
     });
     // }
   }
@@ -156,8 +158,8 @@ this._recense()
         return agent;
       }).sort((a, b) => a.date - b.date);
       if (JSON.stringify(agents) != JSON.stringify(this.agents)) {
-        console.log(updates)
-        this.agents = agents
+        console.log(updates);
+        this.agents = agents;
         this.brokers = this.get_agents("broker");
         this.workers = this.get_agents("worker");
         this.clients = this.get_agents("client");
@@ -173,36 +175,32 @@ this._recense()
         );
 
         this.workers.forEach((w) => {
-          this.log("**worker***",w.clientID, w.id, w.state);
+          this.log("**worker***", w.clientID, w.id, w.state);
         });
 
-        if (updates.removed.length>0){
+        if (updates.removed.length > 0) {
           let todos = Array.from(this.todos.values());
           let prepared = Array.from(this.prepared.values());
           let doing = Array.from(this.doing.values());
           let done = Array.from(this.done.values());
-  let tasks = [...todos, ...prepared, ...doing, ...done]
-// console.log(tasks)
-let that = this
-tasks.forEach((task) => {
-  if (updates.removed.includes(task.clientID)) {
-    console.log("removing", task.clientID, task.id, task.state)
-    let state = task.state
-let t = that[state].get(task.id)
-console.log(t)
-t.aborted = "aborted"
-console.log("aborted", task.id, task.aborted, t.state)
-that[state].set(task.id,t)
-
-  }
-})
+          let tasks = [...todos, ...prepared, ...doing, ...done];
+          // console.log(tasks)
+          let that = this;
+          tasks.forEach((task) => {
+            if (updates.removed.includes(task.clientID)) {
+              console.log("removing", task.clientID, task.id, task.state);
+              let state = task.state;
+              let t = that[state].get(task.id);
+              //console.log(t)
+              t.aborted = "aborted";
+              this.log("aborting", task.id, task.aborted, t.state);
+              that[state].set(task.id, t);
+            }
+          });
         }
-
-
       }
     });
   }
-
 
   get_agents(type) {
     return this.agents

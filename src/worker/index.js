@@ -153,7 +153,7 @@ export class Worker extends Base {
       current.response += token;
       current.delta = { role: "assistant", content: token };
       current.chunkDate = Date.now();
-      this.doing.set(current.id, current);
+   
 
     
       if(aborted_test!= undefined &&aborted_test.aborted == "aborted"){
@@ -161,6 +161,7 @@ export class Worker extends Base {
         console.log("ABORTING", id)
         abortController.abort()
       }
+         this.doing.set(current.id, current);
  
       // if (cpt >3){
       //   abortController.abort()
