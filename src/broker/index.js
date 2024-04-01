@@ -113,13 +113,23 @@ export class Broker extends Base {
     this.activeBroker = this.yjs.doc.getMap("activeBroker");
     let awareness = this.yjs.awareness;
     awareness.on("change", (changes) => {
-      console.log(changes)
-      let agents = Array.from(awareness.getStates().values());
-      this.log("######BROKER AWARENESS", agents.length, "agents");
+      this.log("      ",JSON.stringify(changes))
+      // console.log(awareness.getStates())
+      // for (let [key, value] of awareness.getStates()) {
+      //   console.log(key + " = " + value);
+      //   }
+      // //let agents = Array.from(awareness.getStates().values());
+      // //this.log("######BROKER AWARENESS", agents.length, "agents");
       let brokers = [];
-      agents.forEach((a) => {
+      // let agents = {}
+      awareness.getStates().forEach((a, clientId) => {
+        // console.log("a", a)
+  
         try {
+          // agents[a.agent.type== undefined]? agents[a.agent.type] = []: null
+          // agents[a.agent.type].push({clientId: a})
           this.log(
+            clientId,
             a.agent.name,
             a.agent.type,
             // a.agent.type,
@@ -132,6 +142,7 @@ export class Broker extends Base {
           if (a.agent.type == "broker") {
             brokers.push({
               id: a.agent.id,
+              clientId: clientId,
               name: a.agent.name,
               date: a.agent.date,
               type: a.agent.type,
@@ -150,6 +161,7 @@ export class Broker extends Base {
       }
       this.log("active broker", brokers[0].id + " " + brokers[0].name);
       this.log("######BROKER AWARENESS", brokers.length, "brokers");
+      // this.log("######BROKER agents", agents);
     });
   }
 

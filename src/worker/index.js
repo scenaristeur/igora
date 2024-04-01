@@ -72,15 +72,15 @@ export class Worker extends Base {
     /**
      * Méthode pour écouter les changements dans la liste des tâches prêtes
      */
-    this.listenDoing()
+    this.listenPrepared()
   }
 
   /**
    * Méthode pour écouter les changements dans la liste des tâches prêtes
    */
-  listenDoing() {
+  listenPrepared() {
     this.prepared.observeDeep((events, transaction) => {
-      this.log("events", events, transaction)
+      //this.log("events", JSON.stringify(events), transaction)
       this.prepare();
     })
   }
@@ -91,6 +91,7 @@ export class Worker extends Base {
    * dans la liste "prepared"
    */
   prepare() {
+    this.log("prepare")
     let tasks = Array.from(this.prepared.values())
 
     tasks.forEach((task) => {
@@ -111,9 +112,7 @@ export class Worker extends Base {
    * @param {*} task 
    */
   processTask(task) {
-
-
-
+    this.log("processTask", task.id)
     if (this.mcConnector && this.mcConnector.state == "ready") {
       this.options.state = "working";
       this.updateAwareness();
@@ -131,17 +130,17 @@ export class Worker extends Base {
    */
   async process_doing_mc(id) {
     let current = this.doing.get(id);
-    console.log("!!!!!! PROCESSING ", current)
+    //console.log("!!!!!! PROCESSING ", current)
     if (current.systemPrompt == undefined || current.systemPrompt.length == 0) {
       current.systemPrompt = this.options.systemPrompt || "Tu es une petite souris et tu dois agir comme telle, en finissant toutes te phrases par 'Hi!Hi!Hi'"
 
     }
     //current.temperature = this.options.temperature || 0.7
     //current.seed = this.options.seed
-    this.log("process_doing_mc", id, current, this.mcConnector.state);
+    this.log("process_doing_mc", id, "llm state", this.mcConnector.state);
     current.response = "";
     const response = await this.mcConnector.chat(current, (token) => {
-      process.stdout.write(token);
+      //process.stdout.write(token);
       current.response += token;
       current.delta={"role":"assistant","content":token}
       current.chunkDate = Date.now();

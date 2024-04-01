@@ -7,7 +7,7 @@ import {
   LlamaModel,
   LlamaContext,
   LlamaChatSession,
- // TemplateChatWrapper,
+  // TemplateChatWrapper,
 } from "node-llama-cpp";
 // import { get_encoding, encoding_for_model } from "tiktoken";
 // const enc = get_encoding("cl100k_base"); // encoding_for_model("gpt-4-0125-preview");
@@ -44,7 +44,17 @@ export class McConnector extends Base {
    */
   constructor(options = {}) {
     super(options);
+    /**
+     * The flag that is added to the output text.
+     * @type {string}
+     */
+    this.flag = "[node-llama]";
 
+    /**
+     * The chalk instance used for coloring the flag.
+     * @type {Chalk}
+     */
+    this.chalk = this.chalk.rgb(145, 167, 45); //.hex('#DEADED')
     /**
      * The name of the LLM model to be used.
      * @type {string}
@@ -63,41 +73,33 @@ export class McConnector extends Base {
      */
     const modelLoadedMessage = "Loading LLM model from";
 
-    console.log(modelLoadedMessage, modelPath);
+    this.log(modelLoadedMessage, modelPath);
 
-    model = new LlamaModel({
+    this.model = new LlamaModel({
       llama,
       modelPath: modelPath,
       // gpuLayers: 64 // or any other number of layers you want for use with gpu
     });
 
-    /**
-     * The flag that is added to the output text.
-     * @type {string}
-     */
-    this.flag = "[MULTI-CHANNEL]";
+    //this.log("model", JSON.stringify(this.model, null, 2))
 
-    /**
-     * The chalk instance used for coloring the flag.
-     * @type {Chalk}
-     */
-    this.chalk = this.chalk.rgb(145, 167, 45); //.hex('#DEADED')
 
-    this._init();
+    // this._init();
+    this.state = "ready";
   }
 
-  /**
-   * Initializes the module if needed.
-   * @returns {Promise} The promise that resolves when initialized.
-   * @private
-   */
-  async _init() {
-    if (this.options.runMcTest == true) {
-      await this.test();
-    } else {
-      this.state = "ready";
-    }
-  }
+  // /**
+  //  * Initializes the module if needed.
+  //  * @returns {Promise} The promise that resolves when initialized.
+  //  * @private
+  //  */
+  // async _init() {
+  //   if (this.options.runMcTest == true) {
+  //     await this.test();
+  //   } else {
+  //     this.state = "ready";
+  //   }
+  // }
   /**
    * Handle a message from the assistant.
    * @param {Object} options - The options for the request.
@@ -111,7 +113,7 @@ export class McConnector extends Base {
    */
   chat = async (options, cb) => {
     const that = this;
-    console.log(options);
+    //console.log(options);
     let history = options.messages.map((m) => {
       let message = {};
       if (m.role == "assistant") {
@@ -129,22 +131,29 @@ export class McConnector extends Base {
 
     let seed =
       options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1;
-    this.log("### " + options.user + " say " + options.prompt, "seed:", seed);
+    this.log("### " + options.asker + " say " + options.prompt, "seed:", seed);
     this.log("### starting session n°" + options.id);
 
-    const context = new LlamaContext({
-      model,
-      seed,
-      contextSize: Math.min(4096, model.trainContextSize),
+    let context = new LlamaContext({
+      model: this.model,
+     // seed,
+     contextSize: Math.min(4096, this.model.trainContextSize), // CPU can not allocate more than 4096 tokens
+      //contextSize:  model.trainContextSize
     });
 
-this.log("context",context)
+    //this.log("context", JSON.stringify(context, null, 2))
+
+//console.log("SEQUENCE",this.context.getSequence())
 
     const session = new LlamaChatSession({
       contextSequence: context.getSequence(),
     });
 
+
+
     session.setChatHistory(history);
+
+    //console.log("session",session)
 
     let s = {
       options: options,
@@ -154,10 +163,11 @@ this.log("context",context)
       start: Date.now(),
       response: "",
     };
-    console.log("history",history)
+    //console.log("history",history)
 
     sessions[options.id] = s;
-    this.log("### sessions actives ", sessions);
+    this.log("### sessions actives ", sessions.length);
+    const model = this.model;
     const chat = await session.prompt(options.prompt, {
       // Temperature et autres prompt options https://withcatai.github.io/node-llama-cpp/guide/chat-session#custom-temperature
       temperature: options.temperature || 0.7,
@@ -165,7 +175,8 @@ this.log("context",context)
       onToken(chunk) {
         const tok = model.detokenize(chunk); // context.decode(chunk); https://github.com/withcatai/node-llama-cpp/pull/105#issuecomment-1944189912
         that.log(
-          Object.keys(sessions).length + "sessions- " + options.id + " : " + tok
+          //Object.keys(sessions).length + "sessions- " + 
+          options.id + " : " + tok
         );
         cb(tok);
         s.response += tok;
@@ -189,5 +200,4 @@ this.log("context",context)
     this.log("estimation time : ", this.estimationTime);
     console.log("!!! sessions actives ", sessions.toString());
   };
-
 }
