@@ -35,7 +35,7 @@ let options = {
   debug: true,
 };
 let yjs = new YjsConnector(options);
-yjs.awareness.setLocalStateField("agent", {
+yjs.awareness.setLocalState( {
   id: openai_server_id,
   name: options.name,
   style: options.style,

@@ -168,7 +168,7 @@ export class Worker extends Base {
    * Met à jour les informations de l'agent dans la liste d'awareness
    */
   updateAwareness() {
-    this.yjs.awareness.setLocalStateField("agent", {
+    this.yjs.awareness.setLocalState( {
       id: this.id,
       name: this.options.name,
       style: this.options.style,

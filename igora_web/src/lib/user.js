@@ -73,7 +73,7 @@ export class User {
 
       agents.forEach((a) => {
         try {
-          console.log(a.agent.type, a.agent.state, a.agent.name, a.agent.id, a.agent.style, a)
+          console.log(a.type, a.state, a.name, a.id, a.style, a)
         } catch (e) {
           console.log(e, a)
         }
@@ -170,7 +170,7 @@ export class User {
       //color: "#ffb61e", // should be a hex color
     }
 
-    this.awareness.setLocalStateField('agent', ui_client)
+    this.awareness.setLocalState( ui_client)
   }
 
   addTodo(options) {

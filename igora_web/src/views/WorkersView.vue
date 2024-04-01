@@ -11,9 +11,9 @@
 
                 <!-- {{  workers }} -->
                 <ul class="list-group small">
-                    <li v-for="worker in workers" :key="worker.agent.id"
-                        :class="'list-group-item ' + (worker.agent.state == 'working' ? 'list-group-item-dark' : 'list-group-item-primary')">
-                        {{ worker.agent }} {{ worker.agent.type }}
+                    <li v-for="worker in workers" :key="worker.id"
+                        :class="'list-group-item ' + (worker.state == 'working' ? 'list-group-item-dark' : 'list-group-item-primary')">
+                        {{ worker }} {{ worker.type }}
                     </li>
 
                 </ul>
@@ -35,9 +35,9 @@
 
                 <!-- {{  workers }} -->
                 <ul class="list-group">
-                    <li v-for="broker in brokers" :key="broker.agent.id"
+                    <li v-for="broker in brokers" :key="broker.id"
                         class="list-group-item">
-                        {{ broker.agent }} {{ broker.agent.type }}
+                        {{ broker}} {{ broker.type }}
                     </li>
 
                 </ul>
@@ -71,10 +71,10 @@ export default {
     watch: {
         agents() {
             console.log("AGENTS", this.agents)
-            let workers = this.agents.filter(agent => agent.agent.type == "text")
-            this.workers = workers.sort((a, b) => b.agent.date - a.agent.date)
-            this.clients = this.agents.filter(agent => agent.agent.type=="client")
-            this.brokers = this.agents.filter(agent => agent.agent.type=="broker")
+            let workers = this.agents.filter(agent => agent.type == "text")
+            this.workers = workers.sort((a, b) => b.date - a.date)
+            this.clients = this.agents.filter(agent => agent.type=="client")
+            this.brokers = this.agents.filter(agent => agent.type=="broker")
 
         }
     },

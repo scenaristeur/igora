@@ -96,19 +96,19 @@ export class Broker extends Base {
         let workers = Array.from(
           this.yjs.awareness.getStates().values()
         ).filter((a) => {
-          return a.agent.type == job.type && a.agent.state == "ready";
+          return a.type == job.type && a.state == "ready";
         });
         this.log("workers", workers.length, JSON.stringify(workers));
         if (workers.length > 0) {
-          job.worker = workers[0].agent.id;
+          job.worker = workers[0].id;
           job.state = "prepared";
-          job.worker = workers[0].agent.id;
+          job.worker = workers[0].id;
           job.attemps = 1;
           job.start = Date.now();
           this.prepared.set(job.id, job);
           this.todos.delete(job.id);
           this.log(JSON.stringify(job));
-          this.log("prepare job", job.id, "for worker ", workers[0].agent.id);
+          this.log("prepare job", job.id, "for worker ", workers[0].id);
         } else {
           this.log("!!!!! no workers for job", job.id);
         }
@@ -140,21 +140,21 @@ export class Broker extends Base {
           // agents[a.agent.type].push({clientId: a})
           this.log(
             clientId,
-            a.agent.name,
-            a.agent.type,
+            a.name,
+            a.type,
             // a.agent.type,
-            a.agent.state
+            a.state
             // a.agent.name,
             // a.agent.id,
             // a.agent.style
             // JSON.stringify(a.agent.id)
           );
-          if (a.agent.type == "broker") {
+          if (a.type == "broker") {
             brokers.push({
-              id: a.agent.id,
+              id: a.id,
               clientId: clientId,
               //name: a.agent.name,
-              date: a.agent.date,
+              date: a.date,
              // type: a.agent.type,
             });
           }
@@ -180,7 +180,7 @@ export class Broker extends Base {
    * Méthode pour mettre à jour l'état local de l'agent dans l'awareness
    */
   updateAwareness() {
-    this.yjs.awareness.setLocalStateField("agent", {
+    this.yjs.awareness.setLocalState({
       id: this.id,
       name: this.options.name,
       style: this.options.style,
