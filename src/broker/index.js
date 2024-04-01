@@ -38,27 +38,25 @@ export class Broker extends Base {
      * @type {YjsConnector}
      */
     this.yjs = new YjsConnector(this.options);
+    
+    
+    this.todos = this.yjs.doc.getMap("todos");
+    this.prepared = this.yjs.doc.getMap("prepared");
+    this.doing = this.yjs.doc.getMap("doing");
+    this.done = this.yjs.doc.getMap("done");
+    this.activeBroker = this.yjs.doc.getMap("activeBroker");
+    
     /**
      * Méthode pour écouter les changements d'état dans l'awareness
      */
+
     this.listenAwareness();
     /**
      * Méthode pour mettre à jour l'état de l'awareness
      */
     this.updateAwareness();
-    /**
-     * Map de todos pour les tâches en attente
-     * @type {Y.Map<String, Task>}
-     */
-    this.todos = this.yjs.doc.getMap("todos");
-    /**
-     * Map de prepared pour les tâches prêtes à être exécutées
-     * @type {Y.Map<String, Task>}
-     */
-    this.prepared = this.yjs.doc.getMap("prepared");
-    /**
-     * Méthode pour écouter les changements sur la map todos
-     */
+
+
     this.listenTodos();
   }
   /**
@@ -66,19 +64,31 @@ export class Broker extends Base {
    */
   listenTodos() {
     this.todos.observeDeep((events, transaction) => {
-      // console.log("events", events, transaction)
+      console.log("[broker] prepare TODOS")
       this.prepare();
     });
   }
 
+  _recense(){
+    let todos = Array.from(this.todos.values());
+    let prepared = Array.from(this.prepared.values());
+    let doing = Array.from(this.doing.values());
+    let done = Array.from(this.done.values());
+    this.log("active broker",this.activeBroker.get("active"))
+    this.log(todos.length,"todos ",prepared.length,"prepared", doing.length, "doing", done.length, "done")
+
+  }
   /**
    * Méthode pour préparer les tâches en attente
    */
   prepare() {
+    this.yjs.awareness.setLocalStateField("truc", "machin")
+    this.log("active broker",this.activeBroker.get("active"), "my id", this.id)
+
     if (this.activeBroker.get("active") == this.id) {
       //if this broker is the active broker
+      this._recense()
       let todos = Array.from(this.todos.values());
-      this.log("TODOS tasks", todos.length);
 
       todos.forEach((todo) => {
         let job = this.todos.get(todo.id);
@@ -110,11 +120,11 @@ export class Broker extends Base {
    * Méthode pour écouter les changements d'état des agents
    */
   listenAwareness() {
-    this.activeBroker = this.yjs.doc.getMap("activeBroker");
+  
     let awareness = this.yjs.awareness;
     awareness.on("change", (changes) => {
       this.log("      ",JSON.stringify(changes))
-      // console.log(awareness.getStates())
+      console.log(awareness.getStates())
       // for (let [key, value] of awareness.getStates()) {
       //   console.log(key + " = " + value);
       //   }
@@ -123,7 +133,7 @@ export class Broker extends Base {
       let brokers = [];
       // let agents = {}
       awareness.getStates().forEach((a, clientId) => {
-        // console.log("a", a)
+        console.log(clientId, a)
   
         try {
           // agents[a.agent.type== undefined]? agents[a.agent.type] = []: null
@@ -143,9 +153,9 @@ export class Broker extends Base {
             brokers.push({
               id: a.agent.id,
               clientId: clientId,
-              name: a.agent.name,
+              //name: a.agent.name,
               date: a.agent.date,
-              type: a.agent.type,
+             // type: a.agent.type,
             });
           }
         } catch (e) {
@@ -153,14 +163,15 @@ export class Broker extends Base {
         }
       });
       brokers = brokers.sort((a, b) => a.date - b.date);
-      //   console.log("brokers", brokers);
+       console.log("brokers", brokers);
       let active = brokers[0].id;
 
       if (this.activeBroker.get("active") != active) {
         this.activeBroker.set("active", active);
       }
-      this.log("active broker", brokers[0].id + " " + brokers[0].name);
+      this.log("active broker", brokers[0].id);
       this.log("######BROKER AWARENESS", brokers.length, "brokers");
+      this._recense()
       // this.log("######BROKER agents", agents);
     });
   }
