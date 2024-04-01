@@ -104,6 +104,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     // seed: options.seed || 0,
     temperature: req.body.temperature || 0,
     date: Date.now(),
+    clientID: yjs.awareness.clientID
   };
   // CREATE LISTENERS
   if (req.body.stream == true) {

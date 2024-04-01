@@ -132,7 +132,6 @@ export class Worker extends Base {
    */
   async process_doing_mc(id) {
     const abortController = new AbortController()
-    console.log("***************TODO ABORTED CAPABILITY in WORKER")
     let current = this.doing.get(id);
     
     //console.log("!!!!!! PROCESSING ", current)

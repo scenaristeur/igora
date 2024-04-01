@@ -177,28 +177,31 @@ export class Broker extends Base {
         this.workers.forEach((w) => {
           this.log("**worker***", w.clientID, w.id, w.state);
         });
-
-        if (updates.removed.length > 0) {
-          let todos = Array.from(this.todos.values());
-          let prepared = Array.from(this.prepared.values());
-          let doing = Array.from(this.doing.values());
-          let done = Array.from(this.done.values());
-          let tasks = [...todos, ...prepared, ...doing, ...done];
-          // console.log(tasks)
-          let that = this;
-          tasks.forEach((task) => {
-            if (updates.removed.includes(task.clientID)) {
-              console.log("removing", task.clientID, task.id, task.state);
-              let state = task.state;
-              let t = that[state].get(task.id);
-              //console.log(t)
-              t.aborted = "aborted";
-              this.log("aborting", task.id, task.aborted, t.state);
-              that[state].set(task.id, t);
-            }
-          });
-        }
+        this.prepare();
       }
+
+      if (updates.removed.length > 0) {
+        let todos = Array.from(this.todos.values());
+        let prepared = Array.from(this.prepared.values());
+        let doing = Array.from(this.doing.values());
+        let done = Array.from(this.done.values());
+        let tasks = [...todos, ...prepared, ...doing, ...done];
+        // console.log(tasks)
+        let that = this;
+        tasks.forEach((task) => {
+          if (updates.removed.includes(task.clientID)) {
+            console.log("removing", task.clientID, task.id, task.state);
+            let state = task.state;
+            let t = that[state].get(task.id);
+            //console.log(t)
+            t.aborted = "aborted";
+            this.log("aborting", task.id, task.aborted, t.state);
+            that[state].set(task.id, t);
+          }
+        });
+      }
+
+
     });
   }
 
