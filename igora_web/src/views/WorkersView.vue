@@ -25,7 +25,7 @@
                 <ul class="list-group">
                     <li v-for="client in clients" :key="client.id"
                         class="list-group-item">
-                        {{ client }} 
+                        {{ client.name }} {{ client.style }} {{  client.id }}
                     </li>
 
                 </ul>
@@ -37,7 +37,7 @@
                 <ul class="list-group">
                     <li v-for="broker in brokers" :key="broker.id"
                         class="list-group-item">
-                        {{ broker}} {{ broker.type }}
+                        {{ broker.id }}
                     </li>
 
                 </ul>
@@ -71,7 +71,7 @@ export default {
     watch: {
         agents() {
             console.log("AGENTS", this.agents)
-            let workers = this.agents.filter(agent => agent.type == "text")
+            let workers = this.agents.filter(agent => agent.type == "worker")
             this.workers = workers.sort((a, b) => b.date - a.date)
             this.clients = this.agents.filter(agent => agent.type=="client")
             this.brokers = this.agents.filter(agent => agent.type=="broker")
