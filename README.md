@@ -267,3 +267,14 @@ cd website && npm run build
 # autogen
 - https://www.youtube.com/watch?v=byPbxEH5V8E
 - crewai https://www.youtube.com/watch?v=sPzc6hMg7So
+
+# llm devops
+- https://github.com/flavienbwk/awesome-llm-devops
+- https://github.com/TabbyML/tabby
+- https://github.com/fauxpilot/fauxpilot
+- https://github.com/stanford-oval/storm
+- https://storm.genie.stanford.edu/
+- https://newoval.netlify.app/
+
+# run python from nodejs
+- https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
