@@ -1,0 +1,5 @@
+
+graph TD;
+    start[start] -- user run `node start.js`--> menu
+    menu -- user select services to launch --> selection("- inference servers<br>- models<br>- tools")
+    selection-->launch[Launching services]
