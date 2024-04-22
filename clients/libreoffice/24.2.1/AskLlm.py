@@ -128,7 +128,7 @@ def send_text_to_server(text):
 
 
     try:
-        response = requests.post(url, data=payload)
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
             print("Text successfully sent to the server.")
             return response

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="238" dlg:top="149" dlg:width="206" dlg:height="211" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="OptionButton2" dlg:tab-index="5" dlg:disabled="true" dlg:left="18" dlg:top="78" dlg:width="89" dlg:height="13" dlg:value="OptionButton1" dlg:group-name="actions"/>
+   <dlg:radio dlg:id="OptionButton3" dlg:tab-index="4" dlg:disabled="true" dlg:left="18" dlg:top="65" dlg:width="89" dlg:height="13" dlg:value="OptionButton1" dlg:group-name="actions"/>
+   <dlg:radio dlg:id="étendre" dlg:tab-index="1" dlg:left="18" dlg:top="25" dlg:width="89" dlg:height="13" dlg:tag="pour étendre un texte" dlg:help-text="permet d&apos;étendre un texte" dlg:value="étendre" dlg:group-name="actions" dlg:checked="true"/>
+   <dlg:radio dlg:id="résumer" dlg:tab-index="2" dlg:left="18" dlg:top="38" dlg:width="89" dlg:height="13" dlg:value="résumer"/>
+   <dlg:radio dlg:id="traduire" dlg:tab-index="3" dlg:disabled="true" dlg:left="18" dlg:top="51" dlg:width="89" dlg:height="13" dlg:value="traduire" dlg:group-name="actions"/>
+  </dlg:radiogroup>
+  <dlg:button dlg:id="Envoyer" dlg:tab-index="6" dlg:left="120" dlg:top="129" dlg:width="65" dlg:height="17" dlg:value="Envoyer"/>
+  <dlg:titledbox dlg:id="Action" dlg:tab-index="0" dlg:left="11" dlg:top="12" dlg:width="174" dlg:height="103">
+   <dlg:title dlg:value="Action"/>
+  </dlg:titledbox>
+  <dlg:menulist dlg:id="Modèle" dlg:tab-index="8" dlg:left="14" dlg:top="163" dlg:width="104" dlg:height="15" dlg:spin="true" dlg:linecount="3">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="dolphin"/>
+    <dlg:menuitem dlg:value="llama"/>
+    <dlg:menuitem dlg:value="open-hermes"/>
+   </dlg:menupopup>
+  </dlg:menulist>
+  <dlg:combobox dlg:id="modèle 2" dlg:tab-index="9" dlg:left="14" dlg:top="189" dlg:width="106" dlg:height="17" dlg:value="Modèle2" dlg:spin="true"/>
+  <dlg:textfield dlg:id="url serveur" dlg:tab-index="7" dlg:left="13" dlg:top="131" dlg:width="102" dlg:height="17" dlg:value="http://127.0.0.1:5678"/>
+ </dlg:bulletinboard>
+</dlg:window>

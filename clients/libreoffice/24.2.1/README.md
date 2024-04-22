@@ -45,3 +45,6 @@ sauvage copie des site packages MAIS FONCTIONNE !
 # more options
  - see README.md in clients/libreoffice/24.2.1/llm 
  - https://help.libreoffice.org/latest/ro/text/sbasic/python/python_dialogs.html
+
+ # basic
+ - https://help.libreoffice.org/latest/fr/text/sbasic/shared/01020100.html?&DbPAR=BASIC&System=UNIX
