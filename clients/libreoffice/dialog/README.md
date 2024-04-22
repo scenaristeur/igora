@@ -1,3 +1,45 @@
+# prompts in llm_dialog.py
+
+
+```
+system_prompts = {
+    "resumer": """Agir comme un écrivain. Résumez le texte dans une vue en phrases mettant en évidence les points clés à retenir.""",
+    "expliquer": """Agir comme un écrivain. Expliquez le texte en termes simples et concis en gardant le même sens.""",
+    "etendre" : """Agir comme un écrivain. Développez le texte en ajoutant plus de détails tout en gardant le même sens.""",
+    "formel": """Agir comme un écrivain. Réécrire le texte dans un style plus formel tout en gardant le même sens.""",
+    "courant" : """Agir comme un écrivain. Réécrire le texte dans un style plus décontracté tout en gardant le même sens.""",
+    "active": """Agir comme un écrivain. Réécrire le texte avec une voix active tout en gardant le même sens.""",
+    "liste": """Agir comme un écrivain. Réécrire le texte sous forme de puces tout en gardant le même sens.""",
+    "titre": """Agir comme un écrivain.
+    Créez un seul titre pour l'ensemble du texte qui donne une bonne compréhension de ce à quoi le lecteur peut s'attendre.
+    Le format de ta réponse doit être ## Légende.""",
+    "en_fr": """Traduis le texte d'anglais à français.""",
+    "fr_en": """Traduis le texte de français à anglais.""",
+}
+
++ " Donne uniquement le texte et rien d'autre, ne discute pas, pas de préambule, va à l'essentiel."
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 copy llm_dialog.py to /opt/libreoffice24.2/share/Scripts/python
 
 and import LLMDialog in outils/macros/gérer les boites de dialogue

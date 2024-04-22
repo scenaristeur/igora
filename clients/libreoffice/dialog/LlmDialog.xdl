@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="238" dlg:top="149" dlg:width="206" dlg:height="211" dlg:closeable="true" dlg:moveable="true">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="LlmDialog" dlg:left="238" dlg:top="149" dlg:width="206" dlg:height="211" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:radiogroup>
    <dlg:radio dlg:id="OptionButton2" dlg:tab-index="5" dlg:disabled="true" dlg:left="18" dlg:top="78" dlg:width="89" dlg:height="13" dlg:value="OptionButton1" dlg:group-name="actions"/>
