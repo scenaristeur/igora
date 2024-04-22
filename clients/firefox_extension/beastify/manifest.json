@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "name": "Beastify",
+    "version": "1.0",
+  
+    "description": "Ajoute une icône à la barre d'outil pour une action navigateur. Cliquez sur le bouton pour choisir une bête. Le contenu de l'onglet actif sera alors remplacé par une image de la bête choisie. Voir https://developer.mozilla.org/fr/Add-ons/WebExtensions/Examples#beastify",
+    "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
+    "icons": {
+      "48": "icons/beasts-48.png"
+    },
+  
+    "permissions": ["activeTab"],
+  
+    "browser_action": {
+      "default_icon": "icons/beasts-32.png",
+      "default_title": "Beastify",
+      "default_popup": "popup/choose_beast.html"
+    },
+  
+    "web_accessible_resources": [
+      "beasts/frog.jpg",
+      "beasts/turtle.jpg",
+      "beasts/snake.jpg"
+    ]
+  }
+  
