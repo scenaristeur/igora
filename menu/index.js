@@ -68,6 +68,7 @@ function launch_services(arr) {
           break;
         case 's_lcp':
           console.log('Lancement serveur python');
+          node 
           break;
         case 'third':
           console.log('This is third');
