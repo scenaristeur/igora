@@ -4,3 +4,4 @@
 - icons https://www.iconfinder.com/iconsets/free-retina-icon-set
 - extension exemples https://developer.mozilla.org/fr/docs/Mozilla/Add-ons/WebExtensions/Examples
 - exemples https://github.com/mdn/webextensions-examples
+- utilitaire https://webext.eu/

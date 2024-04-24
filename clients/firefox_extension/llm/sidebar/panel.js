@@ -78,62 +78,217 @@ const system_prompts = {
 }
 
 
-async function requete(system_prompt, texte) {
+// async function requete(system_prompt, texte) {
+//   const serveur_url = document.getElementById("serveur_url").value
+//   const modele = document.getElementById("modele").value
+
+//   let payload = {
+//     "messages": [
+//       { "role": "system", "content": system_prompt },
+//       { "role": "user", "content": texte }
+//     ],
+//     "model": modele,
+//     stream: false,
+//     "temperature": 0,
+//     "max_tokens": 800,
+//     "stop": ["###"]
+//   }
+// const API_KEY="hello"
+// // const stream = false
+// // const signal = "one"
+// //   const body = {
+// //     messages: [], //messages,
+// //     model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
+// //     temperature: 0, //0.7,
+// //     stream: stream,
+// //     max_tokens: 800,
+// //     stop: [
+// //       //"\n",
+// //       "###",
+// //     ],
+// //   };
+
+//   const url = serveur_url + "/v1/chat/completions"
+//   // const body = 
+//   const response = await fetch(url, {
+//     method: "POST",
+//     mode: 'no-cors',
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "application/json",
+//      // Authorization: `Bearer ${API_KEY}`,
+//     },
+//     body: JSON.stringify(payload),
+//    // signal,
+//   });
+//   console.log("response", response)
+//   return response
+
+
+
+// }
+
+async function call_llm(e) {
+  const action = e.target.id
+  const prompt = system_prompts[action]+" Donne uniquement le texte et rien d'autre, ne discute pas, pas de préambule, va à l'essentiel."
+  const texte = contentBox.textContent
+  console.log(action, prompt, texte)
+  //let result = await requete(prompt, texte)
+  //console.log("result", result)
+  await sendChatCompletion(prompt, texte)
+}
+
+
+
+async function sendChatCompletion(system_prompt, texte) {
   const serveur_url = document.getElementById("serveur_url").value
   const modele = document.getElementById("modele").value
+  const API_URL = serveur_url + "/v1/chat/completions"
+  //const API_URL = "http://127.0.0.1:5678/v1/models"
+  const API_KEY="sk-xxx"
+  // stopBtn.disabled = false;
+  // generateBtn.disabled = true;
+  // state.innerHTML = "Generating...";
+let messages =  []
+  controller = new AbortController();
+  const { signal } = controller;
 
-  let payload = {
+  const stream = true//document.getElementById("stream").checked;
+  let body = {
     "messages": [
       { "role": "system", "content": system_prompt },
       { "role": "user", "content": texte }
     ],
-    "model": modele,
+    //"model": modele,
+    "stream": stream,
     "temperature": 0,
     "max_tokens": 800,
     "stop": ["###"]
   }
-const API_KEY="hello"
-const stream = false
-const signal = "one"
-  const body = {
-    messages: [], //messages,
-    model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
-    temperature: 0, //0.7,
-    stream: stream,
-    max_tokens: 800,
-    stop: [
-      //"\n",
-      "###",
-    ],
-  };
 
-  const url = serveur_url + "/v1/chat/completions"
-  // const body = 
-  const response = await fetch(url, {
-    method: "POST",
-    mode: 'no-cors',
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${API_KEY}`,
-    },
-    body: JSON.stringify(body),
-   // signal,
-  });
+  console.log("BODY",body);
+  // messages.push({ role: "user", content: texte });
+  // // list = document.getElementById("list");
+  // // let ligne = document.createElement("li");
+  // // list.appendChild(ligne);
+  // // ligne.innerHTML = "<b>User :</b> " + message;
+  // let assistant_message = "";
+  // const body = {
+  //   messages: messages,
+  //   model: "dolphin-2.2.1-mistral-7b.Q2_K.gguf",
+  //   temperature: 0, //0.7,
+  //   stream: stream,
+  //   max_tokens: 800,
+  //   stop: [
+  //     //"\n",
+  //     "###",
+  //   ],
+  // };
 
+  // try {
+    const response = await fetch(API_URL, {
+     method: "POST",
+     mode: 'cors',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        'Access-Control-Allow-Origin': "*",
+        //Authorization: `Bearer ${API_KEY}`,
+        //"User-Agent": "truc"
+      },
+     body: JSON.stringify(body),
+      signal,
+    });
 
+    if (stream == true) {
+      // console.log("response", response, response.blob())
 
+      // https://www.youtube.com/watch?v=wDtjBb4ZJwA
+      const reader = response.body.getReader();
+      // list = document.getElementById("list");
+      // let ligne = document.createElement("li");
+      // list.appendChild(ligne);
+      // ligne.innerHTML = "<b>Assistant :</b> ";
+      let assistant_message = "";
+
+      while (true) {
+        const chunk = await reader.read();
+        const { done, value } = chunk;
+        if (done) {
+          console.log("done");
+          break;
+        }
+
+        const decoder = new TextDecoder("utf-8");
+        const decodedChunk = decoder.decode(value);
+        const lines = decodedChunk.split("\n");
+        const parsedLines = lines
+          .map((line) => line.replace(/^data: /, "").trim())
+          .filter((line) => line != "" && line !== "[DONE]")
+          .map((line) => JSON.parse(line));
+
+        for (const parsedLine of parsedLines) {
+          const { choices } = parsedLine;
+          const { delta } = choices[0];
+          const { content } = delta;
+          if (content && content != "{}") {
+            console.log(content)
+            // ligne.innerHTML += content;
+             assistant_message += content;
+            const m = { role: "assistant", content: content };
+            let message = {
+              role: m.role,
+              content: m.content,
+            };
+            messages.push(message);
+            console.log("messages", messages);
+            // list = document.getElementById("list");
+            // list.innerHTML = "";
+            // messages.forEach((message) => {
+            //   list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+            // });
+          }
+        }
+      }
+      // messages.push({ role: "assistant", content: assistant_message });
+      console.log("messages", messages);
+      // state.innerHTML = "";
+    } else {
+      // console.log("response", response, await response.blob())
+      const r = await response.json();
+      console.log(r);
+
+      let m = r.choices[0].message;
+      let message = {
+        role: m.role,
+        content: m.content,
+      };
+      messages.push(message);
+      console.log("messages", messages);
+      // list = document.getElementById("list");
+      // list.innerHTML = "";
+      // messages.forEach((message) => {
+      //   list.innerHTML += `<li><b>${message.role} :</b> ${message.content}</li>`;
+      // });
+    }
+  // } catch (error) {
+  //   if (signal.aborted) {
+  //     state.innerHTML = 
+  //     console.log("Request aborted"); // "Request aborted.";
+  //   } else {
+  //     // state.innerHTML = "Error occurred while generating.";
+  //     console.log(error);
+  //   }
+  // } finally {
+  //   // stopBtn.disabled = true;
+  //   // generateBtn.disabled = false;
+  //   // controller = null;
+  //   console.log("finally");
+  // }
+ 
 }
 
-async function call_llm(e) {
-  const action = e.target.id
-  const prompt = system_prompts[action]
-  const texte = contentBox.textContent
-  console.log(action, prompt, texte)
-  let result = await requete(prompt, texte)
-  console.log("result", result)
 
-}
 
 
 resumer_btn.addEventListener("click", call_llm)

@@ -19,11 +19,14 @@ import { ChatCompletionResponse } from "./ChatCompletionResponse/index.js";
 const port = process.env.PORT || 5678;
 const app = express();
 const httpServer = createServer(app);
-const allowedOrigins = ["*"]; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+const allowedOrigins = ["*", 'moz-extension://20c6ce8c-61e7-4c1a-aadd-5a8ac1a90acc']; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
 const cors_options = {
   origin: allowedOrigins,
 };
 app.use(cors(cors_options));
+app.use(express.text()) // https://stackoverflow.com/questions/17793344/empty-req-body-receiving-text-plain-post-request-to-node-js
+
+
 let openai_server_id = uuidv4();
 let options = {
   name: "openai",
@@ -81,8 +84,21 @@ app.get("/v1/models", (req, res) => {
   res.end();
 });
 
+
+
+
+
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("#received", req.body);
+  console.log("#received", req.body, typeof req.body);
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'OPTIONS, POST');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length');
+    res.status(200).send();
+} else {
+  if(typeof req.body === "string") {
+    req.body = JSON.parse(req.body);
+  }
 
   // CREATE RESPONSE
   let chatCompletionReponse = new ChatCompletionResponse(req.body);
@@ -113,6 +129,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
       // "Content-Type": "text/plain",
       "Content-Type": "text/event-stream",
       "Transfer-Encoding": "chunked",
+      "Access-Control-Allow-Origin": "*",
     });
 
     doing.observeDeep((events, transaction) => {
@@ -195,6 +212,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     console.log("response", response);
     res.status(200).json(response);
   }
+}
 });
 
 const io = new Server(httpServer);

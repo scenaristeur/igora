@@ -9,3 +9,6 @@ The example also uses the `commands` manifest key to add a keyboard shortcut tha
 ## What it shows
 
 How to create a sidebar for an add-on. How to associate the sidebar with the currently active tab in that sidebar's window. How to store and restore sidebar content.
+
+# host-permissions
+- https://javascript.plainenglish.io/fetch-data-in-chrome-extension-v3-2b73719ffc0e

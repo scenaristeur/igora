@@ -15,8 +15,8 @@
     "default_title" : "Web LLM",
     "default_panel": "sidebar/panel.html"
   },
-
-  "permissions": ["storage", "tabs", "webRequest"],
+"host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "tabs"],
 
   "commands": {
     "_execute_sidebar_action": {
