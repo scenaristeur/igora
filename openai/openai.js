@@ -82,7 +82,7 @@ app.get("/v1/models", (req, res) => {
 });
 
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("received", req.body);
+  console.log("#received", req.body);
 
   // CREATE RESPONSE
   let chatCompletionReponse = new ChatCompletionResponse(req.body);

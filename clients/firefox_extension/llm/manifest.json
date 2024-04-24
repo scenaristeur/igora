@@ -1,0 +1,29 @@
+{
+
+  "manifest_version": 3,
+  "name": "Web LLM",
+  "description": "Affiche une sidebar permettant d'interroger un LLM.",
+  "version": "1.0",
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "54.0a1"
+    }
+  },
+
+  "sidebar_action": {
+    "default_icon": "icons/star.png",
+    "default_title" : "Web LLM",
+    "default_panel": "sidebar/panel.html"
+  },
+
+  "permissions": ["storage", "tabs", "webRequest"],
+
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L"
+      }
+    }
+  }
+
+}
