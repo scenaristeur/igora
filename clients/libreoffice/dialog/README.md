@@ -20,7 +20,13 @@ system_prompts = {
 + " Donne uniquement le texte et rien d'autre, ne discute pas, pas de préambule, va à l'essentiel."
 ```
 
-
+# extension Libreoffice
+- debuggage de scripts python https://extensions.libreoffice.org/en/extensions/show/apso-alternative-script-organizer-for-python
+- python path (Chemin python Libreoffice") https://python-ooo-dev-tools.readthedocs.io/en/main/guide/virtual_env/linux_linking_paths.html#linking-to-libreoffice ou https://extensions.libreoffice.org/en/extensions/show/41996
++ vérifier la mise à jour
+- ajouter dans l'extension "Chemin python Libreoffice" le chemin vers les librairies python pour avoir accès aux librairies du système (il peut y en avoir plusieurs)
+-- /usr/lib/python3/dist-packages
+-- /home/user/.local/lib/python3.10/site-packages
 
 
 
