@@ -20,6 +20,8 @@ p {
   margin: 2em 2em 0 2em;
   border: .5em solid #DDE4E9;
   transition: background-color .2s ease-out;
+  white-space: pre-line;
+  overflow: scroll;
 }
 
 #content[contenteditable=true] {

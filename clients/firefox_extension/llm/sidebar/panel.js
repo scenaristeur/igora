@@ -141,6 +141,8 @@ async function call_llm(e) {
 
 
 async function sendChatCompletion(system_prompt, texte) {
+
+  contentBox.textContent += "\n\n___________\n\nAssistant: "
   const serveur_url = document.getElementById("serveur_url").value
   const modele = document.getElementById("modele").value
   const API_URL = serveur_url + "/v1/chat/completions"
@@ -216,6 +218,7 @@ let messages =  []
         const { done, value } = chunk;
         if (done) {
           console.log("done");
+          contentBox.textContent += "\n\n___________\n\n"
           break;
         }
 
@@ -234,6 +237,7 @@ let messages =  []
           if (content && content != "{}") {
             console.log(content)
             // ligne.innerHTML += content;
+            contentBox.textContent += content
              assistant_message += content;
             const m = { role: "assistant", content: content };
             let message = {
@@ -265,6 +269,7 @@ let messages =  []
       };
       messages.push(message);
       console.log("messages", messages);
+      contentBox.textContent += m+"\n\n\n___________\n\n\n"
       // list = document.getElementById("list");
       // list.innerHTML = "";
       // messages.forEach((message) => {
