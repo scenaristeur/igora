@@ -18,7 +18,7 @@ see [Igora Docker doc](https://scenaristeur.github.io/igora/fr/docs/Igora%20Dock
 
 
 ## or start every service independent
-- Look at each README.md file in each service
+- Look at each README.md file in each service, for example to load GGUF Models 
 - run `npm install` in this differents folders/services "igora/igora_web" and "igora/openai"
 
 ![Start1](start%20Igora.png)
@@ -29,6 +29,10 @@ see [Igora Docker doc](https://scenaristeur.github.io/igora/fr/docs/Igora%20Dock
 
 ## Clients
 - look in clients folder to find different uses cases and experiments
+- libreoffice [client LibreOffice Igora](./clients/libreoffice/dialog/)
+![LibreOffice Igora](./clients/libreoffice/dialog/04%20Résumer.png)
+- Firefox extension [extension Firefox Igora](./clients/firefox_extension/llm/)
+![Firefox Igora](./clients/firefox_extension/llm/firefox_extension.png)
 
 
 
