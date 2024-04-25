@@ -5,13 +5,10 @@
 - Documentation in [English](https://scenaristeur.github.io/igora/)
 - Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
 
-# Understanding Igora
+## Understanding Igora
 - [Architecture](./architecture.md)
 
-
-
-
-easyest way to use Igora:  
+## Easyest way to use Igora:  
  ```
  git clone https://github.com/scenaristeur/igora.git
  cd igora 
@@ -19,9 +16,28 @@ easyest way to use Igora:
  ``` 
 see [Igora Docker doc](https://scenaristeur.github.io/igora/fr/docs/Igora%20Docker)
 
+
+## or start every service independent
+- Look at each README.md file in each service
+- run `npm install` in this differents folders/services "igora/igora_web" and "igora/openai"
+
+![Start1](start%20Igora.png)
+
+- If all is ok this should give you 
+
+![Start2](./start2%20Igora.png)
+
+## Clients
+- look in clients folder to find different uses cases and experiments
+
+
+
+
 # Bring your Libreoffice to the Genius level
 - [libreoffice client](https://github.com/scenaristeur/igora/blob/main/clients/libreoffice/24.2.1/llm/README.md)
 
+
+# Spec
 - No GPU needed
 - runs on my [Lenovo IdeaPad 3 15ALC6](https://www.google.com/search?client=firefox-b-lm&q=ideapad+3+15alc6) with 16CPU and 16 GB Ram
 - see notebook https://github.com/scenaristeur/igora/blob/main/igora.ipynb
