@@ -267,3 +267,7 @@ cd website && npm run build
 # autogen
 - https://www.youtube.com/watch?v=byPbxEH5V8E
 - crewai https://www.youtube.com/watch?v=sPzc6hMg7So
+
+# ai mermaid VisualLearner Mermaid AI
+- https://medium.com/@elle.neal_71064/mind-mapping-with-ai-an-accessible-approach-for-neurodiverse-learners-1a74767359ff
+- https://databutton.com/v/jk9vrghc

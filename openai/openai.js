@@ -19,7 +19,7 @@ import { ChatCompletionResponse } from "./ChatCompletionResponse/index.js";
 const port = process.env.PORT || 5678;
 const app = express();
 const httpServer = createServer(app);
-const allowedOrigins = ["*", 'moz-extension://20c6ce8c-61e7-4c1a-aadd-5a8ac1a90acc']; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+const allowedOrigins = ["*", 'moz-extension://26aa4c94-c5f9-4cfd-bf78-7cf92fe3877b']; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
 const cors_options = {
   origin: allowedOrigins,
 };
