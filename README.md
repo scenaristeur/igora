@@ -5,6 +5,12 @@
 - Documentation in [English](https://scenaristeur.github.io/igora/)
 - Documentation en [Français](https://scenaristeur.github.io/igora/fr/)
 
+# Understanding Igora
+- [Architecture](./architecture.md)
+
+
+
+
 easyest way to use Igora:  
  ```
  git clone https://github.com/scenaristeur/igora.git
