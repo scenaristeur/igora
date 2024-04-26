@@ -49,21 +49,24 @@ Middlewares --> Agents[Agents / Equipe de LLM\n- Microsoft Autogen\n- Crewai]
 - [Yjs Awareness](https://github.com/yjs/docs/blob/main/getting-started/adding-awareness.md) permet de connaître la présence des différents acteurs connectés
 - Worker est un Worker LLM dont le rôle est d'executer l'inférence LLM (représenté par Customized LLMs sur le premier diagram). Le système peut utiliser plusieurs workers indépendants
 
+## non-stream task
 
 ```mermaid
 sequenceDiagram;
     Worker ->>YjsAwareness: Annonce as state"ready"
     Client ->>YjsAwareness: Annonce
-    Client ->>Yjs-Todo: create Task with Task_id in Todo
-    Broker ->>Yjs-Todo: read Todo and get new Task
+    Client ->>Yjs-Todo: create Task with Task_id in "Todo"
+    Broker ->>Yjs-Todo: read "Todo" and get new Task
     Broker ->>YjsAwareness: Check Available Worker
     Broker ->>Worker: Change worker state as "working" with Task_id
-    Broker ->>Yjs-Prepared: Move Task with Task_id to Prepared
+    Broker ->>Yjs-Prepared: Move Task with Task_id from "Todo" to "Prepared"
     Worker ->>Yjs-Prepared: Get Task with Task_id
-    Worker ->>Yjs-Doing: Move Task with Task_id to Doing and Work on it, update its data
+    Worker ->>Yjs-Doing: Move Task with Task_id from "Prepared" to "Doing" and Work on it, update its data
     Note right of Worker: Worker process Task with Task_id
-    Worker ->>Yjs-Done: Move Task with Task_id to Done
+    Worker ->>Yjs-Done: Move Task with Task_id from "Doing" to "Done"
     Worker ->>YjsAwareness: Annonce as state"ready"
     Client ->>Yjs-Done: Retrieve Result of the Task execution
 
 ```
+## stream task
+Stream task works as "non-stream task" but worker put each chunk of result in "Doing" task and client get it inthere
