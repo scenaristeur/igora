@@ -4,10 +4,35 @@
         <title>Igora Protocol Blog</title>
         <link>https://scenaristeur.github.io/igora/fr/blog</link>
         <description>Igora Protocol Blog</description>
-        <lastBuildDate>Tue, 05 Mar 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 29 Apr 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>fr</language>
+        <item>
+            <title><![CDATA[Pour bien démarrer avec les LLM !]]></title>
+            <link>https://scenaristeur.github.io/igora/fr/blog/Pour bien démarrer avec les LLM !</link>
+            <guid>https://scenaristeur.github.io/igora/fr/blog/Pour bien démarrer avec les LLM !</guid>
+            <pubDate>Mon, 29 Apr 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Pour bien comprendre de quoi on parle quand il est question d'Intelligence Artificielle Générative]]></description>
+            <content:encoded><![CDATA[<p>Pour bien comprendre de quoi on parle quand il est question d'<strong>Intelligence Artificielle Générative</strong>
+et pour appréhender au mieux les LLM (Large Modèle de Langage), nous allons procéder en 3 étapes
+que vous pouvez suivre sur <a href="https://colab.research.google.com/github/scenaristeur/igora/blob/main/notebooks/llama_cpp_python_fr.ipynb" target="_blank" rel="noopener noreferrer"><img decoding="async" loading="lazy" src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" class="img_ev3q"></a></p>
+<blockquote>
+<p>sur google colab, les commandes "système" sont précédées par un point d'exclamation</p>
+</blockquote>
+<ul>
+<li>1 Téléchargement d'un modèle de langage (dolphin)</li>
+<li>2 Installation d'un moteur d'inférence (llama-cpp-python)</li>
+<li>3 Interrogation du modèle de langage via le moteur d'inférence (Nomme les planètes du système solaire)</li>
+</ul>
+<h1>1 Téléchargement d'un modèle de langage (dolphin)</h1>
+<h1>2 Installation d'un moteur d'inférence (llama-cpp-python)</h1>
+<h1>3 Interrogation du modèle de langage via le moteur d'inférence (Nomme les planètes du système solaire)</h1>]]></content:encoded>
+            <category>igora</category>
+            <category>llm</category>
+            <category>llama-cpp-python</category>
+            <category>collab</category>
+        </item>
         <item>
             <title><![CDATA[C'est parti !]]></title>
             <link>https://scenaristeur.github.io/igora/fr/blog/c'est parti !</link>
