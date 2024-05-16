@@ -21,5 +21,12 @@
     "stream": "^0.0.2",
     "uuid": "^9.0.1",
     "y-websocket": "^2.0.2"
+  },
+  "engines": {
+    "npm": ">=10.5.2",
+    "node": ">=20.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
