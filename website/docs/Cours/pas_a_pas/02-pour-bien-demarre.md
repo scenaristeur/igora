@@ -1,12 +1,12 @@
 ---
-slug: Pour bien démarrer avec les LLM !
-title: Pour bien démarrer avec les LLM !
+slug: Pour_bien_demarrer_avec_les_LLM
+title: Pour bien démarrer avec les LLM
 authors: [scenaristeur]
 tags: [igora, llm, llama-cpp-python, collab]
 ---
 
 
-# Pour bien démarrer avec les LLM !
+# Pour bien démarrer avec les LLM
 
 Pour bien comprendre de quoi on parle quand il est question d'**Intelligence Artificielle Générative**
 et pour appréhender au mieux les LLM (Large Modèle de Langage), nous allons procéder en 3 étapes
@@ -104,7 +104,9 @@ Réponse Q: (Nomme les planètes du système solaire). A: 1. Mercure 2. Vénus 3
 ```
 
 
+## Bravo!!!, 
+vous avez implémenté votre premier LLM et vous pouvez l'utiliser, par exemple en changeant la question 
 
-Et voilà, vous avez implémenté votre premier LLM et vous pouvez l'utiliser, changer la question...
+> **"Q: (Nomme les planètes du système solaire). A: "**
 
 Evidemment, il existe des tonnes de paramètres, de personnalisation pour leur demander des choses plus précises, orienter votre llm en lui imposant une façon d'agir avec un "prompt système"...
