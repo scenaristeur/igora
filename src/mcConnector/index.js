@@ -118,20 +118,7 @@ export class McConnector extends Base {
     let abortSignal = data.abortSignal
     const s_id = options.id.split("-").slice(-1); // short_id
     //console.log(options);
-    let history = options.messages.map((m) => {
-      let message = {};
-      if (m.role == "assistant") {
-        message = {
-          type: "model",
-          response: [m.content],
-        };
-      } else {
-        //message.id = m.id;
-        message.type = m.role;
-        message.text = m.content;
-      }
-      return message;
-    });
+
 
     let seed =
       options.seed != 0 ? options.seed : Math.floor(Math.random() * 100) + 1;
@@ -153,7 +140,26 @@ export class McConnector extends Base {
       contextSequence: context.getSequence(),
     });
 
-    session.setChatHistory(history);
+if(options.messages){
+  let history = options.messages.map((m) => {
+    let message = {};
+    if (m.role == "assistant") {
+      message = {
+        type: "model",
+        response: [m.content],
+      };
+    } else {
+      //message.id = m.id;
+      message.type = m.role;
+      message.text = m.content;
+    }
+    return message;
+  });
+  session.setChatHistory(history);
+}
+
+
+
 
     //console.log("session",session)
 

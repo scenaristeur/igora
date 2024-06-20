@@ -19,14 +19,11 @@ import { ChatCompletionResponse } from "./ChatCompletionResponse/index.js";
 const port = process.env.PORT || 5678;
 const app = express();
 const httpServer = createServer(app);
-const allowedOrigins = ["*", 'moz-extension://26aa4c94-c5f9-4cfd-bf78-7cf92fe3877b']; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
+const allowedOrigins = ["*"]; //const allowedOrigins = ['http://localhost:*', "http://127.0.0.1:*", "app://obsidian.md"];
 const cors_options = {
   origin: allowedOrigins,
 };
 app.use(cors(cors_options));
-app.use(express.text()) // https://stackoverflow.com/questions/17793344/empty-req-body-receiving-text-plain-post-request-to-node-js
-
-
 let openai_server_id = uuidv4();
 let options = {
   name: "openai",
@@ -38,7 +35,7 @@ let options = {
   debug: true,
 };
 let yjs = new YjsConnector(options);
-yjs.awareness.setLocalState( {
+yjs.awareness.setLocalState({
   id: openai_server_id,
   name: options.name,
   style: options.style,
@@ -84,25 +81,21 @@ app.get("/v1/models", (req, res) => {
   res.end();
 });
 
-
-
-
-
 app.post("/v1/chat/completions", express.json(), async (req, res) => {
-  console.log("#received", req.body, typeof req.body);
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'OPTIONS, POST');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length');
-    res.status(200).send();
-} else {
-  if(typeof req.body === "string") {
-    req.body = JSON.parse(req.body);
-  }
+// app.post("/v1/completions", express.json(), async (req, res) => {
+  console.log("received", req.body);
 
   // CREATE RESPONSE
   let chatCompletionReponse = new ChatCompletionResponse(req.body);
   console.log("chatCompletionReponse", chatCompletionReponse);
+
+  if (req.body.prompt && req.body.messages == undefined) {
+    req.body.messages = [];
+    req.body.messages.push({
+      role: "user",
+      content: req.body.prompt,
+    });
+  }
 
   // CREATE TODO
   let model = req.body.model;
@@ -120,7 +113,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     // seed: options.seed || 0,
     temperature: req.body.temperature || 0,
     date: Date.now(),
-    clientID: yjs.awareness.clientID
+    clientID: yjs.awareness.clientID,
   };
   // CREATE LISTENERS
   if (req.body.stream == true) {
@@ -129,7 +122,6 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
       // "Content-Type": "text/plain",
       "Content-Type": "text/event-stream",
       "Transfer-Encoding": "chunked",
-      "Access-Control-Allow-Origin": "*",
     });
 
     doing.observeDeep((events, transaction) => {
@@ -162,7 +154,7 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
       }
     });
     todos.set(todo.id, todo);
-    console.log("new stream todo",todo.id)
+    console.log("new stream todo", todo.id);
   } else {
     let response = {
       id: todo.id,
@@ -212,7 +204,6 @@ app.post("/v1/chat/completions", express.json(), async (req, res) => {
     console.log("response", response);
     res.status(200).json(response);
   }
-}
 });
 
 const io = new Server(httpServer);
